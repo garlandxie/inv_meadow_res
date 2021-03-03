@@ -1,0 +1,553 @@
+---
+title: "Multiple Invasion Drivers"
+author: "Garland Xie"
+date: "27/01/2021"
+output:
+  word_document: default
+  html_document: default
+  pdf_document: default
+editor_options: 
+  markdown: 
+    wrap: 72
+bibliography: references.bib
+---
+
+```{r libraries, include=FALSE}
+library(ggplot2)
+```
+
+# Materials and Methods
+
+### Study system
+
+The Meadoway is a 16 km stretch of urban green space (UGS) and meadow
+lands, situated within a large metropolitan city (Toronto, Canada). Due
+to its relative large distribution, this UGS is going to be one of
+Canada's largest linear urban parks that will provide valuable habitats
+for butterflies, birds, and wildflowers between downtown Toronto and the
+Rouge National Urban Park.
+
+Restoration began in 2012 at certain parts of the Meadoway, which
+include seeding portions with native species, mowing, and invasive
+species management. Monitoring activities, for a small number of plots,
+have began in 2016, 2018, 2019, and 2020 to document changes in flora
+species composition. Recent monitoring reports have included information
+on the identity and abundance of three invasive species: *Vincetoxicum
+rossicum* (Kleopow) Bordhidi, *Alliaria petiolata* (M. Bieb.) Cavara &
+Grande, and *Polygonum cuspidatum* (Siebold & Zucc.).
+
+### Study species
+
+Dog-strangling vine, otherwise known as *Vincetoxicum rossicum*
+(Kleopow) Bordhidi (Apocynaceae), is a pervasive invasive plant in
+Toronto, Canada. It is originally from Ukraine, Russia but it was
+introduced to eastern North America in the 1800's. It is a perennial
+vine, where its stems range from 40 to 200 cm in length, emerge
+vertically in late April-early May, and then begin to twine together in
+mid-summer if they do not find a climbing structure [@ditommaso2005].
+
+In the past few decades, there has been great interest in studying this
+plant because it has spread so widely in its invaded range and it is
+known to degrade native biodiversity and ecosystem services
+[@livingstone2020].
+
+## Statistical analysis: Structural equation modeling
+
+**Step 1: Defining the goals of the analysis**
+
+The analysis presented here has two goals. The first goal is to examine
+the relative importance of three different invasion drivers (i.e.,
+propagule pressure, disturbance, and resident plant diversity) on the
+plant invasibility of *Vincetoxicum rossicum* within a 16 km stretch of
+restored urban meadowlands (Toronto, Canada). We are motivated to
+understand the mediating factors and processes connecting the impact of
+[anthropogenic activities?] to [biological changes?]. The second goal is
+to specify our structural equation models in such a form that
+practitioners can prioritize management strategies that will potentially
+guide the protection or restoration of native plant communities by
+reducing the population size and distribution of *Vincetoxicum
+rossicum*. Both goals imply that our system of primary interest is the
+urban meadowlands in and around the Meadoway and we wish to generalize
+to that set. Inferences to other meadow ecosystems is a side benefit.
+
+\newpage
+
+**Step 2: Development of a structural equation metamodel**
+
+```{r figure 1, echo=FALSE, align = "center"}
+knitr::include_graphics(here("images/SEMM_A.png"))
+```
+
+**Figure 1**. Initial structural equation meta‐model representing major
+categories of influences on invasion drivers on plant invasibility of
+*Vincetoxicum rossicum* within a 16 km of urban meadows in Toronto,
+Canada. Round‐edge boxes with dotted outlines represent theoretical
+constructs. This particular metamodel shows the hypothesized situation
+at the most general level. The meaning of the labels assigned to each
+pathway is described in more detail in the methods section.
+
+\newpage
+
+```{r figure 2, echo=FALSE, align = "center"}
+knitr::include_graphics(here("images/SEMM_B.png"))
+```
+
+**Figure 2**. This particular metamodel provides a more detailed view of
+the concepts that will be presented in the structural equation model.
+Nodes represent theoretical constructs using the rounded rectangles with
+dashed lines.
+
+\newpage
+
+**Step 3: Developments of a causal diagram**
+
+A causal diagram for the relative importance of different invasion
+drivers on plant invasibility of *Vincetoxicum rossicum* in the Meadoway
+as seen in Figure 3. This represents a partial specification of the
+ideas in the SEMM based on the variables that might be included in SE
+models (Table 2)
+
+```{r fig3, echo=FALSE, align = "center"}
+knitr::include_graphics(here("images/causal_diagram.png"))
+```
+
+**Figure 3**. Initial causal diagram for the relative importance of
+different invasion drivers on plant invasibility of *Vincetoxicum
+rossicum* in the Meadoway.
+
+\newpage
+
+**Table 2**. Theoretical constructs (see Fig. 3) and available data
+related to those constructs.
+
+```{r table-1, echo=FALSE}
+tribble(
+  ~theor_constructs, ~obs_vars, ~properties, 
+  "invasibility", "unified metric of invasibility", "continuous [0-1]",
+  "propagule pressure", "seed rain", "continuous [0-1]",
+  "propagule pressure", "seed bank", "integer [0 to infinity]",
+  "propagule pressure", "distance to roads", "continous (0 to infinity meters)",
+  "disturbance", "mowing frequency", "nominal (0 or 1)",
+  "disturbance", "photosynthetic active radiation", "integer???",
+  "disturbance", "soil moisture", "continous [0-1]",
+  "plant diversity", "functional richness", "continuous [0 to infinity??]",
+  "plant diversity", "MNDS", "???"
+) %>%
+  kable()
+```
+
+\newpage
+
+**Step 5: Evaluation of specification options for the SE models: (a)
+Focus of the analysis**
+
+The primary goal for SEM application in this particular model system is
+"response focused". Here, I place priority for understanding and
+explaining variation in a particular property of a system. In this case,
+I am developing a model to understand what drives the plant invasibility
+of *Vincetoxicum rossicum* in a large urban green space. Is it propagule
+pressure? Disturbance?] Or just invasion resistance by the resident
+plant community? Or two or more drivers explaining variation in
+invasibility? In such cases, the response of interest (including its
+spatial and temporal properties) is first selected and then theory and
+data are used to build an understanding of the main drivers influencing
+variations in invasibility.
+
+## Experimental protocols
+
+### Invasibility
+
+Invasibility can be defined as "the [intrinsic] susceptibility of
+biological communities to colonization and dominance of introduced
+organisms" [@lonsdale1999; @alpert2000]. This term reflects the number
+of open niches within the community, and often is thought to be mainly
+controlled by resource availability (e.g., [@davis2000]).
+
+Historically, the terms invasibility and degree of invasion have been
+used interchangeably, which makes it difficult to generalize patterns
+and processes in invasion biology. Although, there is a positive
+relationship between degree of invasion (DI) and invasibility. A
+community with low invasibility cannot have high DI, but one with high
+invasibility could either show low or high DI depending on extrinsic
+factors [@guo2015a].
+
+In this study, I am going to use a generic metric for quantifying
+estimated invasibility ($I_{e}$) of a community in the Meadoway
+(Toronto, ON), based on relative resident species richness and
+abundance:
+
+$I_{e} = 1 - (h*\frac{S_{obs}}{S_{max}} + (1-h)*(\frac{B_{obs}}{B_{max}}) )$
+(equation 1)
+
+where $S_{obs}$ and $B_{obs}$ are the observed plot-level richness and
+biomass, whereas $S_{max}$ and $B_{max}$ are maximum plot-level richness
+and biomass, respectively, within the habitat type (i.e., resource-based
+carrying capacity).
+
+Incorporating both species richness and biomass resolves many issues
+than if one were to measure each alone [@levine1999]. Some issues with
+using species richness alone are : (1) invasions can still take place if
+even "saturated" communities (high species richness) because of temporal
+population fluctuations of dominant species, (2) high species richness
+indicates more occupied niches, but species still need time to fill that
+niche, (3) high species does not necessarily equal to high community
+biomass, (4) native and exotic species richness can have a positive
+correlation as both increase with increasing area and heterogeneity
+[@moore2001]. Further a limitation of biomass is that it alone misses
+the importance of invader identity and sampling effect [@huston1997].
+
+Invasibility should be referred to the maximum possible richness and
+biomass in the habitat as indicators of the overall habitat capacity
+[@davis2000]. Here, the generic metric of invasibility incorporates
+habitat capacity through the $h$ which is is a habitat-specific
+weighting parameter that has a value between 0 to 1. This parameter thus
+accounts for the variability among communities in how much biomass and
+species richness contribute to niche utilization [@guo2015a].
+
+The variables, $S_{obs}$, $S_{max}$, $B_{obs}$, and $B_{max}$ are
+estimated from field measurements where I will collect (and sort)
+species-specific biomass (in grams) after cutting the ramets of each
+plant individual. The parameter $h$ can be derived from the slope from
+the relationship between $\frac{S_{obs}}{S_{max}}$ and
+$\frac{B_{obs}}{B_{max}}$ (see Figure 4; below). The range of $I_{e}$ is
+from 0 to 1, which allows researchers to compare invasibility across
+different communities and even successional stages [@guo2015a].
+
+Finally, it is important to note that $I_{e}$ is sensitive to outliers
+(see [@guo2015a] for a thoughtful discussion). If there is a legitimate
+outlier (e.g., abnormally high species richness or biomass), then you
+have three options: (1) remove the outlier from the analysis, (2) define
+the maximum value using the 95th percentile, or (3) increase the sample
+size.
+
+### Propagule pressure
+
+Measuring propagule pressure is difficult. For one, it is a composite
+measure of both propagule size and frequency [@simberloff2009]. Adding
+to that, it is rare to find a metric that encompasses both aspects.
+
+Propagule size is easier to quantify than propagule frequency, and a
+good example would be the number of germinants from a seed bank analysis
+[@eschtruth2011]. This metric circumvents many issues such as (1) it
+reflects natural variation in seed availability among sites
+[@clark2007], (2) it accommodates different dispersal vectors and
+long-term distance dispersal events, (3) it quantifies naturally
+occurring level of propagules as opposed to proxies such as number of
+human visitors [@wonham2013a], and (4) it is favored over seedlings
+(which does not account for factors affect seed survival and
+germination). The choice of a reasonable index of propagule pressure is
+important here because it allows researchers to correctly examine the
+relationship between invasibility and its determinants. If the number of
+germinants is not responsible for driving invasibility, then it could be
+other drivers such as soil fertility, disturbance, or even biotic
+interactions [@houseman2014].
+
+#### Seed germination index
+
+To measure the number of germinants, I will take five soil samples at
+each plot (*i.e.,* 1 m2), which I will later combine into a single
+composite seed bank sample per plot. Seed banks tend to form small-scale
+spatial structure where mother plants disperse many seeds in their
+nearby vicinity (even if they use long-dispersal distances), leading to
+randomly distributed patterns [@plue2012a]. To account for such spatial
+patterns, each sample will be collected at a distance of 15 -30 cm
+<!--#  double-check with Scott --> outside of plot boundaries to ensure
+spatial independence **(cite Legendre 1993)**, so that there is an
+unbiased estimate of plot-level seed bank characteristics after all of
+the samples are aggregated as a composite sample [@plue2012a]. According
+to one study [@plue2012a] that examined three different habitats
+(*i.e.,* forests, heathlands, and grasslands), the number of seeds found
+in the seed bank does not differ between sampling strategy (*i.e.*,
+random, systematic, and stratified).
+
+Before sampling, I will remove any surface litter layer (or gravel) but
+include the fine component of the organic layer. I will then take all
+samples with a 7 cm diameter soil core to a depth of 5 cm. We chose
+these particular dimensions (width x depth) for two reasons. For one, a
+small diameter equals a small sample that reflects the clustered nature
+of seed banks. A larger number of smaller samples is beneficial because
+it increases the precision of seed density estimates compared to a small
+number of larger samples [@bigwood1988a][@calster2008a][@stark2008]. It
+is important to note that this relationship between sample size and
+precision covaries with the species abundance in the soil [@mahé2020].
+Further, a larger set of small samples may facilitate sampling a larger
+percentage of the total area after accounting for a smaller variance of
+the seed bank as you decrease plot size (*i.e.*, 1 m2) [@mickelson2003].
+In terms soil diameter, there is no consensus on the best choice for the
+size of diameter and it seems like obtaining a higher number of soil
+samples is more appropriate than a larger soil diameter [@bigwood1988].
+Second, seeds of *V. rossicum* tend to die off in depths deeper than 5
+cm [probably because their smaller seeds lower change of seed longevity
+in the soil - double-check] [@ditommaso2017a].
+
+Previous studies suggest early season sampling is a good timing if one
+wishes to assess a perennial seed bank as "some of the transient seeds
+germinate in the autumn, some seeds die during the winter and seeds
+undergo a cold period, sometimes required to break seed dormancy"
+**(cite that Devlaeminck et al., 2004)**.
+
+Since I will be collecting samples around [spring-summer?], I will then
+seal composite samples in plastic bags and refrigerate them at 4°C for a
+maximum of ten days prior to processing at the green house. Previous
+studies have shown that cold-stratification (e.g., 18 weeks) improves
+the emergence rate when the harvest date is in Fall rather than Summer
+[@ditommaso2005a]. Note: some of the highest germination rates (30-50%)
+among fresh seed collections were from samples collected in open
+old-field habitats during the later Summer (August) [@ditommaso2005a].
+
+After a five-day refrigeration period, I will air-dry the seed samples
+in paper bags house in a dark environment and subject the samples to
+several concentrating steps [@heerdt1996] by sieving them on a coarse
+4‐mm sieve and removing mosses and plant material that could influence
+seedling germination results. Then I will analyze the number of seed
+germinants of *Vincetoxicum rossicum* using the seedling emergence
+method. Here, emergence is defined as "corresponds to a presence of a
+seedling at the soil surface"[@mahé2020], which implies that this method
+reflects the species and individuals that are able to emerge in the
+field [@espeland2010]. [add in another sentence about why we should look
+at emerged seedlings and how that relates to invasion literature]. Also,
+many plant species emerged in the first month using this method
+[@espeland2010]. Altogether, this approach is suitable for answering my
+research questions.
+
+Here, I will fill 60 plastic germination trays with 1 cm of sterilized
+sand and 2 cm of sterilized potting soil (Sun Gro Metro-Mix®). I will
+then spread the field collected soil samples evenly over the
+sand-potting soil mixture at 0.5 cm thickness to ensure complete
+germination. I will then fill five additional trays with the
+sand-potting soil mixture only and randomly dispersed them throughout
+the greenhouse to serve as control trays to track any weed seeds or
+potential contaminants **(cite?)**. Every five days, I will check trays
+for new germinants of *Vincetoxicum rossicum*. Multiple seedlings
+originating from a single seed (polyembryony) were treated as a single
+seedling **(cite)**? Soil PH also has little effect on seedling
+emergence [@magidow2013]. I will randomly reassign the location of each
+tray once per week inside the greenhouse to reduce the effect of any
+spatial variations in temperature and light intensity. "[plants were
+subjected to a 14 hr/10 hr day/night light cycle and watered with an ebb
+and flow‐system every 2 days]". I will monitor germination over a period
+of five months. While previous buried seed bank studies on *Vincetoxicum
+rossicum* suggest that two years is required to capture all potential
+germinants [@ditommaso2017], I was primarily interested in the species
+that germinated first and most abundantly as these have a competitive
+advantage in establishment.
+
+There are a number of limitations for seedling emergence methods
+[@mahé2020]. After accounting for seed dormancy (using cold
+stratification), the most important one is that germination conditions
+cannot be appropriate to all species in the samples, and this affects
+the detection of particular species. But, I have a target invasive
+species so adjustments to temperature, sunlight, and moisture can be
+modified to promote the growth of *V. rossicum* [@ditommaso2017a].
+
+Some notes about growth chamber space:
+
+-   Shin's experiment has 18.75 inch square pots (area: 116 $cm^{2}$) in
+    the chamber.
+
+-   The chamber holds 18 shelves and Shin has 18 pots in each shelf
+
+-   So the total area of the chamber: 116 \* 18 \* 18 = 37584 $cm^{2}$
+
+-   According to the SEM model, we need a sample size of 60 (where a
+    unit of observation is a 1 $m^{2}$ plot for vegetative surveys). For
+    seedling emergence, this means that we need 60 trays to represent
+    the *V.rossicum* perennial seed banks of 60 plots. Add in an extra
+    two trays to keep track of pathogens and unwanted weeds.
+
+-   We need to see if there's enough space in the growth chamber to hold
+    60 trays. If there's enough, we can look around to find suitable
+    dimensions. If not, we have to revise the SEM model to accommodate
+    the trade-off between sample size and logistics (amount of storage
+    space).
+
+-   So, we can divide the total area of the chamber by the number of
+    shelves (according to Antonio). We get: 37584 $cm^{2}$ / 18 = 2088
+    $cm^{2}$ , which is the total area of a single shelf.
+
+-   Let's assume we can have four trays per shelf (total trays here:
+    4\*18 = 72) to make the math a bit easier (and conservative). So we
+    get: 2088 $cm^{2}$/4 = 522 $cm^{2}$, which is the total area for a
+    single tray on a single shelf in the growth chamber.
+
+-   If we assume we need trays with a height of 1 cm, then the volume of
+    a single tray should be 9405 $cm^{2}$ \* 1 $cm^{2}$ = 522 $cm^{3}$.
+    This is a very conservative estimate.
+
+-   We're also assuming that we're collecting soil samples using a soil
+    core of 7 cm (diameter) by 5 cm (depth). Let's approximate the shape
+    of soil core to that of a cylinder. So the volume of each soil
+    samples is then $\pi r^{2}h = \pi * (3.5cm)^2*5cm$ = 192.42
+    $cm^{3}$.
+
+-   The final calculation: the volume of a single tray divided by the
+    volume of a a single soil sample = 522/192.42 = \~**2.7 samples**.
+
+-   How many other ecologists collected soil samples per plot? Lots of
+    variability here...
+
+    -   [@eschtruth2011a]: Two soil samples per plot using a 20 cm
+        diameter by 10 cm depth soil core in riparian ecosystems.
+
+    -   [@doroski2020]: Five soil samples per plot (four outside; one at
+        the plot center) using a 7 cm diameter by 7 cm depth soil core
+        in small urban parks, large urban parks, and vacant lots.
+
+    -   [@albrecht2011]: Two soil samples per plot using a 10 cm X 10 cm
+        X 10 cm soil core in urban wastelands.
+
+<!--# Should make a table of all the germinants with family, genus, species, life-form, native/alien status, invasive status, and number of seeds germinated [although, I am primarily interested in invasive plants though, but having a decent tracklist would help a bit here.] -->
+
+<!--# “Shallow layering of soil samples has been shown to enhance overall germination rates (Kjellsson 1992) ” -->
+
+<!--# “In trying to simulate nature in the laboratory, attention should be paid to the time when the seeds are dispersed. If seeds are dispersed in autumn, they need to be given cold stratification, whereas if they are dispersed in spring, they need to be given warm stratification treatments. What are cold and warm stratification treatments? This means that seeds are placed on a moist substrate at representative winter (cold stratification) or summer (warm stratification) temperatures” [@baskin1998] -->
+
+<!--# “It is especially important that soil samples from habitats in the temperate zone be given cold stratification treatments, but it also is important that they receive simulated summer conditions. In a heated greenhouse, samples would receive simulated summer, but not winter temperature regimes” [@baskin1998]. -->
+
+#### Seed rain index
+
+A complete map of all exotic plant species within a \~70 m radius of
+each plot [@ditommaso2018] was used to calculate a plot-level seed rain
+index ($SR$):
+
+$SR = \sum_{n=1}^{N}fecundity*e^{-b}{distance_{n}}$
+
+where $SR$ is the seed rain index, $N$ is the total number of
+individuals of a given exotic species within the 70 m radius,
+$fecundity$ is the number of seeds produced per plant, $distance$ is the
+distance in meters to each individual within 70 m ($n$), and $b$ is the
+dispersal coefficient for the negative exponential seed dispersal curve
+[@eschtruth2009; @eschtruth2011]. While the plot level seed rain index
+was calculated to verify the results of the direct germination method
+(see above), it is not as complete a measure of propagule pressure;
+particularly when comparing sites with different dispersal vectors. The
+seed rain model would predominately capture the wind dispersed fraction
+of *V. rossicum* seeds [@ditommaso2018].
+
+The number of seeds produced per plant ($fecundity$) per year was
+determined from weighted mean values reported in the literature (i.e.,
+130 number of seeds per stem per year; [@averill2011]). Variation in
+plant size and environmental conditions can substantially alter the
+number of seeds produced per individual **(cite, cite, cite)** and only
+some of this variation is incorporated into the reported mean values.
+However, these numbers are used only to establish a relative index of
+propagule pressure. Dispersal coefficients ($b$) have not been
+determined for these species. Therefore, we calculated values by
+integrating across the dispersal kernel based on the assumption that 95%
+of seeds would be dispersed within the maximum effective dispersal
+distance reported in the literature for each species [@ditommaso2018].
+Check [Wilson, 1993] to compare values against the dispersal
+coefficient.
+
+#### Distance to roads
+
+It is common for invasion biologists to use "distance to roads" as a
+surrogate for propagule pressure (different exotic species:
+[@catford2011]; *Microstegium vimineum:* Warren et al, 2013; )
+
+since close proximity to roads can increase the chance of invasion
+vectors to disperse propagules into nearby habitats. Although, the
+dispersal mechanism is unclear as human agents (*i.e.,* cars, bikes,
+human foot traffic) may facilitate spread among roads.
+
+### Biotic interactions
+
+At each site, I measured three functional traits (according to
+standardized protocols) for each species that were outside the plots.
+For plant height, I chose 25 healthy individuals (i.e., low exposure to
+pathogens or herbivory) for each species that had their foliage exposed
+to full sunlight. For each individual, we measured the maximum height of
+the foliage of the species (disregarding inflorescences)
+[@perez-harguindeguy2016]. <!--# something about bent plants? -->. From
+a subsample of the 25 healthy individuals for each species (n = 10), I
+then took four healthy leaves (with attached twigs, if possible) from
+plant parts most exposed to direct sunlight [@perez-harguindeguy2016].
+For storage, I wrapped up the four leaves for each individual in moist
+paper (with deionised water) and put them in sealed (and labelled)
+plastic bags [@perez-harguindeguy2016]. For each bag, I breathed into
+the bag before closing it to enhance CO2 concentration and air humidity,
+and then I stored the bags in the dark [@perez-harguindeguy2016] in a
+fridge (2-6 °C) for up to 24 hours. For measuring specific leaf area, I
+took each leaf (after patting it dry) and placed it on a flatbed scanner
+[instrument name] and measured leaf area using ImageJ **(cite)**.
+
+#### 
+
+### Causal pathways
+
+See below for a list of conceptual pathways describing the relationships
+between invasibility, plant diversity, propagule pressure and
+disturbance. Pathways are organized according to the expected pattern
+created, the causal direction of the pathway, and a proposed mechanism.
+
+-   Number of seed propagules --\> invasibility: a higher supply of
+    plant propagule introductions (seed bank) increases the
+    susceptibility of an ecosystem to plant invasion [@eschtruth2011;
+    @houseman2014] via the propagule pressure hypothesis proposed by
+    [@lonsdale1999a].
+
+$ln(\frac{I_{e}}{1-I_{e}}) \sim \beta_{1}PP_{sb} + e_{1}$
+
+$I_{e} \in R: 0 \le I_{e} \le 1$
+
+$PP_{sb} \in R: 0 \le PP_{sb} \le \infty$
+
+$e_{1} \sim N(0,1)$
+
+-   Seed rain --\> invasibility: a higher supply of plant propagule
+    introdeuctions (seed rain) increases the susceptibility of an
+    ecosystem to plant invasion [@eschtruth2011; @houseman2014] via the
+    propagule pressure hypothesis proposed by [@lonsdale1999a].
+
+$ln(\frac{I_{e}}{1-I_{e}}) \sim \beta_{2}PP_{sr} + e_{2}$
+
+$I_{e} \in R: 0 \le I_{e} \le 1$
+
+$PP_{sb} \in R: 0 \le PP_{sb} \le 1$
+
+$e_{2} \sim N(0,1)$
+
+-   Seed rain --\> seed bank: Close proximity of invasive plant
+    individuals to a focal point contributes a higher supply (size) of
+    propagules to the seed bank [@eschtruth2011 @londe2017
+    @marchante2010].
+
+    $ln(PP_{sb}) \sim \beta_{3}PP_{sr} + e_{3}$
+
+    $PP_{sb} \in R: 0 \le PP_{sb} \le +\infty$
+
+    $PP_{sb} \in R: 0 \le PP_{sb} \le 1$
+
+    $e_{3} \sim N(0,1)$
+
+-   Mowing --\> light --\> invasibility: Increase in mowing frequency as
+    a disturbance event, reducing resident species biomass, which then
+    increase light availability for invasion via the fluctuating
+    resource availability hypothesis [@averill2010 @davis20
+
+-   Mowing --\> soil moisture --\> invasibility: Increase in mowing
+    frequency as a disturbance event, reducing resident species biomass,
+    which then increase soil moisture for invasion via the fluctuating
+    resource availability hypothesis [@averill2010 @davis2000]
+
+# Figures and Tables
+
+## Figures
+
+-   Conceptual *a priori* SEM model
+
+-   A scatter plot of the seed rain index (*x-axis*)versus the seed
+    germination index (*y-axis*) of *Vincetoxicum rossicum*.
+
+-   A map of the Meadoway over-layed with site and plot (as points)
+    locations.
+
+-   A scatter plot of the relationship between degree of invasion and
+    invasibility [@guo2015]. Maybe add in empirical data, but we'll
+    see...
+
+## Tables
+
+-   
+
+# References
