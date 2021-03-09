@@ -471,7 +471,46 @@ fridge (2-6 °C) for up to 24 hours. For measuring specific leaf area, I
 took each leaf (after patting it dry) and placed it on a flatbed scanner
 [instrument name] and measured leaf area using ImageJ **(cite)**.
 
-#### 
+Height is related to competitive vigor [@gaudet1988].
+
+SLA is tightly correlated with photosynthetic capacity
+[@ryser2000][@wright2004] [@shipley2006]
+
+Stem diameter is related to competitive vigor [@sodhi2019]
+
+Those three <!-- soft ?---> traits (to be measured) are RESPONSE traits
+that reflect biotic and abiotic conditions --\> describe and predict
+species responses to changes in these factors [@lavorel2002]. It seems
+that response traits are thought to be more sensitive to intraspecific
+trait variation rather than interspecific variation [@albert2011].
+
+Some folks suggest you should rigorously sample functional traits at the
+plot-scale for community assembly research questions rather than using
+surrogates (proxies) from trait databases
+[@cordlandwehr2013][@albert2011]. E.g., select individuals at random for
+each plot: 3 reps for height. For the leaf trait measurements, three
+leaves from three different individuals (total of nine leaves).
+<!--check the 2016 field handbook though-->. We sampled all species at
+the flowering stage to compare all species in the same phenological
+stage as it is the standard procedure in trait databases.
+<!-- should sample plots within a disturbance regime?, look up more papers on traits and disturbances -->
+
+Papers to read:
+
+-   [@perronne2017]
+
+### Disturbance
+
+Some relevant papers?
+
+-   Across multiple species and habitats, disturbance events appear to
+    benefit non-native (including invasive) species than native ones,
+    especially in observational studies (but authors might have just
+    picked sites where high disturbance levels had a strong effect on
+    plant communities) [@jauni2015]. Although, there is no effect of
+    disturbance on non-native plants for either urban sites or plant
+    removals (e.g., mowing)... maybe disturbance doesn't play a strong
+    role in promoting invasion under certain situations.
 
 ### Causal pathways
 
