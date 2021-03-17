@@ -1,0 +1,203 @@
+---
+title: "PhD (PAB) Data Management Plan"
+author: "Garland Xie"
+date: "16/03/2021"
+output: html_document
+bibliography: references.bib
+---
+
+# Data Management Plan
+
+## Backup Storage
+
+### Storage
+
+-   [Options: Google Drive (because there's no sensitive data, just plant data haha)]{.ul}
+
+### Backup
+
+-   "Backups are snapshots of the information in your files at a given point in time"
+
+-   [Options: GitHub and two physical hard drives]{.ul}
+
+### Sensitive Data
+
+-   Very little to no sensitive data?. Here's the data I collect:
+
+    -   GIS maps of the Meadoway
+
+    -   Coordinate data on DSV abundance (seed rain)
+
+    -   Number of invasive propagules in a seed bank (along with greenhouse characteristics)
+
+    -   Species identity (maybe **sensitive** IF there's endangered species; check Meadoway ranking list)
+
+    -   Functional traits (i.e., plant height, stem diameter, specific leaf area)
+
+    -   Soil characteristics (e.g., nitrogen, carbon, phosphorus, soil moisture)
+
+    -   Distance to roads
+
+    -   Residential building density (maybe **sensitive** IF I include coordinates to private yards)
+
+    -   Live plant biomass
+
+-   Using Stanford's classification system for sensitive data, **we would classify all of our proposed data as** **low.** This ranking indicates that "data that is not moderate or high risk and is intended for public disclosure or whose loss of confidentiality, integrity, or availability would have no adverse impact on Stanford's mission, safety, finances, or reputation. This includes but is not limited to research data, SUNet IDs, and other information in the public domain." [@university]
+
+-   [Options: NONE (for now)]{.ul}
+
+### Preservation 
+
+-   "Keep in mind that backing up your data is not the same as, nor is it a replacement for, long-term preservation"
+
+-   Key features [@universitya]
+
+    -   Obtain a **permanent, reliable web link** to your deposit that will not change over time
+
+    -   Control when research data are made public
+
+    -   Establish licensing rules around your data
+
+    -   Make your data easy for other researchers to **discover**
+
+    -   Ensure that the information is **preserved** into the future
+
+-   [Options: Open Science Framework because of 50 years of funding]{.ul}
+
+-   Language for a DMP template
+
+    -   "The repository is built using open-source software widely adopted across the research community, with dedicated staffing by digital preservation experts."
+
+    -   "Metadata describing the content is indexed for searching, and copies of ingested content are provided via persistent URLs available to the public."
+
+## Data best practices
+
+-   Template closely follows guidelines from: [@white2013]
+
+    -   Share you data in repositories. This allows:
+
+        -   Allows for data embargoes [@white2013]
+
+        -   Considered to be citable entities [@white2013]
+
+        -   Allows for researchers to re-analyze data in terms of meta-analyses and synthesis papers [@white2013]
+
+    -   Provide good metadata such as:
+
+        -   The what, when, where, and how of data collection, [@white2013]
+
+        -   How to find and access the data, [@white2013]
+
+        -   Suggestions on the suitability of the data for answering specific questions, [@white2013]
+
+        -   Warnings about known problems or inconsistencies in the data (e.g., general descriptions of data limitations or a column in a table to indicate the quality of individual data points. [@white2013]
+
+        -   Information to check that the data are properly imported, e.g., the number of rows and columns in the data-set and the total sum of numerical columns. [@white2013]
+
+        -   Metadata standards: <https://eml.ecoinformatics.org/> [@white2013]
+
+    -   Provide an unprocessed form of the data
+
+        -   It is best to share the data in as raw a form as possible. [@white2013]
+
+        -   That means providing your data in a form that is as close as possible to the field measurements and observations from which your analysis started [@white2013]
+
+    -   Use standard data formats
+
+        -   Use standard file formats (i.e., .csv file extension). A benefit of this format is that it does not become obsolete over time compared Excel spreadsheets (*i.e.*, .xlsx file extension) [@borer2009][@strasser]
+
+        -   Use standard table formats:
+
+            -   Each row should represent a single (and unique) observation, [@white2013]
+
+            -   Every cell should contain only a single value, [@white2013]
+
+            -   There should be only one column for each type of information, [@white2013]
+
+            -   Use descriptive column names [@white2013]
+
+        -   Use standard formats within cells
+
+            -   Be consistent, [@white2013]
+
+            -   Avoid special characters,[@white2013]
+
+            -   Avoid using your delimiter in the data itself,[@white2013]
+
+            -   use the YYYY-MM-DD format (*i.e.*, ISO 8601 data standard) [@white2013]
+
+    -   Using good null values
+
+        -   The best option recommended by [@white2013] is to use blank spaces, which are automatically treated as null values in R. There are two caveats with this format though: (1) "It can be difficult to know if a value is missing or was overlooked during data entry" [@white2013], (2) "Blanks can be confusing when spaces or tabs are used as delimiters in text files." [@white2013]. To circumvent both caveats, I will use comma-separated text files (.csv) that will contain a column ("comments") in each tabular data set that will provide additional information to help distinguish rows that do include missing data.
+
+    -   Make it easy to combine your data with other data sets
+
+        -   include additional tables that contain a column for the code and additional columns that describe the item in the standard way,[@white2013]
+
+        -   for taxonomy, I include a table with the species codes followed by their most current family, genus, and specific epithet,[@white2013]
+
+        -   for site location, you could include a table with the site name or code followed by latitude
+            and longitude, and other site information such as spatial extent, and temporal duration of sampling. [@white2013]
+
+    -   Perform basic quality control checks
+
+        -   more advanced quality control (see Michener and Jones. 2012. TREE).
+
+        -   some basic ideas though:
+
+            -   if a column should contain numeric values, check that there are no non-numeric values in the data [@white2013],
+
+            -   check that empty cells actually represent missing data, [@white2013]
+
+            -   check for consistency. e.g., unit of measurements, data type, and naming scheme, [@white2013]
+
+            -   ask someone else to look over your metadata + data, and provide you with feedback [@white2013]
+
+-   Use an established repository
+
+    -   "For data sharing to be effective, data should be easy to find, accessible, and stored where it will be preserved for a long time" [@white2013]
+
+    -   Use data repositories that are familiar with the community standard (e.g., EEB - so DRYAD, figshare, and maybeeee OSF)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# References
