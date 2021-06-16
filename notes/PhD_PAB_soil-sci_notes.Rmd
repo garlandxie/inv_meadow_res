@@ -1,0 +1,139 @@
+---
+title: "Soil Fertility"
+author: "Garland Xie"
+date: "15/06/2021"
+output: html_document
+bibliography: references.bib
+---
+
+# Soil fertility
+
+## Nitrogen
+
+### Nitrogen and plant growth and development
+
+-   Nitrogen (N) is a major part of all proteins - including the enzymes, which in turn control virtually all biological processes. It is also essential for carbohydrate use in plants [@brady2010].
+
+-   N-deficient plants often have a low shoot-to-root ratio, and they mature more quickly than healthy plants. When too much N is supplied, excessive vegetative growth occurs, plant maturity is delayed, and the plants may become more susceptible to pests and diseases [@brady2010].
+
+### Forms of nitrogen taken up by plants
+
+-   Plant roots take up N from the soil as dissolved nitrate ($NO_{3}$) and ammonium ($NH_{4}+$) [@brady2010].
+
+-   Uptake of nitrate raises PH of the rhizosphere soil while uptake of ammonium lowers the pH of the same below-ground environment [@brady2010].
+
+### Distribution and cycling in soils
+
+-   Atmosphere is made up of 78% gaseous nitrogen $N_{2}$, but plants cannot use this resource because of the inert properties of $N_{2}$, which is a result of the strong triple bond. Microbes and lightning can break this bond and form reactive nitrogen, which is any form of nitrogen that is readily available to living organisms (*e.g.*, ammonia and nitrate) [@brady2010].
+
+-   Inorganic nitrogen seldom accounts for more than 1 to 2% of the N in soil [@brady2010].
+
+-   The nitrogen in ammonia is subject to five major fates:
+
+    1.  Immobilization by microorganisms,
+
+    2.  Removal of plant uptake,
+
+    3.  Fixation in the inter-layers of certain 2:1 clay materials,
+
+    4.  Volatilization after being transformed into ammonia gas,
+
+    5.  and oxidation to nitrate [@brady2010].
+
+-   The nitrogen in nitrate is subject to five major fates:
+
+    1.  Immobilization by microorganisms,
+
+    2.  Removal by plant uptake,
+
+    3.  Loss to groundwater by leaching in drainage water,
+
+    4.  Volatilization to the atmosphere as several nitrogen-containing gases formed by denitrification,
+
+    5.  and dissimilatory (nitrate) reduction to ammonium (DNRA) by anaerobic organisms [@brady2010].
+
+### Immobilization and mineralization
+
+-   Definition of [immobilization:]{.ul} conversion of inorganic nitrogen ions ($NO_{3}$, $NH_{4}+$) into organic forms. Can take place by both biological and non-biological processes [@brady2010].
+
+-   Definition of [mineralization]{.ul}: conversion of organic forms to inorganic nitrogen ions ($NO_{3}$, $NH_{4}+$) [@brady2010].
+
+-   Mineralization and immobilization occur simultaneously in the soil; whether the net effect is an increase or decrease in the mineral N available depends primarily on the C/N ratio in the organic residues undergoing decomposition [@brady2010].
+
+-   Most N used by plants is likely to come from the upper horizon [@brady2010].
+
+-   Most N mineralization occurs during the growing season when the soil is relative moist and warm [@brady2010].
+
+### Ammonium fixation by clay minerals
+
+-   Ammonium ions are attracted to the negatively charged surfaces of clay and hummus, where they are held in exchangeable form, available for plant uptake, but partially protected from leaching [@brady2010].
+
+-   In soils with considerable 2:1 clay content, interlayer-fixed $NH_{4}+$ typically accounts for 5 to 10% of the total nitrogen in the surface soil and up to 20 to 40% of the nitrogen in the subsoil [@brady2010].
+
+-   While ammonium fixation may be considered to be an advantage because it provides a means of conserving nitrogen, the rate of release of the fixed ammonium is often too slow to be much practical value in fulfilling the needs of fast-growing annual plants [@brady2010].
+
+## Phosphorus
+
+### Phosphorus and plant growth 
+
+-   Phosphorus (P) is an essential component of [adenosine triphosphate]{.ul} (ATP, the *energy currency* of cells), deoxyribonucleic acid (DNA, the set of genetic inheritance), ribonucleic acid (RNA, which directs protein synthesis), and finally phospholipids (critical in cellular membranes)[@brady2010].
+
+-   Adequate phosphorus nutrition enhances the fundamental processes of photosynthesis, nitrogen fixation, flowering, fruiting (including seed production), and maturation. Phosphorus is needed in especially large amounts in meristematic tissues such as root tips [@brady2010].
+
+-   A phosphorus-deficient plant is usually stunted, thin-stemmed, and spindly, but its foliage, rather than being pale, is often dark green with purple areas [@brady2010].
+
+### Phosphorus problem in soil fertility
+
+-   Phosphorus has been a problem for soil fertility for three reasons:
+
+    1.  Total P content of soils is relatively low, ranging from 200 to 2000 kg in the upper 15 cm of 1 ha of soil [@brady2010],
+
+    2.  The phosphorus compounds common in soils are mostly unavailable for plant uptake, often because they are highly insoluble [@brady2010],
+
+    3.  When soluble sources of P are added to soils, they are fixed (changed to unavailable, highly insoluble compounds) [@brady2010].
+
+### The phosphorus cycle
+
+Different forms of phosphorus found in soils and the manner in which these forms of phosphorus interact within the soil and in the larger environment:
+
+-   [Phosphorus in the soil solution]{.ul}: concentration in the soil solution is relatively low, ranging from 0.001 mg/L to 1 mg/L . Plant roots absorb phosphorus dissolved in the soil solution, mainly as phosphate ions ($HPO_{4}^{2-}$) in alkaline soils and ($H_{2}PO_{4}^{2-}$)in acid soils [@brady2010].
+
+-   [Uptake by roots and mycorrhizae]{.ul}: Plant uptake of phosphate ions from the soils solution is curtailed by their slow movement to root surfaces. This is overcome in part by root proliferation into zones where the ions are held. Phosphate ions also move to the roots of many plants through symbiosis with mycorrhizal fungi [@brady2010].
+
+-   [Decomposition of plant residues]{.ul}: Once in the plant, a portion of the phosphorus is translocated to the plant shoots, where it becomes part of the plant tissues. As the plants shed leaves and their roots die, or when they are eaten by people or animals, phosphorus returns to the soil in the form of plant residues, leaf litter and waste from animals and people [@brady2010].
+
+-   [Chemical forms in soils:]{.ul} The bulk of soil exists in three general groups of compounds:
+
+    1.  organic phosphorus,
+
+    2.  calcium-bound inorganic phosphorus (alkaline soils)
+
+    3.  iron- or aluminum-bound inorganic phosphorus (acid soils) [@brady2010]
+
+### **Gains and losses**
+
+-   Main pathways by which P is lost from the soil system (from high to low):
+
+    -   Plant removal,
+
+    -   Erosion of phosphorus-carrying soil particles,
+
+    -   phosphorus dissolved in surface runoff water,
+
+    -   leaching to groundwater [@brady2010].
+
+-   Level of soil fertility and severity of environmental pollution are largely determined by the balance - or lack of balance - between inputs from fertilizer and feed and outputs as plant and animal products [@brady2010].
+
+## Organic phosphorus in soils
+
+-   Three broad groups of organic phosphorus compounds are known to exist in soils:
+
+    1.  inositol phosphates or phosphate esters of a sugarlike compound, inositol,
+
+    2.  nucleic acids,
+
+    3.  phospholipids [@brady2010].
+
+-   Dissolved organic phosphorus (DOP) is generally more mobile than soluble inorganic phosphates, probably because it is not so readily adsorbed by iron, aluminum, clays, and calcium carbonate in the soil.
+
+### Mineralization of Organic P
