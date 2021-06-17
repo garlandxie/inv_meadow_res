@@ -1,0 +1,75 @@
+---
+title: "FIA"
+author: "Garland Xie"
+date: "16/06/2021"
+output: html_document
+---
+
+# Flow injection analysis
+
+## Equipment Checklist
+
+### Ammonia and nitrate
+
+NOTE: Adriano said you can store extracts in the fridge (4C) for up to three weeks
+
+1.  Preferable filter paper: Fisher Q2 (ashless), Whatman 42, Fisher P8. NOTE: there should be \~81 Fischer P8 papers from MacIvor + Cadotte lab supply.
+
+2.  Potassium chloride (KCL). Try to maintain a 1:10 ratio of soil-extractant solution (e.g., 2g of fresh soil and 20 mL of KCL) --\> current stock: 1/2 large bottle
+
+3.  250mL flasks. Check Marney's lab
+
+4.  125mL volumetric flasks. Check Marney's lab.
+
+5.  Shaker. Check Marney's lab.
+
+6.  Funnels. Check Marney's lab.
+
+7.  Storage bottles. Check Marney's lab.
+
+8.  Tape. Took some from Scott's supplies
+
+9.  Sharpies. Took some from Scott's supplies
+
+### **Orphophosphates**
+
+NOTE: Adriano said this should be done the day before FIA operations
+
+1.  Preferable filter paper: Fisher P5. NOTE: there should be 100 Fischer P5 papers from MacIvor + Cadotte lab supply.
+2.  250mL flasks. Check Marney's lab.
+3.  125mL volumetric flasks. Check Marney's lab.
+4.  Shaker. Check Marney's lab.
+5.  Funnels. Check Marney's lab.
+6.  Storage bottles. Check Marney's lab.
+7.  Tape. Took some from Scott's supplies
+8.  Sharpies. Took some from Scott's supplies
+
+LECO Protocol (3-4 hours for prep)
+
+1.  Oven-dried: 105 C for 24 hrs, 0.2 grams for each sample
+
+2.  Ball has to be inside the holding unit with the \~5 grams of sample. Close the unit with the lid.
+
+3.  Release the lock and place the holding unit within the clasp
+
+4.  Make sure lid of the shaking machine is on
+
+5.  Frequency: 20 per sec, 20 secs
+
+6.  Place each sample in a little plastic tube (its near the shaking machine) - can get this straight from the holding unit
+
+7.  Clean the holding unit with a Kim wipe, make sure there's no sediment left so take your time doing this
+
+8.  Can place plastic tubes into colorful trays (its near the LECO machine)
+
+9.  Oven dry the sample before LECO machine prep. Place it into an envelope, label it, and then oven dry it for 30 minutes (105 C).
+
+10. Take an aluminum foil and place on top of a black holding unit. This material can be found in a drawer underneath the LECO machine.
+
+11. Place aluminum foil + black holding unit and place it in the weighing scale. Tare it afterwards. 0.198-0.200 grams for range. Never exceed 0.2 grams!
+
+12. Squeeze foil with 0.2 grams of sample with bare hands (no gloves). Try to squeeze out as much air as possible. Twist it so it looks like a hershey kisses.
+
+13. Place the hershey kisses into the black holding unit. Weight it and record it onto a spreadsheet.
+
+14. Place the hershey kisses into a black holding tray (labeled 1-10). Make sure you match the label with the plot ID!!!
