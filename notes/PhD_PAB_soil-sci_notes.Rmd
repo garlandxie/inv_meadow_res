@@ -2,7 +2,9 @@
 title: "Soil Fertility"
 author: "Garland Xie"
 date: "15/06/2021"
-output: html_document
+output:
+  word_document: default
+  html_document: default
 bibliography: references.bib
 ---
 
@@ -74,7 +76,7 @@ bibliography: references.bib
 
 ## Phosphorus
 
-### Phosphorus and plant growth 
+### Phosphorus and plant growth
 
 -   Phosphorus (P) is an essential component of [adenosine triphosphate]{.ul} (ATP, the *energy currency* of cells), deoxyribonucleic acid (DNA, the set of genetic inheritance), ribonucleic acid (RNA, which directs protein synthesis), and finally phospholipids (critical in cellular membranes)[@brady2010].
 
@@ -134,6 +136,46 @@ Different forms of phosphorus found in soils and the manner in which these forms
 
     3.  phospholipids [@brady2010].
 
--   Dissolved organic phosphorus (DOP) is generally more mobile than soluble inorganic phosphates, probably because it is not so readily adsorbed by iron, aluminum, clays, and calcium carbonate in the soil.
+-   Dissolved organic phosphorus (DOP) is generally more mobile than soluble inorganic phosphates, probably because it is not so readily adsorbed by iron, aluminum, clays, and calcium carbonate in the soil [@brady2010].
 
-### Mineralization of Organic P
+### Contribution of organic phosphorus to plant needs
+
+-   Easily soluble fractions of soil organic phosphorus are often the most important factor in supplying phosphorus to plants in highly weathered soils (e.g., Ultisols, Oxisols). In contrast, the mores soluble inorganic forms of phosphorus play the biggest role in P fertility of less weathered soils (e.g., Mollisols, Vertisols), even though these generally contain relatively high amounts of soil organic matter [@brady2010].
+
+## Inorganic phosphorus in soils
+
+### Fixation and retention
+
+-   Dissolved phosphate ions in mineral soils are subject to many types of reactions that tend to move the ions from the soil solution and produce phosphorus-containing compounds of very low solubility. These reactions are referred to as [phosphorus fixation]{.ul} and [phosphorus retention]{.ul}[@brady2010].
+
+### Inorganic phosphorus compounds
+
+-   As a group, the calcium phosphate compounds becomes more soluble as soil pH decreases; hence, they tend to dissolve and disappear from acid soils. On the other hand, the calcium phosphates are quite stable and very insoluble at higher pH and so becomes the dominant forms of inorganic phosphorus present in neutral to alkaline soils [@brady2010].
+
+### **Effect of aging on inorganic phosphate availability**
+
+-   Usually, when soluble phosphorus is added to a soil, rapid reaction removes the phosphorus from solution (*fixes* the phosphorus) in the first few hours. The freshly fixed phosphorus may be slightly soluble and of some value to plants. With time, the solubility of the fixed phosphorus tends to decrease to extremely low levels [@brady2010].
+
+### Solubility of inorganic phosphorus
+
+-   The particular types of reactions that fix phosphorus in relatively unavailable forms differ from soil to soil and are closely related to soil pH. In acid soils, these reactions involve mostly Al, Fe, or Mn. In alkaline and calcareous soils, the reactions primarily involve precipitation. At moderate pH values, adsorption on the edges of kaolinite or on the iron oxide coating on kaolinite clays play an important role [@brady2010].
+
+## Enhancing phosphorus availability on low P soils
+
+### Differences among plant species
+
+-   Different species enhance phosphorus uptake by at least four strategies:
+
+    1.  Monocots exhibit extensive fibrous root systems and mycorrhizal associations,
+
+    2.  N-fixing legumes use little nitrate and take up an excess of cations over anions, leading to rhizosphere acidification and subsequent release of P from low-solubility Ca-phosphates,
+
+    3.  Certain species excrete specific compounds that complex with Fe to greatly increase the availability of iron-bound soil phosphorus,
+
+    4.  Plats in the *Brassicaceae* family (mustard, radish, etc..) compensate for their very poor mycorrhizal properties by excreting citric and malic acids, forming extensive fine root hairs, and taking up higher amounts of $Ca^{2+}$ [@brady2010].
+
+-   Knowledge of these plat characteristics can aid in choosing plants for restoration ecology [@brady2010].
+
+###  
+
+# References
