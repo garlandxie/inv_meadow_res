@@ -44,6 +44,8 @@ NOTE: Adriano said this should be done the day before FIA operations
 7.  Tape. Took some from Scott's supplies
 8.  Sharpies. Took some from Scott's supplies
 
+### LECO
+
 LECO Protocol (3-4 hours for prep)
 
 1.  Oven-dried: 105 C for 24 hrs, 0.2 grams for each sample
@@ -73,3 +75,17 @@ LECO Protocol (3-4 hours for prep)
 13. Place the hershey kisses into the black holding unit. Weight it and record it onto a spreadsheet.
 
 14. Place the hershey kisses into a black holding tray (labeled 1-10). Make sure you match the label with the plot ID!!!
+
+**Ke's analysis**
+
+FOR SURE:
+
+-   LECO --\> Total C and N
+
+-   FIA -\> 2g for orthophosphates
+
+-   pH
+
+MAYBE... (if she has time)
+
+-   AA--\> cations
