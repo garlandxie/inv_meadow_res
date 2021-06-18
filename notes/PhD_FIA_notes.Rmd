@@ -120,7 +120,7 @@ MAYBE... (if she has time)
 
 -   Samples may be stored in plastic or glass [@knepel2003].
 
-### **Sample pre-treatment procedure** 
+### **Sample pre-treatment procedure**
 
 -   Extract the soluble, inorganic nitrate from soils by shaking 5 g of soil (\<2mm) with 50mL of 2M KCL solution for 30 minutes. FIlter through Whatman no. 42 filter paper [@knepel2003].
 
@@ -157,5 +157,23 @@ Sample extraction procedure [@tucker2007]
 3.  Filter sample through a Whatman \#2 filter paper
 
 4.  Any changes from this example may cause changes in the method. The standards described above are made to match the extract matrix. Do not dilute over-range samples with DI water.
+
+## Determination of ammonia in 2M KCL soil extracts by FIA
+
+-   Authors: James Harbridge
+
+-   Year: August 15 2007
+
+### Principle 
+
+-   Exchangeable ammonium is extracted from soil with 2 M KCl. The KCl extract is filtered and the filtrate is analyzed for ammonia by the salicylate method. When ammonia is heated with salicylate and hypochlorite in an alkaline phosphate buffer an emerald green color is produced which is proportional to the ammonia concentration. The presence of EDTA prevents precipitation of calcium and magnesium. The color is intensified by adding sodium nitroprusside [@harbridge2007].
+
+### **Interferences**
+
+-   Soil extracts can contain sufficient concentrations of calcium and magnesium to cause precipitation during analysis. EDTA is added to eliminate this problem (See System Notes). The pH of the standards solutions should approximate that of the samples. For example, if samples have been preserved with sulfuric acid, include the preservation acid in the standards preparation. Remove interfering turbidity by filtration [@harbridge2007].
+
+### **Storage considerations**
+
+-   Ammonia is volatile and will leave the sample slowly, even through polyethylene bottles. The samples should be run within 24 hours of extraction. If this cannot be done, the samples should be adjusted to a pH of 3-5 with dilute sulfuric acid [@harbridge2007a].
 
 ## References
