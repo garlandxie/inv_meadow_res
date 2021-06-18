@@ -74,6 +74,18 @@ bibliography: references.bib
 
 -   While ammonium fixation may be considered to be an advantage because it provides a means of conserving nitrogen, the rate of release of the fixed ammonium is often too slow to be much practical value in fulfilling the needs of fast-growing annual plants [@brady2010].
 
+### Ammonia volatilization
+
+-   Ammonia gas ($NH_{3}$) can be produced from the breakdown of organic materials and from such fertilizers as anhydrous ammonia and urea. The ammonia gas is in equilibrium with dissolved ammonium ions [@brady2010].
+
+-    Two conclusion can be drawn here:
+
+    1.  Ammonia volatilization will be more pronounced at high pH levels (i.e., $OH^{-}$ ions will drive the reaction to the right)[@brady2010],
+
+    2.  Ammonia-gas-producing amendments will drive the reaction to the left, raising the pH of the solution in which they are dissolved [@brady2010],
+
+-   Soil colloids adsorb ammonia gas, so ammonia losses are greatest in soils with little of these colloids or where the ammonia is not in close contact with the soil. For these reasons, ammonia losses can be quite large from sandy soils and from alkaline or calcareous soils., especially when the ammonia-producing materials are left at or near the soil surface and when the soil is drying out. High temperatures, as often occur on the surface of the soil, also favor the volatilization of ammonia [@brady2010].
+
 ## Phosphorus
 
 ### Phosphorus and plant growth
@@ -160,6 +172,10 @@ Different forms of phosphorus found in soils and the manner in which these forms
 
 -   The particular types of reactions that fix phosphorus in relatively unavailable forms differ from soil to soil and are closely related to soil pH. In acid soils, these reactions involve mostly Al, Fe, or Mn. In alkaline and calcareous soils, the reactions primarily involve precipitation. At moderate pH values, adsorption on the edges of kaolinite or on the iron oxide coating on kaolinite clays play an important role [@brady2010].
 
+## Inorganic phosphorus availability at high pH values
+
+-   The availability of phosphorus in alkaline soils is determined principally by the solubility of the various calcium phosphate compounds present. In alkaline soils (e.g., pH = 8), soluble $H_{2}PO_{4}^{-}$ quickly reacts with calcium to form a sequence of products of decreasing solubility.
+
 ## Enhancing phosphorus availability on low P soils
 
 ### Differences among plant species
@@ -175,7 +191,5 @@ Different forms of phosphorus found in soils and the manner in which these forms
     4.  Plats in the *Brassicaceae* family (mustard, radish, etc..) compensate for their very poor mycorrhizal properties by excreting citric and malic acids, forming extensive fine root hairs, and taking up higher amounts of $Ca^{2+}$ [@brady2010].
 
 -   Knowledge of these plat characteristics can aid in choosing plants for restoration ecology [@brady2010].
-
-###  
 
 # References
