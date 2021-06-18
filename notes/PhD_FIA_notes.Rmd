@@ -2,7 +2,10 @@
 title: "FIA"
 author: "Garland Xie"
 date: "16/06/2021"
-output: html_document
+output:
+  word_document: default
+  html_document: default
+bibliography: references.bib
 ---
 
 # Flow injection analysis
@@ -90,3 +93,69 @@ FOR SURE:
 MAYBE... (if she has time)
 
 -   AA--\> cations
+
+## Determination of nitrate in 2M KCL soil extracts by FIA
+
+-   Author: Krista Knepel
+
+-   Company: Lachat Instruments
+
+-   Revision date: 21 August 2003
+
+### **Principle**
+
+-   Soluble, inorganic nitrate is extracted from the soil samples off-line with a 2M KCL solution. The nitrate is quantitatively reduced to nitrite by passage of the sample through a copperized cadmium column. The nitrite (reduced nitrate plus original nitrite) is then determined by diazotizing with sulfanilamide followed by coupling with N-(1-naphthyl)ethylenediamine dihydrochloride. The resulting water soluble dye has a magenta color which is read at 520 nm. [@knepel2003].
+
+### **Interferences**
+
+1.  Build up of suspended matter in the reduction column will restrict sample flow. Since nitrate-nitrogen is soluble, the sample may be pre-filtered [@knepel2003].
+
+2.  Low results would be obtained for samples that contain high concentrations of iron, copper or other metals. In this method, EDTA is added to the buffer to reduce this interference [@knepel2003].
+
+3.  Samples that contain large concentrations of oil and greases will coat the surface of the cadmium. This interference is eliminated by pre-extracting the sample with an organic solvent [@knepel2003].
+
+### **Storage considerations**
+
+-   Nitrite will be oxidized by air to nitrate in a few days. If analysis can be made within 24 hours, the sample should be preserved by refrigeration at 4 C. When samples must be stored for more than 24 hours, they should be preserved with sulfuric acid (2mL conc. $H_{2}SO_{4}$ per liter) and refrigerate. CUATION: Samples must not be preserved with mercuric chloride because this will degrade with cadmium column [@knepel2003].
+
+-   Samples may be stored in plastic or glass [@knepel2003].
+
+### **Sample pre-treatment procedure** 
+
+-   Extract the soluble, inorganic nitrate from soils by shaking 5 g of soil (\<2mm) with 50mL of 2M KCL solution for 30 minutes. FIlter through Whatman no. 42 filter paper [@knepel2003].
+
+## Determination of orphophosphate in Bray soil extracts by FIA
+
+-   Author: Scott Tucker
+
+-   Company: LaChat Instruments
+
+-   Date: September 4th, 2007
+
+### Principle
+
+-   Soil samples are extracted with a Bray No. 1, Bray No. 2, Mehlich No. 1, or Mehlich No. 3 solution. Approximately 0.02 mL of this extract sample is injected on the method's manifold. The orthophosphate ion ( $PO_{4}^{3-}$) reacts with ammonium molybdate and antinmony potassium to form a blue complex, which absorbs light at 880 nm. The absorbance is proportional to the concentration of orthophosphate in the sample [@tucker2007].
+
+### Interference
+
+1.  Silica forms a pale blue complex, which also absorbs at 880 nm. This intereference is generally insignificant as a silica concentration of approximately 4000 ppm would be required to produce 1 ppm positive error in orthophosphate [@tucker2007].
+
+2.  The determination of phosphorus is sensitive to variations in acid concentrations in the sample since there is no buffer. The higher the acidity, the smaller the sensitivity of the method is. Samples, standards, and blanks should be prepared in a similar matrix [@tucker2007].
+
+3.  Sample coloration is not likely to interfere with the molybdophosphoric blue measurement utilized in this method. If it does, the samples may be decolorized using activated charcoal during the extraction step [@tucker2007].
+
+### **Storage considerations**
+
+-   Extracts should be analyzed within 24 hours [@tucker2007].
+
+Sample extraction procedure [@tucker2007]
+
+1.  Scoop 2 g of soil into an extraction flask. Add 20 mL of the extracting solution. Bray No. 1, Bray No. 2, Mehlich No. 1, or Mehlich No.3 (Reagent 1, 2, 3, or 4) from Section 5.
+
+2.  Shake rapidly for 5 minutes
+
+3.  Filter sample through a Whatman \#2 filter paper
+
+4.  Any changes from this example may cause changes in the method. The standards described above are made to match the extract matrix. Do not dilute over-range samples with DI water.
+
+## References
