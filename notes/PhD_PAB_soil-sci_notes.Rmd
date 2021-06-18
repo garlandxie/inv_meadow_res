@@ -174,7 +174,7 @@ Different forms of phosphorus found in soils and the manner in which these forms
 
 ## Inorganic phosphorus availability at high pH values
 
--   The availability of phosphorus in alkaline soils is determined principally by the solubility of the various calcium phosphate compounds present. In alkaline soils (e.g., pH = 8), soluble $H_{2}PO_{4}^{-}$ quickly reacts with calcium to form a sequence of products of decreasing solubility.
+-   The availability of phosphorus in alkaline soils is determined principally by the solubility of the various calcium phosphate compounds present. In alkaline soils (e.g., pH = 8), soluble $H_{2}PO_{4}^{-}$ quickly reacts with calcium to form a sequence of products of decreasing solubility [@brady2010].
 
 ## Enhancing phosphorus availability on low P soils
 
