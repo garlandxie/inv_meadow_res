@@ -64,13 +64,6 @@ coords <- do.call("rbind", list(
 # sanity check
 str(coords)
 
-# write to disk
-
-write.csv(
-  x = d,
-  file = "kenn-vicp-timh-dvag-ambj.csv"
-)
-
 # extract the columns with latitude and longitude
 
 coords_lat <- coords[, 6]
