@@ -47,22 +47,59 @@ coords <- do.call("rbind", list(
 # sanity check
 str(coords)
 
-# extract the columns with latitude and longitude
+# extract the columns ---- 
+# latitude and longitude
 
 coords_lat <- coords[, 6]
 coords_lon <- coords[, 7]
 
-# split the lat and lon into columns for degrees and minutes
+# split the lat and lon ----
+# into columns for degrees and minutes
 
-coords_lat1 <- separate(coords_lat, col = 1, into = c("ns", "chd", "chm"), sep = " ")
-coords_lat2 <- separate(coords_lat1, col = 2, into = c("chd", "deg"), sep = "°")
-coords_lat3 <- separate(coords_lat2, col = 4, into = c("chm", "deg"), sep = "'")
+coords_lat1 <- separate(
+  coords_lat, 
+  col = 1,
+  into = c("ns", "chd", "chm"), 
+  sep = " "
+  )
 
-coords_lon1 <- separate(coords_lon, col = 1, into = c("ns", "chd", "chm"), sep = " ")
-coords_lon2 <- separate(coords_lon1, col = 2, into = c("chd", "deg"), sep = "°")
-coords_lon3 <- separate(coords_lon2, col = 4, into = c("chm", "deg"), sep = "'")
+coords_lat2 <- separate(
+  coords_lat1, 
+  col = 2, 
+  into = c("chd", "deg"), 
+  sep = "°"
+  )
 
-# create columns for DMS and convert the degrees, minutes, and seconds to numeric
+coords_lat3 <- separate(
+  coords_lat2, 
+  col = 4, 
+  into = c("chm", "deg"), 
+  sep = "'"
+  )
+
+coords_lon1 <- separate(
+  coords_lon, 
+  col = 1, 
+  into = c("ns", "chd", "chm"), 
+  sep = " "
+  )
+
+coords_lon2 <- separate(
+  coords_lon1, 
+  col = 2, 
+  into = c("chd", "deg"), 
+  sep = "°"
+  )
+
+coords_lon3 <- separate(
+  coords_lon2, 
+  col = 4, 
+  into = c("chm", "deg"), 
+  sep = "'"
+  )
+
+# create columns for DMS ----
+# convert the degrees, minutes, and seconds to numeric
 
 dd_lat <- dms_col(coords_lat3, 2)
 mm_lat <- dms_col(coords_lat3, 3)
@@ -74,8 +111,18 @@ mm_lon <- dms_col(coords_lon3, 3)
 ss_lon <- dms_col(coords_lon3, 4)
 ns_lon <- c(coords_lon3[1])
 
-# convert DMS to decimal degrees
+# convert DMS to decimal degrees ----
 
-dec_deg_lat <- mapply(FUN = dms_to_dd, degrees = dd_lat, minutes = mm_lat, seconds = ss_lat)
-dec_deg_lon <- mapply(FUN = dms_to_dd, degrees = dd_lon, minutes = mm_lon, seconds = ss_lon)
+dec_deg_lat <- mapply(
+  FUN = dms_to_dd, 
+  degrees = dd_lat, 
+  minutes = mm_lat, 
+  seconds = ss_lat
+  )
 
+dec_deg_lon <- mapply(
+  FUN = dms_to_dd, 
+  degrees = dd_lon, 
+  minutes = mm_lon, 
+  seconds = ss_lon
+  )
