@@ -78,3 +78,4 @@ ns_lon <- c(coords_lon3[1])
 
 dec_deg_lat <- mapply(FUN = dms_to_dd, degrees = dd_lat, minutes = mm_lat, seconds = ss_lat)
 dec_deg_lon <- mapply(FUN = dms_to_dd, degrees = dd_lon, minutes = mm_lon, seconds = ss_lon)
+
