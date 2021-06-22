@@ -36,13 +36,6 @@ grnb <- read_sheet(grnb_link, sheet = "raw_data")
 # import functions ----
 source(here("src", "functions.R"))
 
-# adjust columns to be equal and reassign column names
-
-colnames(timh) <- colnames(kenn)
-colnames(dvag) <- colnames(kenn)
-colnames(ambj) <- colnames(kenn)
-
-
 # check packaging ----------------------------
 
 str(kenn)
