@@ -127,11 +127,11 @@ coords$Longitude <- mapply(
   seconds = ss_lon
   )
 
-# create data frame -----
+# write to disk -----
 
-lat_longs <- data.frame(
-  lats = dec_deg_lat, 
-  longs = dec_deg_lon
+write.csv(
+  x = coords,
+  file = here("data/original/gis", "coordinates_dec_deg.csv"), 
+  row.names = FALSE
 )
-
 
