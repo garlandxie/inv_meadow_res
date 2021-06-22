@@ -36,15 +36,13 @@ grnb <- read_sheet(grnb_link, sheet = "raw_data")
 # import functions ----
 source(here("src", "functions.R"))
 
-# row-bind
-
+# row-bind -----
 
 coords <- do.call("rbind", list(
   kenn, vicp, timh,
   brim, ambj, dvag, 
   dave, bnsh, ambj)
 )
-
 
 # sanity check
 str(coords)
