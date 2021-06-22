@@ -113,16 +113,25 @@ ns_lon <- c(coords_lon3[1])
 
 # convert DMS to decimal degrees ----
 
-dec_deg_lat <- mapply(
+coords$Latitude <- mapply(
   FUN = dms_to_dd, 
   degrees = dd_lat, 
   minutes = mm_lat, 
   seconds = ss_lat
   )
 
-dec_deg_lon <- mapply(
+coords$Longitude <- mapply(
   FUN = dms_to_dd, 
   degrees = dd_lon, 
   minutes = mm_lon, 
   seconds = ss_lon
   )
+
+# create data frame -----
+
+lat_longs <- data.frame(
+  lats = dec_deg_lat, 
+  longs = dec_deg_lon
+)
+
+
