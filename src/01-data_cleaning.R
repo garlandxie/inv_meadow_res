@@ -36,14 +36,6 @@ grnb <- read_sheet(grnb_link, sheet = "raw_data")
 # import functions ----
 source(here("src", "functions.R"))
 
-# check packaging ----------------------------
-
-str(kenn)
-str(timh)
-
-head(kenn, n = 5)
-cotail(kenn, n = 5)
-
 # row-bind
 
 
