@@ -127,6 +127,8 @@ coords$Longitude <- mapply(
   seconds = ss_lon
   )
 
+coords$Longitude <- -1*coords$Longitude
+
 # write to disk -----
 
 write.csv(
@@ -134,4 +136,6 @@ write.csv(
   file = here("data/original/gis", "coordinates_dec_deg.csv"), 
   row.names = FALSE
 )
+
+
 
