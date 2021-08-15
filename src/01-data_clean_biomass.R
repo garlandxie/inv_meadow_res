@@ -23,6 +23,7 @@ vis_miss(bm)
 # clean data ----
 
 bm_tidy <- bm %>%
+  filter(Spp_Code != "LITTER") %>%
   group_by(Section, Site, Treatment, Plot) %>%
   summarize(
     sr = length(unique(Spp_Code)), 
@@ -39,7 +40,8 @@ plot_id <- c(
 
 # species richness
 bm_tidy %>%
-  filter(Plot %in% plot_id) %>%
+  filter(
+    Plot %in% plot_id) %>%
   ggplot(aes(x = Plot, y = sr, fill = Site)) + 
     geom_bar(stat = "identity") + 
     labs(x = NULL, y = "Species Richness") + 
@@ -62,11 +64,12 @@ bm_tidy %>%
 sr_max <- max(bm_tidy$sr)
 bm_max <- max(bm_tidy$bm_g)
 
+
 bm_tidy$bm_obs_max <- bm_tidy$bm_g/bm_max
 bm_tidy$sr_obs_max <- bm_tidy$sr/sr_max
 
 bm_tidy %>%
-ggplot(aes(x = sr_obs_max, y = bm_obs_max)) +
+ggplot(aes(x = sr_obs_max, y = bm_obs_max, shape = Site, col = Site)) +
   geom_point() +
   labs(
     x = expression("S"["obs"]/"S"["max"]),
