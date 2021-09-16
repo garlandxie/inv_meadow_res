@@ -23,10 +23,11 @@ vis_miss(bm)
 # clean data ----
 
 bm_tidy <- bm %>%
-  group_by(Section, Site, Treatment, Plot) %>%
+  janitor::clean_names() %>%
+  group_by(section, site, treatment, plot) %>%
   summarize(
-    sr = length(unique(Spp_Code)), 
-    bm_g = sum(Biomass_g, na.rm = TRUE)
+    sr = length(unique(spp_code)), 
+    bm_g = sum(biomass_g, na.rm = TRUE)
   )
 
 # plot ----
