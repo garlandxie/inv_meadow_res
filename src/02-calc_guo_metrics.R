@@ -63,6 +63,16 @@ site_vs_ie <- bm %>%
     label = c("Undisturbed", "Seed Tillage")) + 
   theme_bw()
 
+trt_vs_ie <- bm %>%
+  ggplot(aes(x = treatment, y = i_e)) + 
+  geom_violin() + 
+  geom_point(alpha = 0.1) +
+  labs(
+    x = "Treatment", 
+    y = "Unified Metric of Invasibility"
+  ) + 
+  theme_bw()
+
 # plot Guo's invasibility ----
 
 rel_fracs <- bm %>%
@@ -92,6 +102,17 @@ ggsave(
     "output/figures", "site_vs_ie.png"
   ), 
   plot = site_vs_ie, 
+  device = "png", 
+  units = "in", 
+  width = 6, 
+  height = 5
+)
+
+ggsave(
+  filename = here(
+    "output/figures", "trt_vs_ie.png"
+  ), 
+  plot = trt_vs_ie, 
   device = "png", 
   units = "in", 
   width = 6, 
