@@ -1,0 +1,19 @@
+---
+title: "PhD_PAB_data-analysis.Rmd"
+author: "Garland Xie"
+date: "16/09/2021"
+output: html_document
+bibliography: references.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Guo's invasibility index
+
+Here's the math behind the unified measure of invasibility [@guo2015]
+
+$I_{e} = 1 - (h * \frac{S_{obs}}{S_{max}} + (1-h)*\frac{B_{obs}}{B_{max}})$
+
+## References
