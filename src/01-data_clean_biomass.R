@@ -77,10 +77,11 @@ litter <- bm %>%
       x = NULL, 
       y = "Litter biomass (in grams)"
     ) + 
-    coord_flip() + 
-    theme(legend.position = "none") + 
-    theme_bw() 
+    theme_bw() + 
+    theme(legend.position = "none") 
 )
+
+# 
 
 # write to disk -----
 
