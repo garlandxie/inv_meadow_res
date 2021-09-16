@@ -65,7 +65,7 @@ bm %>%
 
 # plot Guo's invasibility ----
 
-bm %>%
+rel_fracs <- bm %>%
   ggplot(aes(x = sr_obs_max, y = bm_obs_max, col = site)) +
   geom_point() +
   labs(
@@ -73,3 +73,16 @@ bm %>%
     y = expression("B"["obs"]/"B"["max"])
   ) + 
   theme_bw()
+
+# write to disk ----
+
+ggsave(
+  filename = here(
+    "output/figures", "relative-fractions.png"
+  ), 
+  plot = rel_fracs, 
+  device = "png", 
+  units = "in", 
+  width = 5, 
+  height = 5
+)
