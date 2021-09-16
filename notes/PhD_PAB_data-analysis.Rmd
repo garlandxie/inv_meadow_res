@@ -10,6 +10,23 @@ bibliography: references.bib
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+## Import data
+
+```{r}
+library(here)
+library(skimr)
+```
+
+Let's import the aggregrated data frame that contains species richness and community biomass per habitat across nine sites and two management regimes.
+
+```{r}
+bm <- read_csv(here("data/final", "biomass_tidy.csv"))
+```
+
+```{r}
+skimr::skim(bm)
+```
+
 ## Guo's invasibility index
 
 Here's the math behind the unified measure of invasibility [@guo2015]
