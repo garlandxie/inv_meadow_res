@@ -61,6 +61,27 @@ bm_tidy %>%
   coord_flip() + 
   theme_bw()
 
+# litter
+
+litter <- bm %>%
+  janitor::clean_names() %>%
+  filter(spp_code == "LITTER") 
+
+(site_vs_lit <- litter %>%
+  group_by(section, treatment, site, plot) %>%
+  summarize(litter_bm_g = sum(biomass_g, na.rm = TRUE)) %>%
+  ggplot(aes(x = site, y = litter_bm_g, fill = site)) + 
+    geom_violin() +  
+    geom_point(alpha = 0.1) + 
+    labs(
+      x = NULL, 
+      y = "Litter biomass (in grams)"
+    ) + 
+    coord_flip() + 
+    theme(legend.position = "none") + 
+    theme_bw() 
+)
+
 # write to disk -----
 
 readr::write_csv(
