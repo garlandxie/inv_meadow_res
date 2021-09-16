@@ -50,7 +50,7 @@ bm <- bm %>%
   )
 
 # some visual checks
-bm %>%
+site_vs_ie <- bm %>%
   ggplot(aes(x = site, y = i_e, fill = treatment)) + 
   geom_violin() + 
   geom_point(alpha = 0.1) +
@@ -84,5 +84,16 @@ ggsave(
   device = "png", 
   units = "in", 
   width = 5, 
+  height = 5
+)
+
+ggsave(
+  filename = here(
+    "output/figures", "site_vs_ie.png"
+  ), 
+  plot = site_vs_ie, 
+  device = "png", 
+  units = "in", 
+  width = 6, 
   height = 5
 )
