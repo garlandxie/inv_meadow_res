@@ -4,6 +4,7 @@ library(visdat)
 library(dplyr)
 library(ggplot2)
 library(here)
+library(readr)
 
 # import ----
 
@@ -61,7 +62,7 @@ bm_tidy %>%
 
 # write to disk -----
 
-write.csv(
+readr::write_csv(
   x = bm_tidy, 
   here("data/final", "biomass_tidy.csv")
 )
