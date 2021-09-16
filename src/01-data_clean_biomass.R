@@ -7,6 +7,7 @@ library(here)
 library(readr)
 library(tidyr)
 library(tibble)
+library(vegan)
 
 # import ----
 
@@ -96,6 +97,19 @@ comm_matrix <- bm %>%
   select(-c(site, plot)) %>%
   column_to_rownames(var = "id")
 
+nmds <- vegan::metaMDS(comm_matrix, k = 2)
+stressplot(nmds)
+
+site <- comm_matrix %>%
+  rownames() %>%
+  str_extract(pattern = "[A-Z]{1,4}")
+
+ordiplot(nmds, type = "n")
+orditorp(nmds, display = "species", col = "red", cex = 0.5) 
+ordihull(nmds, groups = site, draw="polygon", label= TRUE)
+dev.off()
+plot.new()
+  
 # write to disk -----
 
 readr::write_csv(
