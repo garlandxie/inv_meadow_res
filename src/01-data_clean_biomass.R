@@ -5,6 +5,8 @@ library(dplyr)
 library(ggplot2)
 library(here)
 library(readr)
+library(tidyr)
+library(tibble)
 
 # import ----
 
@@ -81,7 +83,18 @@ litter <- bm %>%
     theme(legend.position = "none") 
 )
 
-# 
+# nmds for community composition
+comm_matrix <- bm %>%
+  janitor::clean_names() %>%
+  filter(spp_code != "LITTER") %>%
+  group_by(site, plot, spp_code) %>%
+  summarize(bm_g = sum(biomass_g, na.rm = TRUE)) %>%
+  ungroup() %>%
+  pivot_wider(names_from = spp_code, values_from = bm_g) %>%
+  mutate(across(.cols = everything(), replace_na, 0)) %>%
+  mutate(id = paste(site, plot, sep = "-")) %>%
+  select(-c(site, plot)) %>%
+  column_to_rownames(var = "id")
 
 # write to disk -----
 
