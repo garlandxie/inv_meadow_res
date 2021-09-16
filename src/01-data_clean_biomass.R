@@ -42,21 +42,21 @@ plot_id <- c(
 
 # species richness
 bm_tidy %>%
-  filter(Plot %in% plot_id) %>%
-  ggplot(aes(x = Plot, y = sr, fill = Site)) + 
+  filter(plot %in% plot_id) %>%
+  ggplot(aes(x = plot, y = sr, fill = site)) + 
     geom_bar(stat = "identity") + 
     labs(x = NULL, y = "Species Richness") + 
-    facet_wrap(Site~Treatment) +
+    facet_wrap(site~treatment) +
     coord_flip() + 
     theme_bw()
 
 # community biomass
 bm_tidy %>%
-  filter(Plot %in% plot_id) %>%
-  ggplot(aes(x = Plot, y = bm_g, fill = Site)) + 
+  filter(plot %in% plot_id) %>%
+  ggplot(aes(x = plot, y = bm_g, fill = site)) + 
   geom_bar(stat = "identity") + 
   labs(x = NULL, y = "Community Biomass (in grams)") + 
-  facet_wrap(Site~Treatment) +
+  facet_wrap(site~treatment) +
   coord_flip() + 
   theme_bw()
 
