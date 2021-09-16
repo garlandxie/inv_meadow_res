@@ -3,6 +3,7 @@ library(googlesheets4)
 library(visdat)
 library(dplyr)
 library(ggplot2)
+library(here)
 
 # import ----
 
@@ -58,3 +59,9 @@ bm_tidy %>%
   coord_flip() + 
   theme_bw()
 
+# write to disk -----
+
+write.csv(
+  x = bm_tidy, 
+  here("data/final", "biomass_tidy.csv")
+)
