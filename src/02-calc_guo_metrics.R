@@ -14,7 +14,7 @@ str(bm)
 head(bm, n = 5)
 tail(bm, n = 5)
 
-# Guo's invasibility ----
+# calculate unified measure of invasibility ----
 
 sr_max <- max(bm$sr)
 bm_max <- max(bm$bm_g)
@@ -22,8 +22,10 @@ bm_max <- max(bm$bm_g)
 bm$bm_obs_max <- bm$bm_g/bm_max
 bm$sr_obs_max <- bm$sr/sr_max
 
+# plot Guo's invasibility ----
+
 bm %>%
-  ggplot(aes(x = sr_obs_max, y = bm_obs_max)) +
+  ggplot(aes(x = sr_obs_max, y = bm_obs_max, col = site)) +
   geom_point() +
   labs(
     x = expression("S"["obs"]/"S"["max"]),
