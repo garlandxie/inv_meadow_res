@@ -1,3 +1,18 @@
+# libraries ----
+library(here)
+library(readr)
+
+# import ----
+
+bm <- read_csv(here("data/final", "biomass_tidy.csv"))
+
+# check packaging ----
+
+str(bm)
+head(bm, n = 5)
+tail(bm, n = 5)
+
+
 # Guo's invasibility
 
 sr_max <- max(bm_tidy$sr)
