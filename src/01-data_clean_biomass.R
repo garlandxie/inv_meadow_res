@@ -97,7 +97,7 @@ comm_matrix <- bm %>%
   select(-c(site, plot)) %>%
   column_to_rownames(var = "id")
 
-nmds <- vegan::metaMDS(comm_matrix, k = 2)
+nmds <- vegan::metaMDS(comm_matrix, k = 2, distance = "bray")
 stressplot(nmds)
 
 site <- comm_matrix %>%
@@ -105,7 +105,6 @@ site <- comm_matrix %>%
   str_extract(pattern = "[A-Z]{1,4}")
 
 ordiplot(nmds, type = "n")
-orditorp(nmds, display = "species", col = "red", cex = 0.5) 
 ordihull(nmds, groups = site, draw="polygon", label= TRUE)
 dev.off()
 plot.new()
