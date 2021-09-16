@@ -26,6 +26,7 @@ vis_miss(bm)
 
 bm_tidy <- bm %>%
   janitor::clean_names() %>%
+  filter(spp_code != "LITTER") %>%
   group_by(section, site, treatment, plot) %>%
   summarize(
     sr = length(unique(spp_code)), 
