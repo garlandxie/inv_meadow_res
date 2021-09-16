@@ -49,6 +49,20 @@ bm <- bm %>%
     i_e = 1-(abs_h*sr_obs_max + (1-abs_h)*bm_obs_max)
   )
 
+# some visual checks
+bm %>%
+  ggplot(aes(x = site, y = i_e, fill = treatment)) + 
+  geom_violin() + 
+  geom_point(alpha = 0.1) +
+  labs(
+    x = "Site", 
+    y = "Unified Metric of Invasibility"
+    ) + 
+  scale_fill_discrete(
+    name = "Treatment", 
+    label = c("Undisturbed", "Seed Tillage")) + 
+  theme_bw()
+
 # plot Guo's invasibility ----
 
 bm %>%
