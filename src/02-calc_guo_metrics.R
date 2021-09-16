@@ -12,16 +12,15 @@ str(bm)
 head(bm, n = 5)
 tail(bm, n = 5)
 
+# Guo's invasibility ----
 
-# Guo's invasibility
+sr_max <- max(bm$sr)
+bm_max <- max(bm$bm_g)
 
-sr_max <- max(bm_tidy$sr)
-bm_max <- max(bm_tidy$bm_g)
+bm$bm_obs_max <- bm$bm_g/bm_max
+bm$sr_obs_max <- bm$sr/sr_max
 
-bm_tidy$bm_obs_max <- bm_tidy$bm_g/bm_max
-bm_tidy$sr_obs_max <- bm_tidy$sr/sr_max
-
-bm_tidy %>%
+bm %>%
   ggplot(aes(x = sr_obs_max, y = bm_obs_max)) +
   geom_point() +
   labs(
