@@ -8,6 +8,10 @@ library(readr)
 library(tidyr)
 library(tibble)
 library(vegan)
+library(BiodiversityR)
+library(ggrepel)
+library(gghighlight)
+library(stringr)
 
 # import ----
 
@@ -111,6 +115,44 @@ ordihull(nmds, groups = site, draw="polygon", label= TRUE)
 dev.off()
 plot.new()
   
+# rank-abundance curve: VICP ---------------------------------------------------
+
+# VICP 
+vicp_comm <- bm %>%
+  janitor::clean_names() %>%
+  group_by(section, site, treatment, plot, spp_code) %>%
+  summarize(bm_g = sum(biomass_g, na.rm = TRUE)) %>%
+  ungroup() %>%
+  filter(site == "VICP") %>%
+  select(
+    plot, 
+    spp_code, 
+    bm_g
+  ) %>%
+  pivot_wider(names_from = spp_code, values_from = bm_g) %>%
+  mutate(across(.cols = everything(), replace_na, 0)) %>%
+  column_to_rownames(var = "plot")
+
+# helpful for seeing all plots in VICP
+rad_vicp <- vegan::radfit(vicp_comm, family = Gamma)
+plot(rad_vicp)
+
+# helpful for labeling species
+(RA <- vicp_comm %>%
+  BiodiversityR::rankabundance() %>%
+  as.data.frame() %>%
+  rownames_to_column(var = "species") %>%
+  ggplot(aes(x = rank, y = abundance)) + 
+  geom_line() + 
+  geom_point() + 
+  gghighlight(species %in% c("MELU", "CEFO", "TRPR", "CHAL", "TRAE")) + 
+  geom_text_repel(aes(label = species)) + 
+  labs(title = "Victoria Park") + 
+  theme_bw()
+)
+
+
+
 # write to disk -----
 
 readr::write_csv(
