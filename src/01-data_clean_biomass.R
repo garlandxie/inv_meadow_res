@@ -231,6 +231,48 @@ plot(rad_bnsh)
     theme_bw()
 )
 
+
+# rank-abundance curve: TIMH ---------------------------------------------------
+
+# Note: TIMH and KENN overlap a bit for the NMDS plots
+# So plot rank abundance curves for TIMH (for now)
+
+timh_comm <- bm %>%
+  janitor::clean_names() %>%
+  filter(spp_code != "LITTER") %>%
+  group_by(section, site, treatment, plot, spp_code) %>%
+  summarize(bm_g = sum(biomass_g, na.rm = TRUE)) %>%
+  ungroup() %>%
+  filter(site == "TIMH") %>%
+  select(
+    plot, 
+    spp_code, 
+    bm_g
+  ) %>%
+  pivot_wider(names_from = spp_code, values_from = bm_g) %>%
+  mutate(across(.cols = everything(), replace_na, 0)) %>%
+  column_to_rownames(var = "plot")
+
+# helpful for seeing all plots in GRNB
+# current gamma distribution fit results in non-convergence for glm's 
+# ignore for now.. 
+rad_timh <- vegan::radfit(timh_comm, family = gaussian)
+plot(rad_timh)
+
+# helpful for labeling species
+(timh_comm %>%
+    BiodiversityR::rankabundance() %>%
+    as.data.frame() %>%
+    rownames_to_column(var = "species") %>%
+    ggplot(aes(x = rank, y = abundance)) + 
+    geom_line() + 
+    geom_point() + 
+    gghighlight(species %in% c("SIAL", "OEBI", "CEFO", "ECCR")) + 
+    geom_text_repel(aes(label = species)) + 
+    labs(title = "TIMH") + 
+    theme_bw()
+)
+
 # write to disk -----
 
 readr::write_csv(
