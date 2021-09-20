@@ -151,7 +151,44 @@ plot(rad_vicp)
   theme_bw()
 )
 
+# rank-abundance curve: GRNB ---------------------------------------------------
 
+# GRNB
+grnb_comm <- bm %>%
+  janitor::clean_names() %>%
+  filter(spp_code != "LITTER") %>%
+  group_by(section, site, treatment, plot, spp_code) %>%
+  summarize(bm_g = sum(biomass_g, na.rm = TRUE)) %>%
+  ungroup() %>%
+  filter(site == "GRNB") %>%
+  select(
+    plot, 
+    spp_code, 
+    bm_g
+  ) %>%
+  pivot_wider(names_from = spp_code, values_from = bm_g) %>%
+  mutate(across(.cols = everything(), replace_na, 0)) %>%
+  column_to_rownames(var = "plot")
+
+# helpful for seeing all plots in GRNB
+# current gamma distribution fit results in non-convergence for glm's 
+# ignore for now.. 
+rad_grnb <- vegan::radfit(grnb_comm, family = Gamma)
+plot(rad_grnb)
+
+# helpful for labeling species
+(RA_GRNB <- grnb_comm %>%
+    BiodiversityR::rankabundance() %>%
+    as.data.frame() %>%
+    rownames_to_column(var = "species") %>%
+    ggplot(aes(x = rank, y = abundance)) + 
+    geom_line() + 
+    geom_point() + 
+    gghighlight(species %in% c("SOSP", "HEGI", "HEHE", "DACA")) + 
+    geom_text_repel(aes(label = species)) + 
+    labs(title = "GRNB") + 
+    theme_bw()
+)
 
 # write to disk -----
 
