@@ -84,7 +84,9 @@ litter <- bm %>%
     theme(legend.position = "none") 
 )
 
-# nmds for community composition
+# nmds for community composition -----------------------------------------------
+
+# create community matrix 
 comm_matrix <- bm %>%
   janitor::clean_names() %>%
   filter(spp_code != "LITTER") %>%
