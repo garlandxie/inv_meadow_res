@@ -55,3 +55,12 @@ plants_tidy <- plants %>%
     ) %>%
   mutate(taxa = str_replace(taxa, pattern = " ", replacement = "_"))
 
+# exploring ---
+
+# exotics, natives, and unidentified (??)
+table(plants_tidy$exotic_native)
+
+# filter out unidentified (??)
+u_list <- plants_tidy %>%
+  filter(exotic_native == "U") %>%
+  pull(taxa)
