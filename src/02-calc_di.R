@@ -4,6 +4,7 @@ library(skimr)
 library(dplyr)
 library(janitor)
 library(stringr)
+library(googlesheets4)
 
 # import ----
 
@@ -15,12 +16,17 @@ doi <- "10.5061/dryad.1ns1rn8sg"
 link <- rdryad::dryad_download(doi)
 plants <- read.csv(unlist(link))
 
+# list of species collected in the meadoway
+# binomial latin names and their associated codes
+gs_link <- "https://docs.google.com/spreadsheets/d/1ctIxX6FHW2vZS3yyO5A-pE8jYKXIO2FFq5D_cq7x39s/edit?usp=sharing"
+plants_mw <- googlesheets4::read_sheet(gs_link, sheet = 1)
+
 # check packaging ----
 
 str(plants)
 skimr::skim(plants)
 
-# data cleaning ----
+# data cleaning: plants of Toronto ----
 
 # some metadata on the plants of Toronto database: 
 # (1) 1937 taxa from 146 families, of which 822 are non-indigenous
@@ -55,6 +61,13 @@ plants_tidy <- plants %>%
     ) %>%
   mutate(taxa = str_replace(taxa, pattern = " ", replacement = "_"))
 
+# data cleaning: plants of the Meadoway ----
+
+mw_tidy <- plants_mw %>%
+  janitor::clean_names() %>%
+  mutate(taxa = paste(genus, species, sep = "_")) %>%
+  select(code, taxa)
+
 # exploring ---
 
 # exotics, natives, and unidentified (??)
@@ -64,3 +77,9 @@ table(plants_tidy$exotic_native)
 u_list <- plants_tidy %>%
   filter(exotic_native == "U") %>%
   pull(taxa)
+
+# joins ----
+
+mw_en <- mw_tidy %>%
+  left_join(plants_tidy, by = "taxa")
+
