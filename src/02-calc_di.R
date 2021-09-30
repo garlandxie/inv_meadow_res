@@ -80,6 +80,14 @@ mw_tidy <- plants_mw %>%
     )
   )
 
+# data clean: biomass ----------------------------------------------------------
+
+bm_tidy <- bm %>%
+  janitor::clean_names() %>%
+  group_by(section, site, treatment, plot, spp_code) %>%
+  summarize(spp_biomass_g = sum(biomass_g, na.rm = TRUE)) %>%
+  ungroup() 
+
 # exploring ---
 
 # exotics, natives, and unidentified (??)
@@ -98,5 +106,10 @@ mw_en <- mw_tidy %>%
     taxa == "Cerastium_pumilum" ~ "E", 
     TRUE ~ exotic_native)
     )
+
+bm_en <- bm_tidy %>% 
+  left_join(mw_en, by = c("spp_code" = "code")) 
+
+
 
 
