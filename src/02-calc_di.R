@@ -21,6 +21,10 @@ plants <- read.csv(unlist(link))
 gs_link <- "https://docs.google.com/spreadsheets/d/1ctIxX6FHW2vZS3yyO5A-pE8jYKXIO2FFq5D_cq7x39s/edit?usp=sharing"
 plants_mw <- googlesheets4::read_sheet(gs_link, sheet = 1)
 
+# biomass data 
+bm_link <- "https://docs.google.com/spreadsheets/d/1U6IvXmukXMR8Gwxs1Yi8RyUJnUvqdeBXCVNBQo91Qys/edit?usp=sharing"
+bm <- read_sheet(bm_link, sheet = "raw_data")
+
 # check packaging ----
 
 str(plants)
