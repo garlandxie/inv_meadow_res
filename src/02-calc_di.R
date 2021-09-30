@@ -66,7 +66,15 @@ plants_tidy <- plants %>%
 mw_tidy <- plants_mw %>%
   janitor::clean_names() %>%
   mutate(taxa = paste(genus, species, sep = "_")) %>%
-  select(code, taxa)
+  select(code, taxa) %>%
+  mutate(taxa = case_when(
+    taxa == "Conzya_canadensis" ~ "Erigeron_canadensis", 
+    taxa == "Solidago_spp." ~ "Solidago_canadensis",
+    taxa == "Chenopodium_glaucum" ~ "Oxybasis_glauca", 
+    taxa == "Setaria_glauca" ~ "Setaria_pumila",
+    TRUE ~ taxa
+    )
+  )
 
 # exploring ---
 
@@ -81,5 +89,10 @@ u_list <- plants_tidy %>%
 # joins ----
 
 mw_en <- mw_tidy %>%
-  left_join(plants_tidy, by = "taxa")
+  left_join(plants_tidy, by = "taxa") %>%
+  mutate(exotic_native = case_when(
+    taxa == "Cerastium_pumilum" ~ "E", 
+    TRUE ~ exotic_native)
+    )
+
 
