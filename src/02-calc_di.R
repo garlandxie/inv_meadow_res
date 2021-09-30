@@ -5,6 +5,7 @@ library(dplyr)
 library(janitor)
 library(stringr)
 library(googlesheets4)
+library(here)
 
 # import ----
 
@@ -136,7 +137,12 @@ di <- di_df %>%
     guo_di = ((er/sr) + (e_bio/tot_bio))*0.5
   )
 
+# save to disk -----------------------------------------------------------------
 
+write.csv(
+  x = di, 
+  file = here('data', 'final', 'guo_di.csv')
+)
 
 
 
