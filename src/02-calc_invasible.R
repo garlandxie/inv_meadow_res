@@ -86,6 +86,11 @@ rel_fracs <- bm %>%
 
 # write to disk ----
 
+write.csv(
+  x = bm, 
+  file = here("data", "final", "guo_inv.csv")
+)
+
 ggsave(
   filename = here(
     "output/figures", "relative-fractions.png"
