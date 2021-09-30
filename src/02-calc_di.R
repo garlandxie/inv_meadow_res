@@ -110,6 +110,33 @@ mw_en <- mw_tidy %>%
 bm_en <- bm_tidy %>% 
   left_join(mw_en, by = c("spp_code" = "code")) 
 
+# calculate degree of invasion ----
+
+# tricky to do so just make dfs and do joins
+
+di_df <- bm_en %>%
+  filter(!is.na(exotic_native)) %>%
+  group_by(section, site, treatment, plot) %>%
+  summarize(
+    er = sum(exotic_native == "E", na.rm = TRUE),
+    sr = length(unique(spp_code)),
+    tot_bio = sum(spp_biomass_g, na.rm = TRUE)
+  ) %>%
+  ungroup()
+  
+e_bio <- bm_en %>%
+  filter(exotic_native == "E") %>%
+  group_by(section, site, treatment, plot) %>%
+  summarize(e_bio = sum(spp_biomass_g, na.rm = TRUE)) %>%
+  ungroup()
+
+di <- di_df %>%
+  left_join(e_bio, by = c("section", "site", "treatment", "plot")) %>%
+  mutate(
+    guo_di = ((er/sr) + (e_bio/tot_bio))*0.5
+  )
+
+
 
 
 
