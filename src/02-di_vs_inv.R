@@ -58,6 +58,45 @@ guo <- Reduce(custom_join, all_dfs)
   theme_bw()
 )
 
+# Degree of invasion (invasive): relative fractions ----------------------------
+
+(di_inv_fracs <- guo %>%
+   mutate(
+     inv_rich_frac = inv_rich/tot_rich,
+     inv_bm_frac   = inv_bio/bm_g
+   ) %>%
+   ggplot(aes(x = inv_rich_frac, y = inv_bm_frac, col = site)) + 
+   geom_point() + 
+   labs(
+     title = "Invasive spp only",
+     x = expression("S"["inv"]/"S"["tot"]),
+     y = expression("B"["inv"]/"B"["tot"])
+   ) + 
+   scale_color_discrete("Site") + 
+   xlim(0, 1) + 
+   ylim(0, 1) + 
+   theme_bw()
+)
+
+# Degree of invasion (non-natives): relative fractions -------------------------
+
+(di_nn_fracs <- guo %>%
+   mutate(
+     nn_rich_frac = nn_rich/tot_rich,
+     nn_bm_frac   = nn_biomass_g/bm_g
+   ) %>%
+   ggplot(aes(x = nn_rich_frac, y = nn_bm_frac, col = site)) + 
+   geom_point() + 
+   labs(
+     title = "Non-native spp only",
+     x = expression("S"["nn"]/"S"["tot"]),
+     y = expression("B"["nn"]/"B"["tot"])
+   ) + 
+   scale_color_discrete("Site") + 
+   xlim(0, 1) + 
+   ylim(0, 1) + 
+   theme_bw()
+)
 
 # DI vs invasibility -----------------------------------------------------------
 
