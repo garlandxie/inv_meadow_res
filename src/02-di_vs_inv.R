@@ -31,11 +31,14 @@ guo_inv <- read.csv(
 
 # joins ------------------------------------------------------------------------
 
-di_inv <- guo_di %>%
-  inner_join(
-    guo_inv,
-    by = c("section", "site", "treatment", "plot")
-    ) 
+custom_join <- purrr::partial(
+  inner_join, 
+  by = c("section", "site", "treatment", "plot")
+  )
+
+# recursively apply join operations using a multi-id key
+all_dfs <- list(guo_di, guo_di_inv, guo_di_nn, guo_inv)
+guo <- Reduce(custom_join, all_dfs)
 
 # plot -------------------------------------------------------------------------
 
