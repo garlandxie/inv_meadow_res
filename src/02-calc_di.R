@@ -184,6 +184,51 @@ di_inv <- di_df2 %>%
   mutate(i_bio = tidyr::replace_na(i_bio, 0)) %>%
   mutate(guo_di_inv = ((ir/sr) + (i_bio/tot_bio))*0.5)
 
+# calculate degree of invasion (for non-native spp) ----------------------------
+
+# assign non-native status (excluding invasive spp)
+# should back up with refs? 
+
+mw_nn <- mw_i %>%
+  mutate(non_natives = case_when(
+    exotic_native == "E" & invasive == "N" ~ "Y",
+    exotic_native == "E" & invasive == "Y" ~ "N",
+    exotic_native == "N" ~ "N",
+    TRUE ~ "N")
+  )
+
+# prep for relative fractions
+# 1. non-native richness
+# 2. non-native biomass
+
+bm_nn <- bm_tidy %>% 
+  left_join(mw_nn, by = c("spp_code" = "code")) 
+
+nn_df <- bm_nn %>%
+  filter(!is.na(non_natives)) %>%
+  group_by(section, site, treatment, plot) %>%
+  summarize(
+    nr = sum(non_natives == "Y", na.rm = TRUE),
+    sr = length(unique(spp_code)),
+    tot_bio = sum(spp_biomass_g, na.rm = TRUE)
+  ) %>%
+  ungroup()
+
+nn_bio <- bm_nn %>%
+  filter(non_natives == "Y") %>%
+  group_by(section, site, treatment, plot) %>%
+  summarize(nn_bio = sum(spp_biomass_g, na.rm = TRUE)) %>%
+  ungroup() %>%
+  mutate(nn_bio = tidyr::replace_na(nn_bio, 0))
+
+# degree of invasion
+# for non-native species 
+
+di_nn <- nn_df %>%
+  left_join(nn_bio, by = c("section", "site", "treatment", "plot")) %>%
+  mutate(nn_bio = tidyr::replace_na(nn_bio, 0)) %>%
+  mutate(guo_di_nn = ((nr/sr) + (nn_bio/tot_bio))*0.5)
+
 # save to disk -----------------------------------------------------------------
 
 write.csv(
