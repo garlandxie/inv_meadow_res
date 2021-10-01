@@ -1,4 +1,4 @@
-# libraries ----
+# libraries --------------------------------------------------------------------
 library(rdryad)
 library(skimr)
 library(dplyr)
@@ -8,7 +8,7 @@ library(googlesheets4)
 library(here)
 library(tidyr)
 
-# import ----
+# import -----------------------------------------------------------------------
 
 # dryad citation
 # Cadotte, Marc (2020), The list of vascular plants for the city of Toronto
@@ -27,7 +27,7 @@ plants_mw <- googlesheets4::read_sheet(gs_link, sheet = 1)
 bm_link <- "https://docs.google.com/spreadsheets/d/1U6IvXmukXMR8Gwxs1Yi8RyUJnUvqdeBXCVNBQo91Qys/edit?usp=sharing"
 bm <- read_sheet(bm_link, sheet = "raw_data")
 
-# check packaging ----
+# check packaging --------------------------------------------------------------
 
 str(plants)
 skimr::skim(plants)
@@ -67,7 +67,7 @@ plants_tidy <- plants %>%
     ) %>%
   mutate(taxa = str_replace(taxa, pattern = " ", replacement = "_"))
 
-# data cleaning: plants of the Meadoway ----
+# data cleaning: plants of the Meadoway ----------------------------------------
 
 mw_tidy <- plants_mw %>%
   janitor::clean_names() %>%
@@ -90,7 +90,7 @@ bm_tidy <- bm %>%
   summarize(spp_biomass_g = sum(biomass_g, na.rm = TRUE)) %>%
   ungroup() 
 
-# joins ----
+# joins ------------------------------------------------------------------------
 
 mw_en <- mw_tidy %>%
   left_join(plants_tidy, by = "taxa") %>%
