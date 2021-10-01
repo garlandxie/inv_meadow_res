@@ -40,6 +40,25 @@ custom_join <- purrr::partial(
 all_dfs <- list(guo_di, guo_di_inv, guo_di_nn, guo_inv)
 guo <- Reduce(custom_join, all_dfs)
 
+# Degree of invasion (non-native + invasive): relative fractions ---------------
+
+(di_exo_fracs <- guo %>%
+  mutate(
+    exo_rich_frac = exo_rich/tot_rich,
+    exo_bm_frac   = exo_biomass_g/bm_g
+    ) %>%
+  ggplot(aes(x = exo_rich_frac, y = exo_bm_frac, col = site)) + 
+  geom_point() + 
+  labs(
+    title = "Exotics (incl. non-native and invasive spp)",
+    x = expression("S"["exo"]/"S"["tot"]),
+    y = expression("B"["exo"]/"B"["tot"])
+  ) + 
+  scale_color_discrete("Site") + 
+  theme_bw()
+)
+
+
 # DI vs invasibility -----------------------------------------------------------
 
 # degree of invasion versus invasibility 
