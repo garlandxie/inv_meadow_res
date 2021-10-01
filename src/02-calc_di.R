@@ -6,6 +6,7 @@ library(janitor)
 library(stringr)
 library(googlesheets4)
 library(here)
+library(tidyr)
 
 # import ----
 
@@ -137,12 +138,59 @@ di <- di_df %>%
     guo_di = ((er/sr) + (e_bio/tot_bio))*0.5
   )
 
+# calculate degree of invasion (for just invasive species) ---------------------
+
+# assign invasive status
+# should back up with refs? 
+
+mw_i <- mw_en %>%
+  mutate(invasive = case_when(
+    taxa == "Alliaria_petiolata" ~ "Y",
+    taxa == "Vincetoxicum_rossicum" ~ "Y",
+    taxa == "Cirsium_arvense" ~ "Y", 
+    TRUE ~ "N")
+  )
+
+# prep for relative fractions
+# 1. invasive richness
+# 2. invasive biomass
+
+bm_i <- bm_tidy %>% 
+  left_join(mw_i, by = c("spp_code" = "code")) 
+
+di_df2 <- bm_i %>%
+  filter(!is.na(invasive)) %>%
+  group_by(section, site, treatment, plot) %>%
+  summarize(
+    ir = sum(invasive == "Y", na.rm = TRUE),
+    sr = length(unique(spp_code)),
+    tot_bio = sum(spp_biomass_g, na.rm = TRUE)
+  ) %>%
+  ungroup()
+
+i_bio <- bm_i %>%
+  filter(invasive == "Y") %>%
+  group_by(section, site, treatment, plot) %>%
+  summarize(i_bio = sum(spp_biomass_g, na.rm = TRUE)) %>%
+  ungroup() %>%
+  mutate(i_bio = tidyr::replace_na(i_bio, 0))
+
+# degree of invasion
+# where invasive spp are: 
+# (1) Alliaria petiolata, (2) Vincetoxicum rossicum, (3) Cirsium arvense
+
+di_inv <- di_df2 %>%
+  left_join(i_bio, by = c("section", "site", "treatment", "plot")) %>%
+  mutate(i_bio = tidyr::replace_na(i_bio, 0)) %>%
+  mutate(guo_di_inv = ((ir/sr) + (i_bio/tot_bio))*0.5)
+
 # save to disk -----------------------------------------------------------------
 
 write.csv(
   x = di, 
   file = here('data', 'final', 'guo_di.csv')
 )
+
 
 
 
