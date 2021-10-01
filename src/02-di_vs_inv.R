@@ -128,6 +128,22 @@ guo <- Reduce(custom_join, all_dfs)
    theme_bw()
 )
 
+# DI (invasives) vs invasibility -----------------------------------------------
+
+# degree of invasion versus invasibility 
+# add seed rain later on
+(di_inv_vs_inv <- guo %>%
+   ggplot(aes(x = i_e, y = guo_di_inv)) + 
+   geom_point(aes(col = site)) + 
+   geom_quantile(quantiles = 0.75) + 
+   labs(
+     x = "Invasibility", 
+     y = "DI (invasives)"
+   ) + 
+   scale_color_discrete("Site") + 
+   theme_bw()
+)
+
 # save to disk ------
 
 ggsave(
