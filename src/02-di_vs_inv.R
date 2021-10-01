@@ -40,8 +40,9 @@ custom_join <- purrr::partial(
 all_dfs <- list(guo_di, guo_di_inv, guo_di_nn, guo_inv)
 guo <- Reduce(custom_join, all_dfs)
 
-# plot -------------------------------------------------------------------------
+# DI vs invasibility -----------------------------------------------------------
 
+# degree of invasion versus invasibility 
 # add seed rain later on
 (di_vs_inv <- guo %>%
   ggplot(aes(x = i_e, y = guo_di, col = site)) + 
@@ -50,6 +51,7 @@ guo <- Reduce(custom_join, all_dfs)
     x = "Invasibility", 
     y = "DI"
   ) + 
+  scale_color_discrete("Site") + 
   theme_bw()
 )
 
