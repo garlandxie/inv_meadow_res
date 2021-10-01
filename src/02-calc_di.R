@@ -231,15 +231,21 @@ di_nn <- nn_df %>%
 
 # save to disk -----------------------------------------------------------------
 
+# DI (incl. non-natives + invasive spp)
 write.csv(
   x = di, 
   file = here('data', 'final', 'guo_di.csv')
 )
 
-
+# DI (incl. only invasive spp)
 write.csv(
   x = di_inv, 
   file = here('data', 'final', 'di_inv.csv')
 )
 
+# DI (incl. non-native spp)
+write.csv(
+  x = di_nn, 
+  file = here('data', 'final', 'di_nn.csv')
+)
 
