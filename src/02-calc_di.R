@@ -275,7 +275,7 @@ di_nn_final <- di_nn %>%
 
 # DI (incl. non-natives + invasive spp)
 write.csv(
-  x = di, 
+  x = di_exo_final, 
   file = here('data', 'final', 'guo_di.csv')
 )
 
