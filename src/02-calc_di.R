@@ -30,7 +30,7 @@ bm <- read_sheet(bm_link, sheet = "raw_data")
 
 str(plants)
 
-# data cleaning: plants of Toronto ----
+# data cleaning: plants of Toronto ---------------------------------------------
 
 # some metadata on the plants of Toronto database: 
 # (1) 1937 taxa from 146 families, of which 822 are non-indigenous
@@ -59,10 +59,7 @@ str(plants)
 
 plants_tidy <- plants %>%
   janitor::clean_names() %>%
-  select(
-    taxa = scientific_name, 
-    exotic_native
-    ) %>%
+  select(taxa = scientific_name, exotic_native) %>%
   mutate(taxa = str_replace(taxa, pattern = " ", replacement = "_"))
 
 # data cleaning: plants of the Meadoway ----------------------------------------
@@ -71,6 +68,9 @@ mw_tidy <- plants_mw %>%
   janitor::clean_names() %>%
   mutate(taxa = paste(genus, species, sep = "_")) %>%
   select(code, taxa) %>%
+  
+  # fix synonyms for botanical nomenclature 
+  # so that is consistent with plants of Toronto database 
   mutate(taxa = case_when(
     taxa == "Conzya_canadensis" ~ "Erigeron_canadensis", 
     taxa == "Solidago_spp." ~ "Solidago_canadensis",
@@ -82,6 +82,7 @@ mw_tidy <- plants_mw %>%
 
 # data clean: biomass ----------------------------------------------------------
 
+# aggregate to species-level biomass per plot
 bm_tidy <- bm %>%
   janitor::clean_names() %>%
   group_by(section, site, treatment, plot, spp_code) %>%
@@ -90,13 +91,37 @@ bm_tidy <- bm %>%
 
 # joins ------------------------------------------------------------------------
 
-mw_en <- mw_tidy %>%
+# non-native/invasive status
+ex_in_nn <- mw_tidy %>%
   left_join(plants_tidy, by = "taxa") %>%
+  
+  # one species was not recorded in plants of Toronto
+  # assign as exotic
+  # ref: https://plants.usda.gov/home/plantProfile?symbol=CEPU4
   mutate(exotic_native = case_when(
     taxa == "Cerastium_pumilum" ~ "E", 
     TRUE ~ exotic_native)
-    )
-
+    ) %>%
+  
+  # assign invasive status
+  # should back up with refs? 
+  mutate(invasive = case_when(
+    taxa == "Alliaria_petiolata" ~ "Y",
+    taxa == "Vincetoxicum_rossicum" ~ "Y",
+    taxa == "Cirsium_arvense" ~ "Y", 
+    TRUE ~ "N")
+  ) %>%
+  
+  # assign non-native status (excluding invasive spp)
+  # should back up with refs? 
+  mutate(non_natives = case_when(
+    exotic_native == "E" & invasive == "N" ~ "Y",
+    exotic_native == "E" & invasive == "Y" ~ "N",
+    exotic_native == "N" ~ "N",
+    TRUE ~ "N")
+  )
+  
+# get biomass and exotic/non-native/invasive status in the same df
 bm_en <- bm_tidy %>% 
   left_join(mw_en, by = c("spp_code" = "code")) 
 
@@ -127,17 +152,6 @@ di <- di_df %>%
   )
 
 # calculate degree of invasion (for just invasive species) ---------------------
-
-# assign invasive status
-# should back up with refs? 
-
-mw_i <- mw_en %>%
-  mutate(invasive = case_when(
-    taxa == "Alliaria_petiolata" ~ "Y",
-    taxa == "Vincetoxicum_rossicum" ~ "Y",
-    taxa == "Cirsium_arvense" ~ "Y", 
-    TRUE ~ "N")
-  )
 
 # prep for relative fractions
 # 1. invasive richness
@@ -173,17 +187,6 @@ di_inv <- di_df2 %>%
   mutate(guo_di_inv = ((ir/sr) + (i_bio/tot_bio))*0.5)
 
 # calculate degree of invasion (for non-native spp) ----------------------------
-
-# assign non-native status (excluding invasive spp)
-# should back up with refs? 
-
-mw_nn <- mw_i %>%
-  mutate(non_natives = case_when(
-    exotic_native == "E" & invasive == "N" ~ "Y",
-    exotic_native == "E" & invasive == "Y" ~ "N",
-    exotic_native == "N" ~ "N",
-    TRUE ~ "N")
-  )
 
 # prep for relative fractions
 # 1. non-native richness
