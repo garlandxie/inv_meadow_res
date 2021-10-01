@@ -112,7 +112,7 @@ mw_en <- mw_tidy %>%
 bm_en <- bm_tidy %>% 
   left_join(mw_en, by = c("spp_code" = "code")) 
 
-# calculate degree of invasion ----
+# calculate degree of invasion (invasive + non-natives) ------------------------
 
 # tricky to do so just make dfs and do joins
 
