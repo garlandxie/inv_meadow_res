@@ -43,7 +43,7 @@ guo <- Reduce(custom_join, all_dfs)
 # plot -------------------------------------------------------------------------
 
 # add seed rain later on
-(di_vs_inv <- di_inv %>%
+(di_vs_inv <- guo %>%
   ggplot(aes(x = i_e, y = guo_di, col = site)) + 
   geom_point() + 
   labs(
