@@ -1,12 +1,11 @@
 # libraries --------------------------------------------------------------------
-library(rdryad)
-library(skimr)
-library(dplyr)
-library(janitor)
-library(stringr)
-library(googlesheets4)
-library(here)
-library(tidyr)
+library(rdryad)           # for importing a dryad repo (see below)
+library(dplyr)            # for manipulating tidy data
+library(janitor)          # for cleaning column names
+library(stringr)          # for manipulating string characters
+library(googlesheets4)    # for reading Google spreadsheet files
+library(here)             # for creating relative file paths
+library(tidyr)            # for creating tidy data
 
 # import -----------------------------------------------------------------------
 
@@ -30,7 +29,6 @@ bm <- read_sheet(bm_link, sheet = "raw_data")
 # check packaging --------------------------------------------------------------
 
 str(plants)
-skimr::skim(plants)
 
 # data cleaning: plants of Toronto ----
 
