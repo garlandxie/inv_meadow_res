@@ -90,16 +90,6 @@ bm_tidy <- bm %>%
   summarize(spp_biomass_g = sum(biomass_g, na.rm = TRUE)) %>%
   ungroup() 
 
-# exploring ---
-
-# exotics, natives, and unidentified (??)
-table(plants_tidy$exotic_native)
-
-# filter out unidentified (??)
-u_list <- plants_tidy %>%
-  filter(exotic_native == "U") %>%
-  pull(taxa)
-
 # joins ----
 
 mw_en <- mw_tidy %>%
