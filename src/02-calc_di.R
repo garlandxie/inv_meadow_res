@@ -285,7 +285,7 @@ write.csv(
   file = here('data', 'final', 'di_inv.csv')
 )
 
-# DI (incl. non-native spp)
+# DI (incl. non-native spp, but excludes invasive spp)
 write.csv(
   x = di_nn_final, 
   file = here('data', 'final', 'di_nn.csv')
