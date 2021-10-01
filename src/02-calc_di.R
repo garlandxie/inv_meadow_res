@@ -192,5 +192,9 @@ write.csv(
 )
 
 
+write.csv(
+  x = di_inv, 
+  file = here('data', 'final', 'di_inv.csv')
+)
 
 
