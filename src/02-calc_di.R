@@ -192,6 +192,7 @@ di_inv <- bm_en %>%
 
     # community biomass (incl. native, exotic, and invasive spp)
     tot_bio = sum(spp_biomass_g, na.rm = TRUE)
+    
   ) %>%
   ungroup()
 
@@ -229,33 +230,46 @@ di_inv_final <- di_inv %>%
 # 1. non-native richness
 # 2. non-native biomass
 
-bm_nn <- bm_tidy %>% 
-  left_join(mw_nn, by = c("spp_code" = "code")) 
-
-nn_df <- bm_nn %>%
+di_nn <- bm_en %>%
   filter(!is.na(non_natives)) %>%
   group_by(section, site, treatment, plot) %>%
   summarize(
-    nr = sum(non_natives == "Y", na.rm = TRUE),
-    sr = length(unique(spp_code)),
-    tot_bio = sum(spp_biomass_g, na.rm = TRUE)
+    
+    # non-native community richness
+    nn_rich = sum(non_natives == "Y", na.rm = TRUE),
+    
+    # total community richness (incl. native and invasive species)
+    tot_rich = n_distinct(spp_code),
+    
+    # total community biomass 
+    tot_biomass_g = sum(spp_biomass_g, na.rm = TRUE)
+    
   ) %>%
   ungroup()
 
-nn_bio <- bm_nn %>%
+nn_bio <- bm_en %>%
   filter(non_natives == "Y") %>%
   group_by(section, site, treatment, plot) %>%
-  summarize(nn_bio = sum(spp_biomass_g, na.rm = TRUE)) %>%
+  summarize(nn_biomass_g = sum(spp_biomass_g, na.rm = TRUE)) %>%
   ungroup() %>%
-  mutate(nn_bio = tidyr::replace_na(nn_bio, 0))
+  
+  # sites with zero invasive spp should have zero invasive biomass 
+  mutate(nn_biomass_g = tidyr::replace_na(nn_biomass_g, 0))
 
 # degree of invasion
 # for non-native species 
-
-di_nn <- nn_df %>%
+di_nn_final <- di_nn %>%
   left_join(nn_bio, by = c("section", "site", "treatment", "plot")) %>%
-  mutate(nn_bio = tidyr::replace_na(nn_bio, 0)) %>%
-  mutate(guo_di_nn = ((nr/sr) + (nn_bio/tot_bio))*0.5)
+  mutate(
+    
+    # sites with zero invasive spp should have zero invasive biomass 
+    nn_bio = tidyr::replace_na(nn_biomass_g, 0), 
+    
+    # modified Guo's degree of invasion
+    # only applies to non-native spp (excludes invasive spp)
+    guo_di_nn = ((nn_rich/tot_rich) + (nn_biomass_g/tot_biomass_g))*0.5
+    
+    )
 
 # save to disk -----------------------------------------------------------------
 
@@ -267,13 +281,13 @@ write.csv(
 
 # DI (incl. only invasive spp)
 write.csv(
-  x = di_inv, 
+  x = di_inv_final, 
   file = here('data', 'final', 'di_inv.csv')
 )
 
 # DI (incl. non-native spp)
 write.csv(
-  x = di_nn, 
+  x = di_nn_final, 
   file = here('data', 'final', 'di_nn.csv')
 )
 
