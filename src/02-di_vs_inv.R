@@ -98,7 +98,7 @@ guo <- Reduce(custom_join, all_dfs)
    theme_bw()
 )
 
-# DI vs invasibility -----------------------------------------------------------
+# DI (exotics) vs invasibility -------------------------------------------------
 
 # degree of invasion versus invasibility 
 # add seed rain later on
@@ -111,6 +111,21 @@ guo <- Reduce(custom_join, all_dfs)
   ) + 
   scale_color_discrete("Site") + 
   theme_bw()
+)
+
+# DI (non-natives) vs invasibility ---------------------------------------------
+
+# degree of invasion versus invasibility 
+# add seed rain later on
+(di_nn_vs_inv <- guo %>%
+   ggplot(aes(x = i_e, y = guo_di_nn, col = site)) + 
+   geom_point() + 
+   labs(
+     x = "Invasibility", 
+     y = "DI (non-natives)"
+   ) + 
+   scale_color_discrete("Site") + 
+   theme_bw()
 )
 
 # save to disk ------
