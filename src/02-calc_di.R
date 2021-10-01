@@ -172,34 +172,56 @@ di_exo_final <- di_exo %>%
 # 1. invasive richness
 # 2. invasive biomass
 
-bm_i <- bm_tidy %>% 
-  left_join(mw_i, by = c("spp_code" = "code")) 
+# list of invasive spp: 
+# 1. Vinceotoxicum rossicum
+# 2. Alliara petiolata
+# 3. Cirsium arvense
 
-di_df2 <- bm_i %>%
+di_inv <- bm_en %>%
+  
+  # remove morphospecies and litter since I cannot assign a native status
   filter(!is.na(invasive)) %>%
   group_by(section, site, treatment, plot) %>%
   summarize(
-    ir = sum(invasive == "Y", na.rm = TRUE),
-    sr = length(unique(spp_code)),
+    
+    # invasive richness 
+    inv_rich = sum(invasive == "Y", na.rm = TRUE),
+    
+    # community richness (incl. native, exotic, and invasive spp)
+    tot_rich  = n_distinct(spp_code),
+
+    # community biomass (incl. native, exotic, and invasive spp)
     tot_bio = sum(spp_biomass_g, na.rm = TRUE)
   ) %>%
   ungroup()
 
-i_bio <- bm_i %>%
+inv_bio <- bm_en %>%
   filter(invasive == "Y") %>%
   group_by(section, site, treatment, plot) %>%
-  summarize(i_bio = sum(spp_biomass_g, na.rm = TRUE)) %>%
-  ungroup() %>%
-  mutate(i_bio = tidyr::replace_na(i_bio, 0))
+  summarize(
+    
+    # invasive biomass 
+    inv_bio = sum(spp_biomass_g, na.rm = TRUE)
+    
+    ) %>%
+  
+  # sites with zero invasive spp should have zero invasive biomass 
+  mutate(inv_bio = tidyr::replace_na(inv_bio, 0))
 
-# degree of invasion
-# where invasive spp are: 
-# (1) Alliaria petiolata, (2) Vincetoxicum rossicum, (3) Cirsium arvense
 
-di_inv <- di_df2 %>%
-  left_join(i_bio, by = c("section", "site", "treatment", "plot")) %>%
-  mutate(i_bio = tidyr::replace_na(i_bio, 0)) %>%
-  mutate(guo_di_inv = ((ir/sr) + (i_bio/tot_bio))*0.5)
+di_inv_final <- di_inv %>%
+  left_join(inv_bio, by = c("section", "site", "treatment", "plot")) %>%
+  mutate(
+    
+    # sites with zero invasive spp should have zero invasive biomass 
+    inv_bio = tidyr::replace_na(inv_bio, 0),
+    
+    # modified Guo's degree of invasion
+    # only applies to invasive spp
+    # which is a subset of exotic spp (non-native + invasive)
+    guo_di_inv = ((inv_rich/tot_rich) + (inv_bio/tot_bio))*0.5
+    
+    )
 
 # calculate degree of invasion (for non-native spp) ----------------------------
 
