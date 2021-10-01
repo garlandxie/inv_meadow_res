@@ -129,19 +129,21 @@ bm_en <- bm_tidy %>%
 
 # tricky to do so just make dfs and do joins
 
+# get total biomass 
+tot_fracs <- bm_en %>%
+  group_by(section, site, treatment, plot) %>%
+  summarize(
+    tot_rich      = n_distinct(spp_code),
+    tot_biomass_g = sum(spp_biomass_g, na.rm = TRUE)) %>%
+  ungroup()
+
 di_exo <- bm_en %>%
   filter(!is.na(exotic_native)) %>%
   group_by(section, site, treatment, plot) %>%
   summarize(
     
     # exotic richness
-    exo_rich = sum(exotic_native == "E", na.rm = TRUE),
-    
-    # community richness (incl. native, exotic, and invasive spp)
-    tot_rich = length(unique(spp_code)),
-    
-    # community biomass (incl. native, exotic, and invasive spp)
-    tot_biomass_g = sum(spp_biomass_g, na.rm = TRUE)
+    exo_rich = sum(exotic_native == "E", na.rm = TRUE)
     
   ) %>%
   ungroup()
@@ -159,8 +161,9 @@ exo_bio <- bm_en %>%
 
 di_exo_final <- di_exo %>%
   left_join(exo_bio, by = c("section", "site", "treatment", "plot")) %>%
+  left_join(tot_fracs, by = c("section", "site", "treatment", "plot")) %>%
   mutate(
-    
+  
     # Guo's degree of invasion
     guo_di = ((exo_rich/tot_rich) + (exo_biomass_g/tot_biomass_g))*0.5
     
