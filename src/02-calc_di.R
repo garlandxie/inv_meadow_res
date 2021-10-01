@@ -89,7 +89,7 @@ bm_tidy <- bm %>%
   summarize(spp_biomass_g = sum(biomass_g, na.rm = TRUE)) %>%
   ungroup() 
 
-# joins ------------------------------------------------------------------------
+# assign status ----------------------------------------------------------------
 
 # non-native/invasive status
 ex_in_nn <- mw_tidy %>%
@@ -123,33 +123,48 @@ ex_in_nn <- mw_tidy %>%
   
 # get biomass and exotic/non-native/invasive status in the same df
 bm_en <- bm_tidy %>% 
-  left_join(mw_en, by = c("spp_code" = "code")) 
+  left_join(ex_in_nn, by = c("spp_code" = "code")) 
 
 # calculate degree of invasion (invasive + non-natives) ------------------------
 
 # tricky to do so just make dfs and do joins
 
-di_df <- bm_en %>%
+di_exo <- bm_en %>%
   filter(!is.na(exotic_native)) %>%
   group_by(section, site, treatment, plot) %>%
   summarize(
-    er = sum(exotic_native == "E", na.rm = TRUE),
-    sr = length(unique(spp_code)),
-    tot_bio = sum(spp_biomass_g, na.rm = TRUE)
+    
+    # exotic richness
+    exo_rich = sum(exotic_native == "E", na.rm = TRUE),
+    
+    # community richness (incl. native, exotic, and invasive spp)
+    tot_rich = length(unique(spp_code)),
+    
+    # community biomass (incl. native, exotic, and invasive spp)
+    tot_biomass_g = sum(spp_biomass_g, na.rm = TRUE)
+    
   ) %>%
   ungroup()
   
-e_bio <- bm_en %>%
+exo_bio <- bm_en %>%
   filter(exotic_native == "E") %>%
   group_by(section, site, treatment, plot) %>%
-  summarize(e_bio = sum(spp_biomass_g, na.rm = TRUE)) %>%
+  summarize(
+    
+    # exotic biomass 
+    exo_biomass_g = sum(spp_biomass_g, na.rm = TRUE)
+    
+    ) %>%
   ungroup()
 
-di <- di_df %>%
-  left_join(e_bio, by = c("section", "site", "treatment", "plot")) %>%
+di_exo_final <- di_exo %>%
+  left_join(exo_bio, by = c("section", "site", "treatment", "plot")) %>%
   mutate(
-    guo_di = ((er/sr) + (e_bio/tot_bio))*0.5
-  )
+    
+    # Guo's degree of invasion
+    guo_di = ((exo_rich/tot_rich) + (exo_biomass_g/tot_biomass_g))*0.5
+    
+    )
 
 # calculate degree of invasion (for just invasive species) ---------------------
 
