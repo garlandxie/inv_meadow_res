@@ -1,15 +1,27 @@
-# libraries ----
+# libraries -------------------------------------------------------------------
 library(here)
 library(ggplot2)
 library(dplyr)
 
-# import ----
+# import -----------------------------------------------------------------------
 
-# degree of invasion
-guo_di  <- read.csv(
+# degree of invasion (incl. non-natives + invasive spp)
+guo_di <- read.csv(
   here("data", "final", "guo_di.csv"),
   row.names = 1
   )
+
+# degree of invasion (just invasive spp)
+guo_di_inv <- read.csv(
+  here("data", "final", "di_inv.csv"),
+  row.names = 1
+)
+
+# degree of invasion (non-natives, excl. invasive spp)
+guo_di_nn <- read.csv(
+  here("data", "final", "di_nn.csv"),
+  row.names = 1
+)
 
 # unified measure of invasibility 
 guo_inv <- read.csv(
@@ -17,7 +29,7 @@ guo_inv <- read.csv(
   row.names = 1
   ) 
 
-# joins ----
+# joins ------------------------------------------------------------------------
 
 di_inv <- guo_di %>%
   inner_join(
@@ -25,7 +37,7 @@ di_inv <- guo_di %>%
     by = c("section", "site", "treatment", "plot")
     ) 
 
-# plot ------
+# plot -------------------------------------------------------------------------
 
 # add seed rain later on
 (di_vs_inv <- di_inv %>%
