@@ -188,13 +188,7 @@ di_inv <- bm_en %>%
   summarize(
     
     # invasive richness 
-    inv_rich = sum(invasive == "Y", na.rm = TRUE),
-    
-    # community richness (incl. native, exotic, and invasive spp)
-    tot_rich  = n_distinct(spp_code),
-
-    # community biomass (incl. native, exotic, and invasive spp)
-    tot_bio = sum(spp_biomass_g, na.rm = TRUE)
+    inv_rich = sum(invasive == "Y", na.rm = TRUE)
     
   ) %>%
   ungroup()
@@ -215,6 +209,7 @@ inv_bio <- bm_en %>%
 
 di_inv_final <- di_inv %>%
   left_join(inv_bio, by = c("section", "site", "treatment", "plot")) %>%
+  left_join(tot_fracs, by = c("section", "site", "treatment", "plot")) %>%
   mutate(
     
     # sites with zero invasive spp should have zero invasive biomass 
@@ -223,7 +218,7 @@ di_inv_final <- di_inv %>%
     # modified Guo's degree of invasion
     # only applies to invasive spp
     # which is a subset of exotic spp (non-native + invasive)
-    guo_di_inv = ((inv_rich/tot_rich) + (inv_bio/tot_bio))*0.5
+    guo_di_inv = ((inv_rich/tot_rich) + (inv_bio/tot_biomass_g))*0.5
     
     )
 
