@@ -32,6 +32,7 @@ library(googlesheets4)  # for importing googlesheet files
 library(dplyr)          # for manipulating data
 library(knitr)          # for creating tables
 library(kableExtra)     # for customizing tables
+library(janitor)        # for making 'R-friendly' column names
 
 ```
 
@@ -39,7 +40,7 @@ library(kableExtra)     # for customizing tables
 
 Key information for reproducibility
 
-```{r}
+```{r sessionInfo}
 sessionInfo()
 
 ```
@@ -113,4 +114,12 @@ Descriptions of each variable in the data frames:
 
 ### Data wrangling
 
--   
+**Reorganize data.** First, subset the seed bank dataset to have six sites that are congruent with the above-ground biomass dataset. This applies to both the spring and fall sampling season.
+
+```{r subset fall seed bank}
+sb_fall_six_sites <- seed_bank_fall %>%
+  janitor::clean_names() %>%
+  dplyr::filter(
+    site %in% c("BNSH", "GRNB", "DAVE", "KENN", "TIMH", "VICP")
+    ) 
+```
