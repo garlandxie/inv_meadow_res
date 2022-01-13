@@ -80,7 +80,19 @@ seed_bank_fall <- googlesheets4::read_sheet(
 
 ```
 
-\newpage
+```{r import binomial latin , message=FALSE}
+
+# binomial latin names
+taxon_link <- "https://docs.google.com/spreadsheets/d/1r-T9lY1Osjez8SKKoCUHRi5ftbHBvgFn2Xk-IPqc0z4/edit?usp=sharing"
+
+sb_taxa <- googlesheets4::read_sheet(
+  taxon_link, 
+  sheet = "raw_data"
+  )
+
+```
+
+\\newpage
 
 ### Metadata
 
