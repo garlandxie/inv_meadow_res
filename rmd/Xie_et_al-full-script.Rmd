@@ -186,7 +186,7 @@ sb_summary <- sb_tidy %>%
 
 ### Exploratory data analysis
 
-Seed bank density
+#### Seed Bank Analysis
 
 -   How many seeds were in the seed bank across both sampling season?`r sum(sb_summary$seed_emer_density)` seeds.
 
@@ -242,9 +242,7 @@ Seed bank density
 
 \newpage
 
-Dominant and rare species
-
-Plot the rank-abundance curves to determine dominant and rare seedlings
+#### Rank-abundance curves
 
 ```{r fig.height=5, fig.width=5, message=FALSE, warning=FALSE, include=FALSE}
 
