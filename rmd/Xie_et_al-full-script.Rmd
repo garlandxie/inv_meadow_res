@@ -126,12 +126,46 @@ Descriptions of each variable in the data frames:
 
 ### Data wrangling
 
-**Reorganize data.** First, subset the seed bank dataset to have six sites that are congruent with the above-ground biomass dataset. This applies to both the spring and fall sampling season.
+**Reorganize data.** For each sampling season, subset the seed bank dataset to six sites that are congruent with the above-ground biomass dataset. Then, merge the subset with the taxonomic data to obtain binomial latin species name (e.g., *Alliara_petiolata).* Finally, combine both fall and spring seed bank data into a single data-frame.
 
 ```{r subset fall seed bank}
-sb_fall_six_sites <- seed_bank_fall %>%
+sb_spring_tidy <- seed_bank_spr %>%
   janitor::clean_names() %>%
   dplyr::filter(
     site %in% c("BNSH", "GRNB", "DAVE", "KENN", "TIMH", "VICP")
-    ) 
+    ) %>%
+  left_join(sb_taxa %>% janitor::clean_names(), by = c("spp_code" = "code")) %>%
+  mutate(binom_latin = paste(genus, species, sep = "_")) %>%
+  select(
+    season, 
+    section, 
+    site, 
+    treatment, 
+    plot, 
+    date_ymd, 
+    spp_code, 
+    binom_latin,
+    abund
+  )
+
+sb_fall_tidy <- seed_bank_fall %>%
+  janitor::clean_names() %>%
+  dplyr::filter(
+    site %in% c("BNSH", "GRNB", "DAVE", "KENN", "TIMH", "VICP")
+    ) %>%
+  left_join(sb_taxa %>% janitor::clean_names(), by = c("spp_code" = "code")) %>%
+  mutate(binom_latin = paste(genus, species, sep = "_")) %>%
+  select(
+    season, 
+    section, 
+    site, 
+    treatment, 
+    plot, 
+    date_ymd, 
+    spp_code, 
+    binom_latin,
+    abund
+  )
+
+sb_tidy <- rbind(sb_fall_tidy, sb_spring_tidy)
 ```
