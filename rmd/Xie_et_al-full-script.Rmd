@@ -3,9 +3,9 @@ title: "Xie_et_all-full_script"
 author: "Garland Xie"
 date: "09/01/2022"
 output:
-  pdf_document: default
-  html_document: default
   word_document: default
+  html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -33,6 +33,7 @@ library(dplyr)          # for manipulating data
 library(knitr)          # for creating tables
 library(kableExtra)     # for customizing tables
 library(janitor)        # for making 'R-friendly' column names
+library(ggplot2)        # for visualizing data
 
 ```
 
@@ -92,7 +93,7 @@ sb_taxa <- googlesheets4::read_sheet(
 
 ```
 
-\\newpage
+\newpage
 
 ### Metadata
 
@@ -172,11 +173,38 @@ sb_tidy <- rbind(sb_fall_tidy, sb_spring_tidy)
 
 **Summarize data**. The raw data for seedling emergent abundance was collected at specific dates (y-m-d) within specific plots. Temporal dimensions are beyond the scope of this analysis, and the data will thus be summarized as **total** **seedling emergent density per plot**. This measured variable make sense since we collected soil cores within a defined volume (3.5 cm diameter and a 5 cm depth, approximating the shape of a cylinder).
 
-```{r summarize seed bank data}
+```{r summarize seed bank data, message=FALSE}
 sb_summary <- sb_tidy %>%
   group_by(season, section, site, treatment, plot) %>%
   summarize(
     seed_emer_density = sum(abund, na.rm = TRUE)
   ) %>%
   ungroup()
+```
+
+### Exploratory data analysis
+
+Seed bank density
+
+-   How many seeds were in the seed bank across both sampling season?`r sum(sb_summary$seed_emer_density)` seeds.
+
+```{=html}
+<!-- -->
+```
+-   How many seeds were in the seed bank for the fall season? `r sum(filter(sb_summary, season == "Fall")$seed_emer_density)` seeds.
+
+-   How many seeds were in the seed bank in the spring season?`r sum(filter(sb_summary, season == "Spring")$seed_emer_density)` seeds.
+
+Rank-abundance curves
+
+```{r}
+sb_tidy %>%
+  group_by(season, section, site, treatment, plot, spp_code) %>%
+  summarize(
+    abundance = sum(abund, na.rm = TRUE)
+  ) %>%
+  ungroup() %>%
+  ggplot(aes(x = spp_code, y = abundance)) +
+  geom_point()
+  
 ```
