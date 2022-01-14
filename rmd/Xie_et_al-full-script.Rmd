@@ -3,9 +3,9 @@ title: "Xie_et_all-full_script"
 author: "Garland Xie"
 date: "09/01/2022"
 output:
-  word_document: default
-  html_document: default
   pdf_document: default
+  html_document: default
+  word_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -33,8 +33,10 @@ library(dplyr)          # for manipulating data
 library(knitr)          # for creating tables
 library(kableExtra)     # for customizing tables
 library(janitor)        # for making 'R-friendly' column names
-library(ggplot2)        # for visualizing data
-
+library(ggplot2)        # for visualizing data 
+library(ggrepel)        # for making easy-to-read text labels
+library(vegan)          # for analyzing community data matrices
+library(patchwork)
 ```
 
 ### Session Info
@@ -188,23 +190,254 @@ Seed bank density
 
 -   How many seeds were in the seed bank across both sampling season?`r sum(sb_summary$seed_emer_density)` seeds.
 
-```{=html}
-<!-- -->
-```
 -   How many seeds were in the seed bank for the fall season? `r sum(filter(sb_summary, season == "Fall")$seed_emer_density)` seeds.
 
 -   How many seeds were in the seed bank in the spring season?`r sum(filter(sb_summary, season == "Spring")$seed_emer_density)` seeds.
 
-Rank-abundance curves
+-   How does seed bank density differ across sites? See figure below. Note that each point represent a particular plot.
 
-```{r}
-sb_tidy %>%
-  group_by(season, section, site, treatment, plot, spp_code) %>%
-  summarize(
-    abundance = sum(abund, na.rm = TRUE)
-  ) %>%
+    ```{r seed bank density in section 2, echo=FALSE}
+
+    sb_summary %>%
+      mutate(
+        season    = factor(season, levels = c("Spring", "Fall")), 
+        treatment = case_when(
+          treatment == "RES" ~ "Undisturbed",
+          treatment == "TIL" ~ "Heavily-Tilled"
+          )
+        ) %>%
+      filter(section == "S2") %>%
+      ggplot(aes(x = site, y = seed_emer_density, fill = site)) +
+      geom_boxplot() + 
+      geom_point(alpha = 0.1) + 
+      facet_wrap(~season) + 
+      labs(
+        title = "Section 2 - Heavily-Tilled Sites",
+        x = NULL, 
+        y = "Seedling emergent density (per plot)") + 
+      theme_bw()
+    ```
+
+    ```{r seed bank density in section 4, echo=FALSE}
+
+    sb_summary %>%
+      mutate(
+        season    = factor(season, levels = c("Spring", "Fall")), 
+        treatment = case_when(
+          treatment == "RES" ~ "Undisturbed",
+          treatment == "TIL" ~ "Heavily-Tilled"
+          )
+        ) %>%
+      filter(section == "S4") %>%
+      ggplot(aes(x = site, y = seed_emer_density, fill = site)) +
+      geom_boxplot() + 
+      geom_point(alpha = 0.1) + 
+      facet_wrap(~season) + 
+      labs(
+        title = "Section 4 - Undisturbed Sites",
+        x = NULL, 
+        y = "Seedling emergent density (per plot)") + 
+      theme_bw()
+    ```
+
+\newpage
+
+Dominant and rare species
+
+Plot the rank-abundance curves to determine dominant and rare seedlings
+
+```{r fig.height=5, fig.width=5, message=FALSE, warning=FALSE, include=FALSE}
+
+spring_S2_comm_matrix <- sb_tidy %>%
+  filter(season == "Spring" & treatment == "TIL") %>%
+  group_by(site, binom_latin) %>%
+  summarize(abundance = sum(abund, na.rm = TRUE)) %>%
   ungroup() %>%
-  ggplot(aes(x = spp_code, y = abundance)) +
-  geom_point()
-  
+  tidyr::pivot_wider(
+    id_cols = c("site"), 
+    names_from = binom_latin, 
+    values_from = abundance
+    ) %>%
+  mutate(across(.cols = everything(), ~ tidyr::replace_na(.x, 0))) %>%
+  tibble::column_to_rownames(var = "site") %>%
+  as.data.frame()
+
+spring_S2_RA <- BiodiversityR::rankabundance(spring_S2_comm_matrix) %>%
+    as.data.frame() %>%
+    tibble::rownames_to_column(var = "species") 
+```
+
+```{r fig.height=5, fig.width=5, message=FALSE, warning=FALSE, include=FALSE}
+
+fall_S2_comm_matrix <- sb_tidy %>%
+  filter(season == "Fall" & treatment == "TIL") %>%
+  group_by(site, binom_latin) %>%
+  summarize(abundance = sum(abund, na.rm = TRUE)) %>%
+  ungroup() %>%
+  tidyr::pivot_wider(
+    id_cols = c("site"), 
+    names_from = binom_latin, 
+    values_from = abundance
+    ) %>%
+  mutate(across(.cols = everything(), ~ tidyr::replace_na(.x, 0))) %>%
+  tibble::column_to_rownames(var = "site") %>%
+  as.data.frame()
+
+fall_S2_RA <- BiodiversityR::rankabundance(fall_S2_comm_matrix) %>%
+    as.data.frame() %>%
+    tibble::rownames_to_column(var = "species") 
+```
+
+```{r rank-abundance for TIL, fig.height=5, fig.width=5, message=FALSE, warning=FALSE, include=FALSE}
+
+S2_comm_matrix <- sb_tidy %>%
+  filter(treatment == "TIL") %>%
+  group_by(site, binom_latin) %>%
+  summarize(abundance = sum(abund, na.rm = TRUE)) %>%
+  ungroup() %>%
+  tidyr::pivot_wider(
+    id_cols = c("site"), 
+    names_from = binom_latin, 
+    values_from = abundance
+    ) %>%
+  mutate(across(.cols = everything(), ~ tidyr::replace_na(.x, 0))) %>%
+  tibble::column_to_rownames(var = "site") %>%
+  as.data.frame()
+
+S2_RA <- BiodiversityR::rankabundance(S2_comm_matrix) %>%
+    as.data.frame() %>%
+    tibble::rownames_to_column(var = "species") 
+
+```
+
+```{r echo=FALSE, fig.height=6, fig.width=5, message=FALSE, warning=FALSE}
+
+spr_S2_RA_plot <- spring_S2_RA %>%
+    ggplot(aes(x = rank, y = abundance)) + 
+    geom_text_repel(aes(label = species)) + 
+    geom_point(alpha = 0.5) +
+    geom_line(alpha = 0.5) + 
+    labs(title = "Heavily-tilled management in Spring") +
+    theme_bw()
+
+fal_S2_RA_plot <- fall_S2_RA %>%
+    ggplot(aes(x = rank, y = abundance)) + 
+    geom_text_repel(aes(label = species)) + 
+    geom_point(alpha = 0.5) +
+    geom_line(alpha = 0.5) + 
+    labs(title = "Heavily-tilled management in Fall") +
+    theme_bw()
+
+S2_RA_plot <- S2_RA %>%
+    ggplot(aes(x = rank, y = abundance)) + 
+    geom_text_repel(aes(label = species)) + 
+    geom_point(alpha = 0.5) +
+    geom_line(alpha = 0.5) + 
+    labs(
+      title = "Heavily-tilled management (Fall + Spring)", 
+      x     = "rank",
+      y     = "seedling abundance"
+      ) +
+    theme_bw()
+
+spr_S2_RA_plot / fal_S2_RA_plot / S2_RA_plot
+```
+
+\newpage
+
+```{r fig.height=5, fig.width=5, message=FALSE, warning=FALSE, include=FALSE}
+
+spring_S4_comm_matrix <- sb_tidy %>%
+  filter(season == "Spring" & treatment == "RES") %>%
+  group_by(site, binom_latin) %>%
+  summarize(abundance = sum(abund, na.rm = TRUE)) %>%
+  ungroup() %>%
+  tidyr::pivot_wider(
+    id_cols = c("site"), 
+    names_from = binom_latin, 
+    values_from = abundance
+    ) %>%
+  mutate(across(.cols = everything(), ~ tidyr::replace_na(.x, 0))) %>%
+  tibble::column_to_rownames(var = "site") %>%
+  as.data.frame()
+
+spring_S4_RA <- BiodiversityR::rankabundance(spring_S4_comm_matrix) %>%
+    as.data.frame() %>%
+    tibble::rownames_to_column(var = "species") 
+```
+
+```{r fig.height=5, fig.width=5, message=FALSE, warning=FALSE, include=FALSE}
+
+fall_S4_comm_matrix <- sb_tidy %>%
+  filter(season == "Fall" & treatment == "RES") %>%
+  group_by(site, binom_latin) %>%
+  summarize(abundance = sum(abund, na.rm = TRUE)) %>%
+  ungroup() %>%
+  tidyr::pivot_wider(
+    id_cols = c("site"), 
+    names_from = binom_latin, 
+    values_from = abundance
+    ) %>%
+  mutate(across(.cols = everything(), ~ tidyr::replace_na(.x, 0))) %>%
+  tibble::column_to_rownames(var = "site") %>%
+  as.data.frame()
+
+fall_S4_RA <- BiodiversityR::rankabundance(fall_S4_comm_matrix) %>%
+    as.data.frame() %>%
+    tibble::rownames_to_column(var = "species") 
+```
+
+```{r, fig.height=5, fig.width=5, message=FALSE, warning=FALSE, include=FALSE}
+
+S4_comm_matrix <- sb_tidy %>%
+  filter(treatment == "RES") %>%
+  group_by(site, binom_latin) %>%
+  summarize(abundance = sum(abund, na.rm = TRUE)) %>%
+  ungroup() %>%
+  tidyr::pivot_wider(
+    id_cols = c("site"), 
+    names_from = binom_latin, 
+    values_from = abundance
+    ) %>%
+  mutate(across(.cols = everything(), ~ tidyr::replace_na(.x, 0))) %>%
+  tibble::column_to_rownames(var = "site") %>%
+  as.data.frame()
+
+S4_RA <- BiodiversityR::rankabundance(S4_comm_matrix) %>%
+    as.data.frame() %>%
+    tibble::rownames_to_column(var = "species") 
+
+```
+
+```{r echo=FALSE, fig.height=6, fig.width=5, message=FALSE, warning=FALSE}
+
+spr_S4_RA_plot <- spring_S4_RA %>%
+    ggplot(aes(x = rank, y = abundance)) + 
+    geom_text_repel(aes(label = species)) + 
+    geom_point(alpha = 0.5) +
+    geom_line(alpha = 0.5) + 
+    labs(title = "Undisturbed sites in Spring") +
+    theme_bw()
+
+fal_S4_RA_plot <- fall_S4_RA %>%
+    ggplot(aes(x = rank, y = abundance)) + 
+    geom_text_repel(aes(label = species)) + 
+    geom_point(alpha = 0.5) +
+    geom_line(alpha = 0.5) + 
+    labs(title = "Undisturbed sites in Fall") +
+    theme_bw()
+
+S4_RA_plot <- S4_RA %>%
+    ggplot(aes(x = rank, y = abundance)) + 
+    geom_text_repel(aes(label = species)) + 
+    geom_point(alpha = 0.5) +
+    geom_line(alpha = 0.5) + 
+    labs(
+      title = "Undisturbed sites (Fall + Spring)", 
+      x     = "rank",
+      y     = "seedling abundance"
+      ) +
+    theme_bw()
+
+spr_S4_RA_plot / fal_S4_RA_plot / S4_RA_plot
 ```
