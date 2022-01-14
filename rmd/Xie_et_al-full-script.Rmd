@@ -169,3 +169,14 @@ sb_fall_tidy <- seed_bank_fall %>%
 
 sb_tidy <- rbind(sb_fall_tidy, sb_spring_tidy)
 ```
+
+**Summarize data**. The raw data for seedling emergent abundance was collected at specific dates (y-m-d) within specific plots. Temporal dimensions are beyond the scope of this analysis, and the data will thus be summarized as **total** **seedling emergent density per plot**. This measured variable make sense since we collected soil cores within a defined volume (3.5 cm diameter and a 5 cm depth, approximating the shape of a cylinder).
+
+```{r summarize seed bank data}
+sb_summary <- sb_tidy %>%
+  group_by(season, section, site, treatment, plot) %>%
+  summarize(
+    seed_emer_density = sum(abund, na.rm = TRUE)
+  ) %>%
+  ungroup()
+```
