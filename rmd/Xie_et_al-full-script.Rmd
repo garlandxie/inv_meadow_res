@@ -210,7 +210,7 @@ sb_summary <- sb_tidy %>%
 
 ### Exploratory data analysis
 
-#### Seed Bank Analysis
+#### Propagule Density 
 
 -   How many seeds were in the seed bank across both sampling season?`r sum(sb_summary$seed_emer_density)` seeds.
 
