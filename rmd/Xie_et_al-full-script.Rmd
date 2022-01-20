@@ -242,8 +242,6 @@ sb_summary <- sb_tidy %>%
 
 \newpage
 
-#### Rank-abundance curves
-
 ```{r fig.height=5, fig.width=5, message=FALSE, warning=FALSE, include=FALSE}
 
 spring_S2_comm_matrix <- sb_tidy %>%
