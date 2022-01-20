@@ -38,6 +38,7 @@ library(ggplot2)        # for visualizing data
 library(ggrepel)        # for making easy-to-read text labels
 library(vegan)          # for analyzing community data matrices
 library(patchwork)
+library(rdryad)
 ```
 
 ### Session Info
@@ -47,6 +48,28 @@ Key information for reproducibility
 ```{r sessionInfo}
 sessionInfo()
 
+```
+
+## Plants of Toronto
+
+This is dataset containing 1,937 plant species that occur in the city of Toronto. It was compiled by Marc W. Cadotte (University of Toronto) from the following data sources [@cadotte2021]:
+
+1.  A list of species compiled through the Cadotte research lab,
+2.  A list of species provided by staff at the Rouge National Urban Park,
+3.  A list of species compiled by the Royal Ontario Museum,
+4.  A list of species from a biological inventory conduced by the Toronto Region Conservation Authority,
+5.  A list of plant observations (download on 21 October 2019) from the Global Biodiversity Information Facility,
+6.  A collation of natural history observations from Ken Sproule
+
+This dataset has information on origin status. Marc Cadotte compiled it from the Ministry of Natural Resources and Forestry's Natural Heritage Information Centre (<https://www.ontario.ca/page/natural-heritage-information-centre>) to determine whether a species is native or introduced. Here, an introduced species is defined as "those not known occur in the province Ontario prior to European settlement".
+
+This data set is currently archived as a DRYAD data repository [@cadotte2020]. It can be download as a data frame in the R environment through the DRYAD R API:
+
+```{r}
+
+dryad_doi <- "10.5061/dryad.1ns1rn8sg"
+dryad_link <- rdryad::dryad_download(dryad_doi)
+plants_to <- read.csv(unlist(dryad_link))
 ```
 
 ## Seed bank
@@ -439,13 +462,15 @@ S4_RA_plot <- S4_RA %>%
 spr_S4_RA_plot / fal_S4_RA_plot / S4_RA_plot
 ```
 
+\newpage
+
 #### Community composition
 
 It would be interesting to explore how the community composition of the seed bank differ among plots, sites, seasons, and management regimes. Here, two possible approaches to answer this question are: (1) principal coordinate analysis (PCoA), and (2) non-metric dimensional scaling (NMDS).
 
 Using a dissimilarity measure (e.g., Bray-Curtis), both can help visualize close objects with similar values (*i.e.,* seed banks with similar community composition are close together) and distance objects with different values. Here, I will follow [@borcard2011] recommendation on using PCoA, instead than NMDS, for this analysis.\
 
-```{r message=FALSE, warning=FALSE}
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 
 spring_comm_matrix <- sb_spring_tidy %>%
   group_by(site, binom_latin) %>%
@@ -489,7 +514,7 @@ spring_comm_pcoa %>%
   
 ```
 
-```{r}
+```{r echo=FALSE, message=FALSE, warning=TRUE}
 fall_comm_matrix <- sb_fall_tidy %>%
   group_by(site, binom_latin) %>%
   summarize(abundance = sum(abund, na.rm = TRUE)) %>%
@@ -530,3 +555,5 @@ fall_comm_pcoa %>%
     y = "PCoA2") + 
   theme_bw()
 ```
+
+# References
