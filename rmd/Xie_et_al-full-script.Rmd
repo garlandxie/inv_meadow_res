@@ -6,6 +6,7 @@ output:
   pdf_document: default
   html_document: default
   word_document: default
+bibliography: references.bib
 ---
 
 ```{r setup, include=FALSE}
@@ -436,4 +437,96 @@ S4_RA_plot <- S4_RA %>%
     theme_bw()
 
 spr_S4_RA_plot / fal_S4_RA_plot / S4_RA_plot
+```
+
+#### Community composition
+
+It would be interesting to explore how the community composition of the seed bank differ among plots, sites, seasons, and management regimes. Here, two possible approaches to answer this question are: (1) principal coordinate analysis (PCoA), and (2) non-metric dimensional scaling (NMDS).
+
+Using a dissimilarity measure (e.g., Bray-Curtis), both can help visualize close objects with similar values (*i.e.,* seed banks with similar community composition are close together) and distance objects with different values. Here, I will follow [@borcard2011] recommendation on using PCoA, instead than NMDS, for this analysis.\
+
+```{r message=FALSE, warning=FALSE}
+
+spring_comm_matrix <- sb_spring_tidy %>%
+  group_by(site, binom_latin) %>%
+  summarize(abundance = sum(abund, na.rm = TRUE)) %>%
+  ungroup() %>%
+  tidyr::pivot_wider(
+    id_cols = c("site"), 
+    names_from = binom_latin, 
+    values_from = abundance
+    ) %>%
+  mutate(across(.cols = everything(), ~ tidyr::replace_na(.x, 0))) %>%
+  tibble::column_to_rownames(var = "site") %>%
+  as.data.frame()
+
+spring_comm_bray <- vegan::vegdist(spring_comm_matrix, method = "bray")
+spring_comm_pcoa <- cmdscale(
+  spring_comm_bray, 
+  k = (nrow(spring_comm_matrix)- 1),
+  eig = TRUE
+)
+
+spring_comm_pcoa %>%
+  vegan::scores(choices = c(1, 2)) %>%
+  as.data.frame() %>%
+  mutate(
+    site = rownames(.), 
+    mgt  = case_when(
+      site %in% c("GRNB", "BNSH", "DAVE") ~ "Undisturbed", 
+      site %in% c("KENN", "TIMH", "VICP") ~ "Heavily-Tilled")
+    ) %>%
+  ggplot(aes(x = Dim1, y = Dim2, col = mgt)) + 
+  geom_text(aes(label = site)) + 
+  xlim(-0.5, 0.5) + 
+  ylim(-0.5, 0.5) + 
+  scale_color_discrete(name = "Management Regime") + 
+  labs(
+    title = "Seed Bank Community Composition - Spring",
+    x = "PCoA1", 
+    y = "PCoA2") + 
+  theme_bw()
+  
+```
+
+```{r}
+fall_comm_matrix <- sb_fall_tidy %>%
+  group_by(site, binom_latin) %>%
+  summarize(abundance = sum(abund, na.rm = TRUE)) %>%
+  ungroup() %>%
+  tidyr::pivot_wider(
+    id_cols = c("site"), 
+    names_from = binom_latin, 
+    values_from = abundance
+    ) %>%
+  mutate(across(.cols = everything(), ~ tidyr::replace_na(.x, 0))) %>%
+  tibble::column_to_rownames(var = "site") %>%
+  as.data.frame()
+
+fall_comm_bray <- vegan::vegdist(fall_comm_matrix, method = "bray")
+fall_comm_pcoa <- cmdscale(
+  fall_comm_bray, 
+  k = (nrow(fall_comm_matrix)- 1),
+  eig = TRUE
+)
+
+fall_comm_pcoa %>%
+  vegan::scores(choices = c(1, 2)) %>%
+  as.data.frame() %>%
+  mutate(
+    site = rownames(.), 
+    mgt  = case_when(
+      site %in% c("GRNB", "BNSH", "DAVE") ~ "Undisturbed", 
+      site %in% c("KENN", "TIMH", "VICP") ~ "Heavily-Tilled")
+    ) %>%
+  ggplot(aes(x = Dim1, y = Dim2, col = mgt)) + 
+  geom_text(aes(label = site)) + 
+  xlim(-0.5, 0.5) + 
+  ylim(-0.5, 0.5) + 
+  scale_color_discrete(name = "Management Regime") + 
+  labs(
+    title = "Seed Bank Community Composition - Fall",
+    x = "PCoA1", 
+    y = "PCoA2") + 
+  theme_bw()
 ```
