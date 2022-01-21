@@ -563,7 +563,7 @@ It would be interesting to see how many of the seed species are either native or
 
 The results shown here are the [restoration outcomes]{.ul}. How many native species are in the soil seed bank? And how many species are introduced? Note that some native species may not be in the seed mix and may be in the seed bank due to spontaneous colonization from outside the Meadoway footprint.
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 plants_to_tidy <- plants_to %>%
   janitor::clean_names() %>%
   select(taxa = scientific_name, exotic_native) %>%
@@ -590,7 +590,203 @@ sb_org_status <- sb_tidy %>%
     TRUE ~ exotic_native)
   )
 
-View(filter(sb_org_status, is.na(exotic_native)))
+```
+
+\newpage
+
+\
+Next, I'll visualize which species are exotic among the sampled sites.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+sb_org_status %>%
+  group_by(
+    season, site, treatment, plot,  
+    binom_latin, exotic_native
+    ) %>%
+  summarize(abundance = sum(abund, na.rm = TRUE)) %>%
+  ungroup() %>%
+  filter(exotic_native == "E", 
+         season == "Spring",
+         treatment == "TIL") %>%
+  ggplot(aes(x = binom_latin, y = abundance)) + 
+  geom_point() +
+  facet_wrap(~site) +
+  labs(
+    title = "Exotic Species - Section 2 (Spring)", 
+    x = NULL, 
+    y = "Seedling Abundance", 
+  ) + 
+  coord_flip() + 
+  theme_bw() 
+
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+sb_org_status %>%
+  group_by(
+    season, site, treatment, plot,  
+    binom_latin, exotic_native
+    ) %>%
+  summarize(abundance = sum(abund, na.rm = TRUE)) %>%
+  ungroup() %>%
+  filter(exotic_native == "E", 
+         season == "Fall",
+         treatment == "TIL") %>%
+  ggplot(aes(x = binom_latin, y = abundance)) + 
+  geom_point() +
+  facet_wrap(~site) +
+  labs(
+    title = "Exotic Species - Section 2 (Fall)", 
+    x = NULL, 
+    y = "Seedling Abundance", 
+  ) + 
+  coord_flip() + 
+  theme_bw() 
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+sb_org_status %>%
+  group_by(
+    season, site, treatment, plot,   
+    binom_latin, exotic_native
+    ) %>%
+  summarize(abundance = sum(abund, na.rm = TRUE)) %>%
+  ungroup() %>%
+  filter(exotic_native == "E", 
+         season == "Spring",
+         treatment == "RES") %>%
+  ggplot(aes(x = binom_latin, y = abundance)) + 
+  geom_point() +
+  facet_wrap(~site) +
+  labs(
+    title = "Exotic Species - Section 4 (Spring)", 
+    x = NULL, 
+    y = "Seedling Abundance", 
+  ) + 
+  coord_flip() + 
+  theme_bw() 
+
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+sb_org_status %>%
+  group_by(
+    season, site, treatment, plot,   
+    binom_latin, exotic_native
+    ) %>%
+  summarize(abundance = sum(abund, na.rm = TRUE)) %>%
+  ungroup() %>%
+  filter(exotic_native == "E", 
+         season == "Fall",
+         treatment == "RES") %>%
+  ggplot(aes(x = binom_latin, y = abundance)) + 
+  geom_point() +
+  facet_wrap(~site) +
+  labs(
+    title = "Exotic Species - Section 4 (Fall)", 
+    x = NULL, 
+    y = "Seedling Abundance", 
+  ) + 
+  coord_flip() + 
+  theme_bw() 
+```
+
+\newpage
+
+\
+Then, I'll visualize which species are native among the sampled sites.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+sb_org_status %>%
+  group_by(
+    season, site, treatment, plot,  
+    binom_latin, exotic_native
+    ) %>%
+  summarize(abundance = sum(abund, na.rm = TRUE)) %>%
+  ungroup() %>%
+  filter(exotic_native == "N", 
+         season == "Spring",
+         treatment == "TIL") %>%
+  ggplot(aes(x = binom_latin, y = abundance)) + 
+  geom_point() +
+  facet_wrap(plot~site) +
+  labs(
+    title = "Native Species - Section 2 (Spring)", 
+    x = NULL, 
+    y = "Seedling Abundance", 
+  ) + 
+  coord_flip() + 
+  theme_bw() 
+
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+sb_org_status %>%
+  group_by(
+    season, site, treatment, plot,  
+    binom_latin, exotic_native
+    ) %>%
+  summarize(abundance = sum(abund, na.rm = TRUE)) %>%
+  ungroup() %>%
+  filter(exotic_native == "N", 
+         season == "Fall",
+         treatment == "TIL") %>%
+  ggplot(aes(x = binom_latin, y = abundance)) + 
+  geom_point() +
+  facet_wrap(~site) +
+  labs(
+    title = "Native Species - Section 2 (Fall)", 
+    x = NULL, 
+    y = "Seedling Abundance", 
+  ) + 
+  coord_flip() + 
+  theme_bw() 
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+sb_org_status %>%
+  group_by(
+    season, site, treatment, plot,  
+    binom_latin, exotic_native
+    ) %>%
+  summarize(abundance = sum(abund, na.rm = TRUE)) %>%
+  ungroup() %>%
+  filter(exotic_native == "N", 
+         season == "Spring",
+         treatment == "RES") %>%
+  ggplot(aes(x = binom_latin, y = abundance)) + 
+  geom_point() +
+  facet_wrap(~site) +
+  labs(
+    title = "Native Species - Section 4 (Spring)", 
+    x = NULL, 
+    y = "Seedling Abundance", 
+  ) + 
+  coord_flip() + 
+  theme_bw() 
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+sb_org_status %>%
+  group_by(
+    season, site, treatment, plot,  
+    binom_latin, exotic_native
+    ) %>%
+  summarize(abundance = sum(abund, na.rm = TRUE)) %>%
+  ungroup() %>%
+  filter(exotic_native == "N", 
+         season == "Fall",
+         treatment == "RES") %>%
+  ggplot(aes(x = binom_latin, y = abundance)) + 
+  geom_point() +
+  facet_wrap(~site) +
+  labs(
+    title = "Native Species - Section 4 (Spring)", 
+    x = NULL, 
+    y = "Seedling Abundance", 
+  ) + 
+  coord_flip() + 
+  theme_bw() 
 ```
 
 # References
