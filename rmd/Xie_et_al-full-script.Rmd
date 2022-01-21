@@ -37,8 +37,9 @@ library(janitor)        # for making 'R-friendly' column names
 library(ggplot2)        # for visualizing data 
 library(ggrepel)        # for making easy-to-read text labels
 library(vegan)          # for analyzing community data matrices
-library(patchwork)
-library(rdryad)
+library(patchwork)      # for displaying multiple ggplot2 figures
+library(rdryad)         # for importing datasets from DRYAD
+library(stringr)        # for manipulating string characters
 ```
 
 ### Session Info
@@ -554,6 +555,42 @@ fall_comm_pcoa %>%
     x = "PCoA1", 
     y = "PCoA2") + 
   theme_bw()
+```
+
+#### Origin Status
+
+It would be interesting to see how many of the seed species are either native or introduced, across different management regimes. The Toronto Region Conservation Authority has dedicated on-the-field crew to evaluate environmental conditions and then till the soil to deplete the seed bank of introduced species (including invasives). This is done to ensure the successful sowing and establishment of native species from a carefully-curated seed mix.
+
+The results shown here are the [restoration outcomes]{.ul}. How many native species are in the soil seed bank? And how many species are introduced? Note that some native species may not be in the seed mix and may be in the seed bank due to spontaneous colonization from outside the Meadoway footprint.
+
+```{r}
+plants_to_tidy <- plants_to %>%
+  janitor::clean_names() %>%
+  select(taxa = scientific_name, exotic_native) %>%
+  mutate(taxa = str_replace(taxa, pattern = " ", replacement = "_"))
+
+sb_org_status <- sb_tidy %>%
+  left_join(plants_to_tidy, by = c("binom_latin" = "taxa")) %>%
+  
+  # fix taxonomic synonyms across both datasets
+  # do this manually (only small number of cases to fix)
+  mutate(exotic_native = case_when(
+    
+   # cross-referenced with the Plants of Toronto df
+   binom_latin == "Conyza_canadensis" ~ "E", 
+   binom_latin == "Acalypha_rhomboidea" ~ "N", 
+   binom_latin == "Verbenum_urticifolia" ~ "N",
+   binom_latin == "Oligoneuron_rigidium" ~ "N",
+   
+   # did not show up in Plants of Toronto
+   # cross-referenced with Plants USDA 
+   binom_latin == "Mentha_arvensis" ~ "N",
+   binom_latin == "Pycnanthemum_muticum" ~ "E",
+   binom_latin == "Sinapsis_alba" ~ "E",
+    TRUE ~ exotic_native)
+  )
+
+View(filter(sb_org_status, is.na(exotic_native)))
 ```
 
 # References
