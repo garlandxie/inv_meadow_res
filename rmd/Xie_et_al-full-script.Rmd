@@ -68,9 +68,42 @@ This data set is currently archived as a DRYAD data repository [@cadotte2020]. I
 
 ```{r}
 
+# import dataset using R DRYAD API  
 dryad_doi <- "10.5061/dryad.1ns1rn8sg"
 dryad_link <- rdryad::dryad_download(dryad_doi)
 plants_to <- read.csv(unlist(dryad_link))
+```
+
+## Meadoway Seed Mix
+
+### Import data 
+
+```{r}
+
+seed_mix_link <- "https://docs.google.com/spreadsheets/d/1A5CFyFKqYont4hAs_H03FIah2sVYp4eeU3kmtQdK2rA/edit?usp=sharing"
+
+mw_seed_mix <- googlesheets4::read_sheet(
+    seed_mix_link, 
+    sheet = "Seed_mix"
+    )
+```
+
+### Data wrangling
+
+Clean the dataset so that I get all of the desirable species from seed mix 1 and 2 for Meadoway section 4.
+
+```{r}
+seed_mix_s4 <- mw_seed_mix %>%
+  janitor::clean_names() %>%
+  mutate(binom_latin = paste(genus, species, sep = "_")) %>%
+  filter(seed_mix_1 == "Yes" | seed_mix_2 == "Yes") %>%
+  mutate(
+    seed_mix_1_and_2 = case_when(
+      seed_mix_1 == "Yes" | seed_mix_2 == "Yes" ~ "Yes"
+      )
+    ) %>%
+  select(binom_latin, seed_mix_1, seed_mix_2, seed_mix_1_and_2)
+  
 ```
 
 ## Seed bank
@@ -162,7 +195,10 @@ sb_spring_tidy <- seed_bank_spr %>%
   dplyr::filter(
     site %in% c("BNSH", "GRNB", "DAVE", "KENN", "TIMH", "VICP")
     ) %>%
-  left_join(sb_taxa %>% janitor::clean_names(), by = c("spp_code" = "code")) %>%
+  left_join(
+    sb_taxa %>% janitor::clean_names(), 
+    by = c("spp_code" = "code")
+    ) %>%
   mutate(binom_latin = paste(genus, species, sep = "_")) %>%
   select(
     season, 
@@ -181,7 +217,10 @@ sb_fall_tidy <- seed_bank_fall %>%
   dplyr::filter(
     site %in% c("BNSH", "GRNB", "DAVE", "KENN", "TIMH", "VICP")
     ) %>%
-  left_join(sb_taxa %>% janitor::clean_names(), by = c("spp_code" = "code")) %>%
+  left_join(
+    sb_taxa %>% janitor::clean_names(), 
+    by = c("spp_code" = "code")
+    ) %>%
   mutate(binom_latin = paste(genus, species, sep = "_")) %>%
   select(
     season, 
@@ -577,7 +616,7 @@ sb_org_status <- sb_tidy %>%
   mutate(exotic_native = case_when(
     
    # cross-referenced with the Plants of Toronto df
-   binom_latin == "Conyza_canadensis" ~ "E", 
+   binom_latin == "Conyza_canadensis" ~ "N", 
    binom_latin == "Acalypha_rhomboidea" ~ "N", 
    binom_latin == "Verbenum_urticifolia" ~ "N",
    binom_latin == "Oligoneuron_rigidium" ~ "N",
@@ -665,6 +704,30 @@ sb_org_status %>%
   ) + 
   coord_flip() + 
   theme_bw() 
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+sb_org_status %>%
+  group_by(
+    site, treatment, plot,   
+    binom_latin, exotic_native
+    ) %>%
+  summarize(abundance = sum(abund, na.rm = TRUE)) %>%
+  ungroup() %>%
+  filter(exotic_native == "E", treatment == "RES") %>%
+  
+  # add a logarithm function to make the trends easier to trend
+  # because of an extreme outlier (i.e., Verbascum thapsus)
+  ggplot(aes(x = binom_latin, y = log(abundance))) + 
+  geom_point() +
+  facet_wrap(~site) +
+  labs(
+    title = "Exotic Species - Section 4 (Spring + Fall)", 
+    x = NULL, 
+    y = "log(Seedling Abundance)", 
+  ) + 
+  coord_flip() + 
+  theme_bw() 
 
 ```
 
@@ -709,7 +772,7 @@ sb_org_status %>%
          treatment == "TIL") %>%
   ggplot(aes(x = binom_latin, y = abundance)) + 
   geom_point() +
-  facet_wrap(plot~site) +
+  facet_wrap(~site) +
   labs(
     title = "Native Species - Section 2 (Spring)", 
     x = NULL, 
@@ -781,12 +844,101 @@ sb_org_status %>%
   geom_point() +
   facet_wrap(~site) +
   labs(
-    title = "Native Species - Section 4 (Spring)", 
+    title = "Native Species - Section 4 (Fall)", 
     x = NULL, 
     y = "Seedling Abundance", 
   ) + 
   coord_flip() + 
   theme_bw() 
+```
+
+It would also be interesting to see how many native species are in the TRCA seed mix fro section 4.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+sb_org_status %>%
+  group_by(
+    site, treatment, plot,  
+    binom_latin, exotic_native
+    ) %>%
+  summarize(abundance = sum(abund, na.rm = TRUE)) %>%
+  ungroup() %>%
+  left_join(seed_mix_s4, by = "binom_latin") %>%
+  filter(
+    exotic_native == "N", 
+    treatment == "RES"
+    ) %>%
+  ggplot(
+    aes(
+      x = binom_latin, 
+      y = abundance, 
+      col = seed_mix_1_and_2)
+    ) + 
+  geom_point() +
+  scale_color_discrete(guide="none") + 
+  facet_wrap(~site) +
+  labs(
+    title = "Native Species - Section 4 (Spring + Fall)", 
+    x = NULL, 
+    y = "Seedling Abundance", 
+  ) + 
+  coord_flip() + 
+  theme_bw() 
+```
+
+#### Exotic Richness
+
+```{r}
+
+exotic_richness <- 
+  sb_org_status %>%
+  
+  # just get the exotic species for this calculation
+  filter(exotic_native == "E") %>%
+  rename(exotic_status = exotic_native) %>%
+  
+  # first, get a list of exotic species (and their abundance) in each plot
+  group_by(site, treatment, plot, spp_code) %>%
+  summarize(abundance = sum(abund, na.rm = TRUE)) %>%
+  ungroup() %>%
+  
+  # then, calculate number of exotic species in each plot
+  group_by(site, treatment, plot) %>%
+  summarize(exotic_richness = n_distinct(spp_code)) %>%
+  ungroup()
+
+exotic_richness %>%
+  ggplot(aes(x = site, y = exotic_richness, fill = treatment)) +
+    geom_boxplot() + 
+    scale_fill_discrete(labels = c("Undisturbed", "Heavily-Tilled")) +
+    labs(
+      title = "Seed Bank (Spring + Fall Sampling)",
+      x = NULL, 
+      y = "Exotic Richness") + 
+    theme_bw()
+```
+
+```{r}
+
+exotic_abundance <- 
+  sb_org_status %>%
+  
+  # just get the exotic species for this calculation
+  filter(exotic_native == "E") %>%
+  rename(exotic_status = exotic_native) %>%
+  
+  group_by(site, treatment, plot) %>%
+  summarize(abundance = sum(abund, na.rm = TRUE)) %>%
+  ungroup() 
+  
+exotic_abundance %>%
+  ggplot(aes(x = site, y = abundance, fill = treatment)) +
+    geom_boxplot() + 
+    scale_fill_discrete(labels = c("Undisturbed", "Heavily-Tilled")) +
+    labs(
+      title = "Seed Bank (Spring + Fall Sampling)",
+      x = NULL, 
+      y = "Exotic Abundance") + 
+    theme_bw()
 ```
 
 # References
