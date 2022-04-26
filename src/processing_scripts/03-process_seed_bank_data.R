@@ -2,6 +2,7 @@
 library(here)
 library(dplyr)
 library(janitor)
+library(ggplot2)
 
 # import ----
 sb_spring <- read.csv(
@@ -54,5 +55,30 @@ write.csv(
   file = here("data", "intermediate_data", "seed_bank_tidy.csv")
 )
 
+# figures ----
+
+## seed bank density ----
+sb_spring_tidy %>%
+  ggplot(aes(x = site_name, y = sb_density, fill = treatment)) + 
+  geom_boxplot() + 
+  geom_point(alpha = 0.2) +
+  labs(x = "Site", y = "Seed Bank Density") + 
+  scale_fill_discrete(
+    name = "Management Regime", 
+    labels = c("Undisturbed", "Tilling")
+  ) + 
+  theme_bw()
+
+## seed bank richness ----
+sb_spring_tidy %>%
+  ggplot(aes(x = site_name, y = sb_richness, fill = treatment)) + 
+  geom_boxplot() + 
+  geom_point(alpha = 0.2) +
+  labs(x = "Site", y = "Seed Bank Richness") + 
+  scale_fill_discrete(
+    name = "Management Regime", 
+    labels = c("Undisturbed", "Tilling")
+  ) + 
+  theme_bw()
 
 
