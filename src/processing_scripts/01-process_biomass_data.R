@@ -2,6 +2,8 @@
 library(here)    # for creating relative file-paths
 library(dplyr)   # for manipulating data
 library(janitor) # for creating r-friendly column names
+library(ggplot2)
+library(forcats)
 
 # import ----
 
@@ -51,3 +53,55 @@ write.csv(
     )
 )
 
+# figures ----
+
+## biomass -----
+biomass_summ %>%
+  mutate(
+    site = factor(
+      site, 
+      levels = c("VICP", "TIMH", "KENN", "GRNB", "BNSH", "DAVE"))
+  ) %>%
+  ggplot(aes(x = site, y = comm_biomass_g, fill = treatment)) + 
+  geom_boxplot() + 
+  geom_point(alpha = 0.2) + 
+  labs(x = "Site", y = "Community Biomass (in grams)") + 
+  scale_fill_discrete(
+    name = "Management Regime", 
+    labels = c("Undisturbed", "Tilling")
+  ) + 
+  theme_bw()
+
+## species richness ----
+biomass_summ %>%
+  mutate(
+    site = factor(
+      site, 
+      levels = c("VICP", "TIMH", "KENN", "GRNB", "BNSH", "DAVE"))
+  ) %>%
+  ggplot(aes(x = site, y = species_richness, fill = treatment)) + 
+  geom_boxplot() + 
+  geom_point(alpha = 0.2) + 
+  labs(x = "Site", y = "Species Richness") + 
+  scale_fill_discrete(
+    name = "Management Regime", 
+    labels = c("Undisturbed", "Tilling")
+  ) + 
+  theme_bw()
+
+## correlation: richness and biomass ----
+
+# can community biomass and species richness act as surrogates?
+biomass_summ %>%
+  mutate(
+    treatment = case_when(
+      treatment == "RES" ~ "Undisturbed", 
+      treatment == "TIL" ~ "Tilling")
+  ) %>%
+  ggplot(aes(x = species_richness, y = comm_biomass_g)) + 
+  geom_point(aes(col = site)) + 
+  geom_smooth(method = "lm") + 
+  labs(x = "Species Richness", y = "Community Biomass (in grams)") + 
+  facet_wrap(~ treatment) + 
+  scale_color_discrete(name = "Site") + 
+  theme_bw()
