@@ -96,6 +96,78 @@ inv_incl_mspp <- mutate(
 
 # analysis: without extreme outlier for maximum biomass ----
 
+## remove extreme outlier ----
+biomass_no_out <- dplyr::filter(biomass, comm_biomass_g != bm_max_chal)
+
+## get new carrying capacity ----
+bm_max_bnsh <- max(biomass_no_out$comm_biomass_g)
+
+## get relative fractions (species richness and biomass) ----
+
+biomass_tidy2 <- biomass_no_out %>%
+  rename(
+    bm_observed_g = comm_biomass_g, 
+    sr_observed = species_richness
+  ) %>%
+  mutate(
+    frac_bm_obs_max = bm_observed_g/bm_max_bnsh, 
+    frac_sr_obs_max = sr_observed/sr_maximum
+  )
+
+## get variation in invasibility ---- 
+
+bm_5_bnsh <- biomass_tidy2 %>%
+  arrange(desc(bm_observed_g)) %>%
+  head(n=5)
+
+sr_5_bnsh <- biomass_tidy2 %>%
+  arrange(desc(sr_observed)) %>%
+  head(n=5)
+
+h_df_bnsh <- rbind(bm_5_bnsh, sr_5_bnsh)
+
+# obtain slope (coefficient)
+lm_bnsh <- lm(frac_bm_obs_max ~ frac_sr_obs_max, data = h_df_bnsh)
+h_bnsh <- coef(lm_bnsh)["frac_sr_obs_max"]
+abs_h_bnsh <- abs(h_bnsh)
+
+## get unified metric of invasibility ----
+
+# includes unidentified morphospecies
+inv_bnsh <- mutate(
+  biomass_tidy2,
+  i_e_bnsh = 1-(abs_h_bnsh*frac_sr_obs_max + (1-abs_h_bnsh)*frac_bm_obs_max)
+)
+
+## plots ----
+
+# relative fractions and possible habitat saturation
+(rel_fracs_bnsh <- inv_bnsh %>%
+   ggplot(aes(x = frac_sr_obs_max, y = frac_bm_obs_max, col = site)) +
+   geom_point() +
+   labs(
+     title = "Excludes extreme outliers for maximum biomass",
+     x = expression("S"["obs"]/"S"["max"]),
+     y = expression("B"["obs"]/"B"["max"])
+   ) + 
+   theme_bw()
+)
+
+# unified metric of invasibility per site
+(site_vs_ie_bnsh <- inv_bnsh %>%
+    ggplot(aes(x = site, y = i_e_bnsh, fill = treatment)) + 
+    geom_boxplot() + 
+    geom_point(alpha = 0.1) +
+    labs(
+      title = "Excludes extreme outliers for maximum biomass",
+      x = "Site", 
+      y = "Unified Metric of Invasibility"
+    ) + 
+    scale_fill_discrete(
+      name = "Treatment", 
+      label = c("Undisturbed", "Tilling")) + 
+    theme_bw()
+)
 
 # save to disk -----
 
