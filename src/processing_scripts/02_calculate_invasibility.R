@@ -173,6 +173,61 @@ inv_bnsh <- mutate(
     theme_bw()
 )
 
+# sensitivity analysis ----
+
+inv <- inv_incl_mspp %>%
+  inner_join(inv_bnsh, by = c("section", "site", "treatment", "plot")) %>%
+  mutate(id = paste(site, plot, sep = "-")) %>%
+  select(section, site, treatment, plot, id, i_e, i_e_bnsh) 
+
+(inv_sens <- inv %>%
+  mutate(
+    treatment = case_when(
+      treatment == "RES" ~ "Undisturbed", 
+      treatment == "TIL" ~ "Tilling"
+    )
+  ) %>%
+  ggplot() +
+  geom_segment(aes(x = i_e_bnsh, xend = i_e, y = id, yend = id), alpha = 0.2) + 
+  geom_point(aes(x = i_e, y = id, col = "i_e", shape = treatment)) + 
+  geom_point(aes(x = i_e_bnsh, y = id, col = "i_e_bnsh", shape = treatment)) + 
+  labs(x = "Unified Metric of Invasibility") + 
+  xlim(0, 1) + 
+  scale_color_discrete(
+    name = "Sensitivity Analysis",
+    labels = c("With outliers", "Without outliers")
+  ) + 
+  scale_shape_discrete(
+    name = "Management Regime"
+  ) + 
+  facet_wrap(~site) + 
+  theme_bw() + 
+  theme(axis.text.y = element_blank())
+)
+
+## histograms ----
+
+inv %>%
+ggplot(aes(x = i_e)) +
+  geom_histogram() + 
+  geom_vline(xintercept = mean(inv$i_e), linetype = "dashed") + 
+  xlim(0, 1) + 
+  labs(
+    title = "Includes extreme outliers of maximum biomass",
+    x = "Unified Metric of Invasibility") + 
+  theme_bw()
+
+inv %>%
+  ggplot(aes(x = i_e_bnsh)) +
+  geom_histogram() + 
+  xlim(0, 1) + 
+  geom_vline(xintercept = mean(inv$i_e_bnsh), linetype = "dashed") + 
+  labs(
+    title = "Excludes extreme outliers of maximum biomass",
+    x = "Unified Metric of Invasibility"
+    ) + 
+  theme_bw()
+
 # save to disk -----
 
 ggsave(
