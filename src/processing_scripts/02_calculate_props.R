@@ -83,7 +83,12 @@ biomass_tidy <- biomass %>%
   left_join(taxon, by = c("spp_code" = "Code")) %>%
   mutate(binom_latin = paste(Genus, species, sep = "_")) %>%
   left_join(plants_to_tidy, by = "binom_latin") %>%
-  select(section, site, treatment, plot, spp_code, biomass_g, exotic_native) %>%
+  left_join(seed_mix_tidy, by = "binom_latin") %>%
+  select(
+    section, site, treatment, plot, 
+    spp_code,
+    biomass_g, 
+    exotic_native, seed_mix_1_2) %>%
   
   # manually assign exotic/native status 
   mutate(exotic_native = case_when(
@@ -103,5 +108,3 @@ biomass_tidy <- biomass %>%
     spp_code == "CHGL" ~ "N",
     TRUE ~ exotic_native)
   )
-
-# 
