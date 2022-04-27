@@ -38,9 +38,9 @@ plants_to <- read.csv(unlist(dryad_link))
 dplyr::glimpse(plants_to)
 dplyr::glimpse(biomass)
 
-# data clean ---
+# data clean ----
 
-# obtain exotic/native status
+## obtain exotic/native status ----
 plants_to_tidy <- plants_to %>%
   janitor::clean_names() %>%
   select(scientific_name, exotic_native) %>%
@@ -50,7 +50,7 @@ plants_to_tidy <- plants_to %>%
     replace = "_")
     )
 
-# link exotic/native status with specie-specific biomass
+## link exotic/native status with biomass ----
 biomass_tidy <- biomass %>%
   janitor::clean_names() %>%
   left_join(taxon, by = c("spp_code" = "Code")) %>%
