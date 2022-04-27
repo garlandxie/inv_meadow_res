@@ -66,21 +66,25 @@ inv_incl_mspp <- mutate(
 
 ## plots -----
 
+# relative fractions and possible habitat saturation
 (rel_fracs_chal <- inv_incl_mspp %>%
   ggplot(aes(x = frac_sr_obs_max, y = frac_bm_obs_max, col = site)) +
   geom_point() +
   labs(
+    title = "Includes extreme outliers for maximum biomass",
     x = expression("S"["obs"]/"S"["max"]),
     y = expression("B"["obs"]/"B"["max"])
   ) + 
   theme_bw()
 )
 
+# unified metric of invasibility per site
 (site_vs_ie_chal <- inv_incl_mspp %>%
   ggplot(aes(x = site, y = i_e, fill = treatment)) + 
   geom_boxplot() + 
   geom_point(alpha = 0.1) +
   labs(
+    title = "Includes extreme outliers for maximum biomass",
     x = "Site", 
     y = "Unified Metric of Invasibility"
   ) + 
