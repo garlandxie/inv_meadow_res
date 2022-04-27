@@ -66,6 +66,7 @@ biomass_tidy <- biomass %>%
     
     # Conzya canadensis
     # synonym with Erigeron canadensis
+    # located in the plants of TO database
     spp_code == "COCA"  ~ "N", 
     spp_code == "SEGL"  ~ "E", 
     
