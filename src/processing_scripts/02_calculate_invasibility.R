@@ -14,54 +14,59 @@ biomass <- read.csv(
 # check packaging ----
 dplyr::glimpse(biomass)
 
-# calculate unified metric of invasibility: incl. morphospecies ----
+# analysis: with the influential outlier ----
 
 ## get carrying capacity ----
 
-# maximum biomass
-bm_maximum_g <- max(biomass$comm_biomass_g)
+# maximum biomass (in grams)
+# basically, the plot with all of the lambquarter's (Chenopodium album)
+bm_max_chal <- max(biomass$comm_biomass_g)
 
 # maximum richness 
 # TODO: compare to TRCA Meadoway's biomonitoring datasets
 sr_maximum <- max(biomass$species_richness)
 
-## get relative fractions ----
+## get relative fractions (species richness and biomass) ----
 
-##  observed values ----
 biomass_tidy <- biomass %>%
-  rename(bm_observed_g = comm_biomass_g, 
-         sr_observed = species_richness
+  rename(
+    bm_observed_g = comm_biomass_g, 
+    sr_observed = species_richness
          ) %>%
   mutate(
-    frac_bm_obs_max = bm_observed_g/bm_maximum_g, 
+    frac_bm_obs_max = bm_observed_g/bm_max_chal, 
     frac_sr_obs_max = sr_observed/sr_maximum
   )
 
 ## get variation of invasibility ----
 
 # there should be a better way of doing this
-bm_5 <- biomass_tidy %>%
+bm_5_chal <- biomass_tidy %>%
   arrange(desc(bm_observed_g)) %>%
   head(n=5)
 
-sr_5 <- biomass_tidy %>%
+sr_5_chal <- biomass_tidy %>%
   arrange(desc(sr_observed)) %>%
   head(n=5)
 
-h_df <- rbind(bm_5, sr_5)
+h_df_chal <- rbind(bm_5_chal, sr_5_chal)
 
-h <- coef(lm(frac_sr_obs_max ~ frac_bm_obs_max, data = h_df))["frac_bm_obs_max"]
-abs_h <- abs(h)
+lm_chal <- lm(frac_sr_obs_max ~ frac_bm_obs_max, data = h_df_chal)
+h_chal <- coef(lm_chal)["frac_bm_obs_max"]
+
+abs_h_chal <- abs(h_chal)
 
 ## get unified metric of invasibility ----
 
 # includes unidentified morphospecies
-inv_incl_mspp <- biomass_tidy %>%
-  mutate(i_e = 1-(abs_h*frac_sr_obs_max + (1-abs_h)*frac_bm_obs_max))
+inv_incl_mspp <- mutate(
+  biomass_tidy,
+  i_e_chal = 1-(abs_h_chal*frac_sr_obs_max + (1-abs_h_chal)*frac_bm_obs_max)
+  )
 
-# plots -----
+## plots -----
 
-rel_fracs <- inv_incl_mspp %>%
+(rel_fracs_chal <- inv_incl_mspp %>%
   ggplot(aes(x = frac_sr_obs_max, y = frac_bm_obs_max, col = site)) +
   geom_point() +
   labs(
@@ -69,8 +74,9 @@ rel_fracs <- inv_incl_mspp %>%
     y = expression("B"["obs"]/"B"["max"])
   ) + 
   theme_bw()
+)
 
-site_vs_ie <- inv_incl_mspp %>%
+(site_vs_ie_chal <- inv_incl_mspp %>%
   ggplot(aes(x = site, y = i_e, fill = treatment)) + 
   geom_boxplot() + 
   geom_point(alpha = 0.1) +
@@ -80,8 +86,9 @@ site_vs_ie <- inv_incl_mspp %>%
   ) + 
   scale_fill_discrete(
     name = "Treatment", 
-    label = c("Undisturbed", "Seed Tillage")) + 
+    label = c("Undisturbed", "Tilling")) + 
   theme_bw()
+)
 
 # save to disk -----
 
