@@ -248,9 +248,13 @@ ggsave(
   width = 5
 )
 
+# data frame with: 
+# (1) observed values of species richness and community biomass, 
+# (2) relative fractions of species richness and community biomass, 
+# (3) Guo's unified metric of invasibility (including extreme outliers)
 write.csv(
   x = inv_incl_mspp, 
-  file = here("data", "intermediate_data", "guo_inv_incl_morphospp.csv")
+  file = here("data", "intermediate_data", "guo_inv_with_outliers.csv")
 )
 
 
