@@ -80,6 +80,9 @@ biomass_tidy <- biomass %>%
 
 # calculate degree of invasion ----
 
+# TO DO: modify existing Guo's degree of invasion by partitioning into 
+# invasive alien and non-invasive alien species
+
 # obtain total richness and community biomass ----
 max_df <- biomass_tidy %>%
   group_by(section, site, treatment, plot) %>%
