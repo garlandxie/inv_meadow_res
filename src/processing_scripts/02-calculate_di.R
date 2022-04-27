@@ -76,3 +76,31 @@ biomass_tidy <- biomass %>%
     spp_code == "CHGL" ~ "N",
     TRUE ~ exotic_native)
   )
+
+# calculate degree of invasion ----
+
+# obtain total richness (incl. natives) and total community biomass
+max_df <- biomass_tidy %>%
+  group_by(section, site, treatment, plot) %>%
+  summarize(
+    sr_tot = dplyr::n_distinct(spp_code), 
+    bm_tot = sum(biomass_g, na.rm = TRUE)
+  )
+
+# observed exotic richness and biomass
+obs_df <- biomass_tidy %>%
+  filter(exotic_native == "E") %>%
+  group_by(section, site, treatment, plot) %>%
+  summarize(
+    sr_exo = dplyr::n_distinct(spp_code), 
+    bm_exo = sum(biomass_g, na.rm = TRUE)
+  )
+
+# join total and observed values
+bm_df <- max_df %>%
+  inner_join(obs_df,by = c("section", "site", "treatment", "plot")) %>%
+  mutate(guo_di = (sr_exo/sr_tot + bm_exo/bm_tot)*0.5)
+
+
+
+
