@@ -144,7 +144,12 @@ di_vs_site <- bm_df %>%
   ) + 
   theme_bw() 
 
+# save to disk ----
 
+write.csv(
+  x = bm_df, 
+  file = here("data", "intermediate_data", "guo_di.csv")
+)
 
 
 
