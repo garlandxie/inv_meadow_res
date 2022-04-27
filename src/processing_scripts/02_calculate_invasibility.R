@@ -231,7 +231,7 @@ inv %>%
 # save to disk -----
 
 ggsave(
-  plot = rel_fracs, 
+  plot = rel_fracs_chal, 
   filename = here("output", "results", "relative_fractions.png"), 
   device = "png",
   units = "in", 
@@ -240,7 +240,7 @@ ggsave(
 )
 
 ggsave(
-  plot = site_vs_ie, 
+  plot = site_vs_ie_chal, 
   filename = here("output", "results", "site_vs_ie.png"), 
   device = "png",
   units = "in", 
@@ -257,4 +257,11 @@ write.csv(
   file = here("data", "intermediate_data", "guo_inv_with_outliers.csv")
 )
 
-
+# data frame with: 
+# (1) observed values of species richness and community biomass, 
+# (2) relative fractions of species richness and community biomass, 
+# (3) Guo's unified metric of invasibility (excluding extreme outliers)
+write.csv(
+  x = inv_bnsh, 
+  file = here("data", "intermediate_data", "guo_inv_exclude_outliers.csv")
+)
