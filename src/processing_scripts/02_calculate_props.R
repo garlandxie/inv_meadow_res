@@ -108,3 +108,20 @@ biomass_tidy <- biomass %>%
     spp_code == "CHGL" ~ "N",
     TRUE ~ exotic_native)
   )
+
+## clean status: spontaneous, seed mix, invasives -----
+biomass_tidy <- biomass_tidy %>%
+  mutate(status = case_when(
+    
+    # native species in the TRCA seed mix
+    exotic_native == "N" & seed_mix_1_2 == "Yes" ~ "SM", 
+    
+    # spontaneous exotic species 
+    exotic_native == "E" ~ "SE", 
+    
+    # spontaneous native species
+    exotic_native == "N" ~ "SN",
+    
+    TRUE ~ "U")
+  )
+
