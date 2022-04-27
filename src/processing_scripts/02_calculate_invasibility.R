@@ -1,8 +1,7 @@
 # libraries ----
-library(here)
-library(readr)
-library(dplyr)
-library(ggplot2)
+library(here)     # for creating relative file-paths
+library(dplyr)    # for manipulating data
+library(ggplot2)  # for visualising data 
 
 # import ----
 
@@ -80,7 +79,7 @@ inv_incl_mspp <- mutate(
 
 # unified metric of invasibility per site
 (site_vs_ie_chal <- inv_incl_mspp %>%
-  ggplot(aes(x = site, y = i_e, fill = treatment)) + 
+  ggplot(aes(x = site, y = i_e_chal, fill = treatment)) + 
   geom_boxplot() + 
   geom_point(alpha = 0.1) +
   labs(
@@ -178,7 +177,7 @@ inv_bnsh <- mutate(
 inv <- inv_incl_mspp %>%
   inner_join(inv_bnsh, by = c("section", "site", "treatment", "plot")) %>%
   mutate(id = paste(site, plot, sep = "-")) %>%
-  select(section, site, treatment, plot, id, i_e, i_e_bnsh) 
+  select(section, site, treatment, plot, id, i_e_bnsh, i_e_chal) 
 
 (inv_sens <- inv %>%
   mutate(
@@ -188,8 +187,8 @@ inv <- inv_incl_mspp %>%
     )
   ) %>%
   ggplot() +
-  geom_segment(aes(x = i_e_bnsh, xend = i_e, y = id, yend = id), alpha = 0.2) + 
-  geom_point(aes(x = i_e, y = id, col = "i_e", shape = treatment)) + 
+  geom_segment(aes(x = i_e_bnsh, xend = i_e_chal, y = id, yend = id), alpha = 0.2) + 
+  geom_point(aes(x = i_e_chal, y = id, col = "i_e", shape = treatment)) + 
   geom_point(aes(x = i_e_bnsh, y = id, col = "i_e_bnsh", shape = treatment)) + 
   labs(x = "Unified Metric of Invasibility") + 
   xlim(0, 1) + 
@@ -208,9 +207,9 @@ inv <- inv_incl_mspp %>%
 ## histograms ----
 
 inv %>%
-ggplot(aes(x = i_e)) +
+ggplot(aes(x = i_e_chal)) +
   geom_histogram() + 
-  geom_vline(xintercept = mean(inv$i_e), linetype = "dashed") + 
+  geom_vline(xintercept = mean(inv$i_e_chal), linetype = "dashed") + 
   xlim(0, 1) + 
   labs(
     title = "Includes extreme outliers of maximum biomass",
