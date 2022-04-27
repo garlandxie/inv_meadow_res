@@ -1,10 +1,10 @@
 # libraries ----
-library(here)
-library(rdryad)
-library(dplyr)
-library(janitor)
-library(stringr)
-library(ggplot2)
+library(here)    # for creating relative file paths
+library(rdryad)  # for importing dryad repos
+library(dplyr)   # for manipulating data
+library(janitor) # for cleaning column names
+library(stringr) # for manipulating string data
+library(ggplot2) # for visualising data 
 
 # import ----
 
