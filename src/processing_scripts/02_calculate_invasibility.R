@@ -14,7 +14,7 @@ biomass <- read.csv(
 # check packaging ----
 dplyr::glimpse(biomass)
 
-# analysis: with the influential outlier ----
+# analysis: with the extreme outlier for maximum biomass ----
 
 ## get carrying capacity ----
 
@@ -93,6 +93,9 @@ inv_incl_mspp <- mutate(
     label = c("Undisturbed", "Tilling")) + 
   theme_bw()
 )
+
+# analysis: without extreme outlier for maximum biomass ----
+
 
 # save to disk -----
 
