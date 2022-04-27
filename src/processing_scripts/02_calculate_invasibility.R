@@ -179,6 +179,9 @@ inv <- inv_incl_mspp %>%
   mutate(id = paste(site, plot, sep = "-")) %>%
   select(section, site, treatment, plot, id, i_e_bnsh, i_e_chal) 
 
+# plot differences between invasibility metrics that includes and excludes
+# extreme outliers of maximum biomass
+# by site
 (inv_sens <- inv %>%
   mutate(
     treatment = case_when(
