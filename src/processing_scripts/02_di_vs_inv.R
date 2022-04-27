@@ -34,6 +34,7 @@ di_inv <- guo_di %>%
 
 # plot ----
 
+## includes extreme outliers ----
 (di_inv_plot <- di_inv %>%
   ggplot(
     aes(
@@ -58,4 +59,32 @@ di_inv <- guo_di %>%
     name = "Site"
   ) + 
   theme_bw()
+)
+
+## excludes extreme outliers ----
+
+(di_inv_out_plot <- di_inv %>%
+   ggplot(
+     aes(
+       x = i_e_bnsh, 
+       y = guo_di, 
+       col = treatment 
+     )
+   ) +
+   geom_smooth(method = "lm") + 
+   geom_point(aes(shape = site)) + 
+   labs(
+     title = "Excludes extreme outliers from maximum biomass", 
+     x = "Guo's Unified Metric of Invasibility",
+     y = "Guo's Degree of Invasion") + 
+   xlim(0, 1) + 
+   ylim(0, 1) + 
+   scale_color_discrete(
+     name = "Management Regime", 
+     labels = c("Undisturbed", "Tilling")
+   ) + 
+   scale_shape_discrete(
+     name = "Site"
+   ) + 
+   theme_bw()
 )
