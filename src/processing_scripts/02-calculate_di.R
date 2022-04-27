@@ -7,6 +7,26 @@ library(stringr)
 
 # import ----
 
+biomass <- read.csv(
+  here(
+    "data", 
+    "input_data",
+    "aboveground_biomass", 
+    "meadoway_plants_aboveground_biomass_raw_data.csv"
+  )
+)
+
+## taxonomy ----
+
+taxon <- read.csv(
+  here(
+    "data", 
+    "input_data", 
+    "aboveground_biomass", 
+    "meadoway_plants_taxonomy.csv"
+  )
+)
+
 ## plants of toronto ----
 
 # import dataset using R DRYAD API  
@@ -16,6 +36,7 @@ plants_to <- read.csv(unlist(dryad_link))
 
 # check packaging ----
 dplyr::glimpse(plants_to)
+dplyr::glimpse(biomass)
 
 # data clean ---
 plants_to_tidy <- plants_to %>%
