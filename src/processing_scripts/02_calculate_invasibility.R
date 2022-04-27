@@ -145,6 +145,10 @@ inv_bnsh <- mutate(
 (rel_fracs_bnsh <- inv_bnsh %>%
    ggplot(aes(x = frac_sr_obs_max, y = frac_bm_obs_max, col = site)) +
    geom_point() +
+   geom_abline(intercept = 1.50, slope = as.double(h_bnsh)) + 
+   
+   # note: remove y-axis tick labels 1.5 to 2.0 (if possible)
+   ylim(0, 2) + 
    labs(
      title = "Excludes extreme outliers for maximum biomass",
      x = expression("S"["obs"]/"S"["max"]),
