@@ -39,12 +39,21 @@ dplyr::glimpse(plants_to)
 dplyr::glimpse(biomass)
 
 # data clean ---
+
+# obtain exotic/native status
 plants_to_tidy <- plants_to %>%
   janitor::clean_names() %>%
   select(scientific_name, exotic_native) %>%
-  mutate(binomial_latin = str_replace(
+  mutate(binom_latin = str_replace(
     scientific_name, 
     pattern = " ", 
     replace = "_")
     )
 
+# link exotic/native status with specie-specific biomass
+biomass_tidy <- biomass %>%
+  janitor::clean_names() %>%
+  left_join(taxon, by = c("spp_code" = "Code")) %>%
+  mutate(binom_latin = paste(Genus, species, sep = "_")) %>%
+  left_join(plants_to_tidy, by = "binom_latin") %>%
+  select(section, site, treatment, plot, spp_code, biomass_g, exotic_native)
