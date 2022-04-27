@@ -4,6 +4,7 @@ library(rdryad)
 library(dplyr)
 library(janitor)
 library(stringr)
+library(ggplot2)
 
 # import ----
 
@@ -100,6 +101,21 @@ obs_df <- biomass_tidy %>%
 bm_df <- max_df %>%
   inner_join(obs_df,by = c("section", "site", "treatment", "plot")) %>%
   mutate(guo_di = (sr_exo/sr_tot + bm_exo/bm_tot)*0.5)
+
+# plots ----
+di_vs_site <- bm_df %>% 
+  ggplot(aes(x = site, y = guo_di, fill = treatment)) + 
+  geom_boxplot() + 
+  geom_point(alpha = 0.2) + 
+  ylim(0, 1) + 
+  labs(x = "Site", y = "Guo's Degree of Invasion") + 
+  scale_fill_discrete(
+    name = "Management Regime", 
+    labels = c("Undisturbed", "Tilling")
+  ) + 
+  theme_bw() 
+
+
 
 
 
