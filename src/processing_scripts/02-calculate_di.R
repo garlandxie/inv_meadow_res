@@ -100,9 +100,38 @@ obs_df <- biomass_tidy %>%
 # join total and observed values ----
 bm_df <- max_df %>%
   inner_join(obs_df,by = c("section", "site", "treatment", "plot")) %>%
-  mutate(guo_di = (sr_exo/sr_tot + bm_exo/bm_tot)*0.5)
+  mutate(
+    sr_frac = sr_exo/sr_tot, 
+    bm_frac = bm_exo/bm_tot,
+    guo_di = (sr_frac + bm_frac)*0.5
+    ) 
 
 # plots ----
+
+# relative fractions
+(rel_fracs <- bm_df %>%
+   ggplot(aes(
+     x = sr_frac, 
+     y = bm_frac,
+     col = treatment, 
+     shape = site)
+     ) +
+   geom_point() +
+   xlim(0, 1) + 
+   ylim(0, 1) + 
+   labs(
+     x = expression("S"["exo"]/"S"["tot"]),
+     y = expression("B"["exo"]/"B"["tot"])
+   ) + 
+   scale_color_discrete(
+     name = "Management Regime", 
+     labels = c("Undisturbed", "Tilling")
+   ) + 
+   scale_shape_discrete(name = "Site") + 
+   theme_bw()
+)
+
+# guo's degree of invasion per site
 di_vs_site <- bm_df %>% 
   ggplot(aes(x = site, y = guo_di, fill = treatment)) + 
   geom_boxplot() + 
