@@ -2,6 +2,7 @@
 library(here)
 library(dplyr)
 library(stringr)
+library(tidyr)
 
 # import ----
 
@@ -37,6 +38,10 @@ seed_mix <- read.csv(
 dryad_doi <- "10.5061/dryad.1ns1rn8sg"
 dryad_link <- rdryad::dryad_download(dryad_doi)
 plants_to <- read.csv(unlist(dryad_link))
+
+## invasive species in TO ----
+
+# insert dataset from Poitgeiter et al. 2022. J Appl Ecol
 
 # data clean ----
 
@@ -122,6 +127,84 @@ biomass_tidy <- biomass_tidy %>%
     # spontaneous native species
     exotic_native == "N" ~ "SN",
     
-    TRUE ~ "U")
+    TRUE ~ "U"
   )
+)
 
+# calculate proportions (for abundance) ----
+
+abund_tot <- biomass_tidy %>%
+  group_by(section, site, treatment, plot) %>%
+  summarize(abund_tot = sum(biomass_g, na.rm = TRUE)) %>%
+  ungroup()
+
+sm_tot <- biomass_tidy %>%
+  filter(status == "SM") %>%
+  group_by(section, site, treatment, plot) %>%
+  summarize(abund_sm = sum(biomass_g, na.rm = TRUE)) %>%
+  ungroup()
+
+se_tot <- biomass_tidy %>%
+  filter(status == "SE") %>%
+  group_by(section, site, treatment, plot) %>%
+  summarize(abund_se = sum(biomass_g, na.rm = TRUE)) %>%
+  ungroup()
+
+sn_tot <- biomass_tidy %>%
+  filter(status == "SN") %>%
+  group_by(section, site, treatment, plot) %>%
+  summarize(abund_sn = sum(biomass_g, na.rm = TRUE)) %>%
+  ungroup()
+
+
+multi_key_id <- c("section", "site", "treatment", "plot")
+tot <- abund_tot %>%
+  left_join(sm_tot, by = multi_key_id) %>%
+  left_join(se_tot, by = multi_key_id) %>%
+  left_join(sn_tot, by = multi_key_id) %>%
+  mutate(
+    prop_sm = abund_sm/abund_tot, 
+    prop_sn = abund_sn/abund_tot, 
+    prop_se = abund_se/abund_tot
+  ) 
+
+# plot ----
+
+(prop_sm_plot <- tot %>%
+  ggplot(aes(x = site, y = prop_sm, col = treatment)) + 
+  geom_boxplot() + 
+  geom_point(alpha = 0.2) + 
+  ylim(0, 1) + 
+  labs(x = "Site", y = "Proportion of natives in seed mix") + 
+  scale_color_discrete(
+    name = "Management Regime", 
+    labels = c("Undisturbed", "Tilling")
+  ) + 
+  theme_bw()
+)
+
+(prop_se_plot <- tot %>%
+  ggplot(aes(x = site, y = prop_se, col = treatment)) + 
+  geom_boxplot() + 
+  geom_point(alpha = 0.2) + 
+  ylim(0, 1) + 
+  labs(x = "Site", y = "Proportion of exotics species") + 
+  scale_color_discrete(
+    name = "Management Regime", 
+    labels = c("Undisturbed", "Tilling")
+  ) + 
+  theme_bw()
+)
+
+(prop_sn_plot <- tot %>%
+    ggplot(aes(x = site, y = prop_sn, col = treatment)) + 
+    geom_boxplot() + 
+    geom_point(alpha = 0.2) + 
+    ylim(0, 1) + 
+    labs(x = "Site", y = "Proportion of spontaneous native species") + 
+    scale_color_discrete(
+      name = "Management Regime", 
+      labels = c("Undisturbed", "Tilling")
+    ) + 
+    theme_bw()
+)
