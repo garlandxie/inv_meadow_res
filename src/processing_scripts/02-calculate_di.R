@@ -56,4 +56,22 @@ biomass_tidy <- biomass %>%
   left_join(taxon, by = c("spp_code" = "Code")) %>%
   mutate(binom_latin = paste(Genus, species, sep = "_")) %>%
   left_join(plants_to_tidy, by = "binom_latin") %>%
-  select(section, site, treatment, plot, spp_code, biomass_g, exotic_native)
+  select(section, site, treatment, plot, spp_code, biomass_g, exotic_native) %>%
+
+  # manually assign exotic/native status 
+  mutate(exotic_native = case_when(
+
+    # Cerastium pumilum 
+    spp_code == "CEPU"  ~ "E", 
+    
+    # Conzya canadensis
+    # synonym with Erigeron canadensis
+    spp_code == "COCA"  ~ "N", 
+    spp_code == "SEGL"  ~ "E", 
+    
+    # Chenopodium glaucum
+    # synonym with Oxybasis glauca
+    # located in the plants of TO database
+    spp_code == "CHGL" ~ "N",
+    TRUE ~ exotic_native)
+  )
