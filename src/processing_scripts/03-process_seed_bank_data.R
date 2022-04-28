@@ -23,6 +23,7 @@ sb_fall <- read.csv(
 
 # check packaging ----
 dplyr::glimpse(sb_spring)
+dplyr::glimpse(sb_fall)
 
 # clean data ----
 
@@ -80,5 +81,3 @@ sb_spring_tidy %>%
     labels = c("Undisturbed", "Tilling")
   ) + 
   theme_bw()
-
-
