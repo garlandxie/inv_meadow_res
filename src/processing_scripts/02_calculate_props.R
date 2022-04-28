@@ -5,6 +5,7 @@ library(stringr)
 library(tidyr)
 library(rdryad)
 library(readxl)
+library(ggplot2)
 
 # import ----
 
@@ -181,16 +182,23 @@ sn_tot <- biomass_tidy %>%
   summarize(abund_sn = sum(biomass_g, na.rm = TRUE)) %>%
   ungroup()
 
+si_tot <- biomass_tidy %>%
+  filter(status == "SI") %>%
+  group_by(section, site, treatment, plot) %>%
+  summarize(abund_si = sum(biomass_g, na.rm = TRUE)) %>%
+  ungroup()
 
 multi_key_id <- c("section", "site", "treatment", "plot")
 tot <- abund_tot %>%
   left_join(sm_tot, by = multi_key_id) %>%
   left_join(se_tot, by = multi_key_id) %>%
   left_join(sn_tot, by = multi_key_id) %>%
+  left_join(si_tot, by = multi_key_id) %>%
   mutate(
     prop_sm = abund_sm/abund_tot, 
     prop_sn = abund_sn/abund_tot, 
-    prop_se = abund_se/abund_tot
+    prop_se = abund_se/abund_tot, 
+    prop_si = abund_si/abund_tot
   ) 
 
 # plot ----
@@ -227,6 +235,19 @@ tot <- abund_tot %>%
     geom_point(alpha = 0.2) + 
     ylim(0, 1) + 
     labs(x = "Site", y = "Proportion of spontaneous native species") + 
+    scale_color_discrete(
+      name = "Management Regime", 
+      labels = c("Undisturbed", "Tilling")
+    ) + 
+    theme_bw()
+)
+
+(prop_si_plot <- tot %>%
+    ggplot(aes(x = site, y = prop_si, col = treatment)) + 
+    geom_boxplot() + 
+    geom_point(alpha = 0.2) + 
+    ylim(0, 1) + 
+    labs(x = "Site", y = "Proportion of invasive species") + 
     scale_color_discrete(
       name = "Management Regime", 
       labels = c("Undisturbed", "Tilling")
