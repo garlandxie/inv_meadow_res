@@ -35,7 +35,7 @@ di_inv <- guo_di %>%
     guo_di_exo, guo_di_inv, 
     i_e_chal, i_e_bnsh)
 
-# plots: exotic species ----
+# plots: treatment effect on exotic species ----
 
 ## |- includes extreme outliers ----
 (di_exo_inv_plot <- di_inv %>%
@@ -92,7 +92,7 @@ di_inv <- guo_di %>%
    theme_bw()
 )
 
-# plots: invasives species ----
+# plots: treatment effect on invasives species ----
 
 ## |- includes extreme outliers ----
 (di_inv_plot <- di_inv %>%
@@ -148,5 +148,3 @@ di_inv <- guo_di %>%
    ) + 
    theme_bw()
 )
-
-# plots: invasive + exotics
