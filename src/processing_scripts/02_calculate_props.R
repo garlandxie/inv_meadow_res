@@ -9,7 +9,7 @@ library(ggplot2)
 
 # import ----
 
-## biomass ----
+## |- biomass ----
 biomass <- read.csv(
   here(
     "data", 
@@ -19,7 +19,7 @@ biomass <- read.csv(
   )
 ) 
 
-## taxonomy ----
+## |- taxonomy ----
 taxon <- read.csv(
   here(
     "data", 
@@ -29,20 +29,20 @@ taxon <- read.csv(
   )
 )
 
-## seed mix ----
+## |- seed mix ----
 
 seed_mix <- read.csv(
   here("data", "input_data", "seed_mix", "meadoway_seed_mix.csv")
 )
 
-## plants of toronto ----
+## |- plants of toronto ----
 
 # import dataset using R DRYAD API  
 dryad_doi_1 <- "10.5061/dryad.1ns1rn8sg"
 dryad_link_1 <- rdryad::dryad_download(dryad_doi_1)
 plants_to <- read.csv(unlist(dryad_link_1))
 
-## invasive species in TO ----
+## |- invasive species in TO ----
 
 dryad_doi_2 <- "10.5061/dryad.h9w0vt4k3"
 dryad_link_2 <- rdryad::dryad_download(dryad_doi_2)
@@ -54,7 +54,7 @@ inv_spp_to <- readxl::read_excel(
 
 # data clean ----
 
-## clean seed mix ----
+## |- clean seed mix ----
 
 seed_mix_tidy <- seed_mix %>%
   janitor::clean_names() %>%
@@ -81,7 +81,7 @@ seed_mix_tidy <- seed_mix %>%
   ) %>%
   select(binom_latin, seed_mix_1_2) 
 
-## clean invasive species of TO -----
+## |- clean invasive species of TO -----
 
 inv_to_tidy <- inv_spp_to %>%
   janitor::clean_names() %>%
@@ -92,7 +92,7 @@ inv_to_tidy <- inv_spp_to %>%
     ) %>%
   mutate(invasive_status = "I") 
 
-## obtain exotic/native status ----
+## |- obtain exotic/native status ----
 plants_to_tidy <- plants_to %>%
   janitor::clean_names() %>%
   select(scientific_name, exotic_native) %>%
@@ -102,7 +102,7 @@ plants_to_tidy <- plants_to %>%
     replace = "_")
   )
 
-## link exotic/native status with biomass ----
+## |- link exotic/native status with biomass ----
 biomass_tidy <- biomass %>%
   janitor::clean_names() %>%
   left_join(taxon, by = c("spp_code" = "Code")) %>%
@@ -137,7 +137,7 @@ biomass_tidy <- biomass %>%
     TRUE ~ exotic_native)
   ) 
   
-## clean status: spontaneous, seed mix, invasives -----
+## |- clean status: spontaneous, seed mix, invasives -----
 biomass_tidy <- biomass_tidy %>%
   mutate(status = case_when(
     
@@ -157,7 +157,7 @@ biomass_tidy <- biomass_tidy %>%
   )
 )
 
-# calculate proportions (for abundance) ----
+# |- calculate proportions (for abundance) ----
 
 abund_tot <- biomass_tidy %>%
   group_by(section, site, treatment, plot) %>%
