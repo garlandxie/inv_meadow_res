@@ -134,7 +134,9 @@ biomass_tidy <- biomass %>%
     # located in the plants of TO database
     spp_code == "CHGL" ~ "N",
     TRUE ~ exotic_native)
-  )
+  ) %>%
+  
+
 
 ## clean status: spontaneous, seed mix, invasives -----
 biomass_tidy <- biomass_tidy %>%
@@ -148,6 +150,9 @@ biomass_tidy <- biomass_tidy %>%
     
     # spontaneous native species
     exotic_native == "N" ~ "SN",
+    
+    # invasive alien species with TRCA management priority 
+    exotic_native == "E" & invasive_status == "I" ~ "SI",
     
     TRUE ~ "U"
   )
