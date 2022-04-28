@@ -30,16 +30,19 @@ dplyr::glimpse(guo_inv_out)
 di_inv <- guo_di %>%
   inner_join(guo_inv, by = c("section", "site", "treatment", "plot")) %>%
   inner_join(guo_inv_out, by = c("section", "site", "treatment", "plot")) %>%
-  select(section, site, treatment, plot, guo_di, i_e_chal, i_e_bnsh)
+  select(
+    section, site, treatment, plot,
+    guo_di_exo, guo_di_inv, 
+    i_e_chal, i_e_bnsh)
 
 # plot ----
 
 ## includes extreme outliers ----
-(di_inv_plot <- di_inv %>%
+(di_exo_inv_plot <- di_inv %>%
   ggplot(
     aes(
       x = i_e_chal, 
-      y = guo_di, 
+      y = guo_di_exo, 
       col = treatment 
       )
     ) +
@@ -47,8 +50,8 @@ di_inv <- guo_di %>%
   geom_point(aes(shape = site)) + 
   labs(
     title = "Includes extreme outliers from maximum biomass", 
-    x = "Guo's Unified Metric of Invasibility",
-    y = "Guo's Degree of Invasion") + 
+    x = "Unified Metric of Invasibility",
+    y = "Degree of Invasion (Exotic Species)") + 
   xlim(0, 1) + 
   ylim(0, 1) + 
   scale_color_discrete(
@@ -63,11 +66,11 @@ di_inv <- guo_di %>%
 
 ## excludes extreme outliers ----
 
-(di_inv_out_plot <- di_inv %>%
+(di_exo_inv_out_plot <- di_inv %>%
    ggplot(
      aes(
        x = i_e_bnsh, 
-       y = guo_di, 
+       y = guo_di_exo, 
        col = treatment 
      )
    ) +
@@ -75,8 +78,8 @@ di_inv <- guo_di %>%
    geom_point(aes(shape = site)) + 
    labs(
      title = "Excludes extreme outliers from maximum biomass", 
-     x = "Guo's Unified Metric of Invasibility",
-     y = "Guo's Degree of Invasion") + 
+     x = "Unified Metric of Invasibility",
+     y = "Degree of Invasion") + 
    xlim(0, 1) + 
    ylim(0, 1) + 
    scale_color_discrete(
