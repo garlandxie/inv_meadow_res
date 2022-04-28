@@ -89,7 +89,7 @@ inv_to_tidy <- inv_spp_to %>%
       pattern = " ", 
       replace = "_")
     ) %>%
-  mutate(status = "I")
+  mutate(invasive_status = "I")
  
 ## obtain exotic/native status ----
 plants_to_tidy <- plants_to %>%
@@ -108,11 +108,14 @@ biomass_tidy <- biomass %>%
   mutate(binom_latin = paste(Genus, species, sep = "_")) %>%
   left_join(plants_to_tidy, by = "binom_latin") %>%
   left_join(seed_mix_tidy, by = "binom_latin") %>%
+  left_join(inv_to_tidy, by = "binom_latin") %>%
   select(
     section, site, treatment, plot, 
     spp_code,
     biomass_g, 
-    exotic_native, seed_mix_1_2) %>%
+    exotic_native, 
+    seed_mix_1_2, 
+    invasive_status) %>%
   
   # manually assign exotic/native status 
   mutate(exotic_native = case_when(
