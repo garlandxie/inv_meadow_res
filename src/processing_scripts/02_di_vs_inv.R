@@ -1,7 +1,7 @@
 # libraries ----
-library(here)
-library(ggplot2)
-library(dplyr)
+library(here)     # for creating relative file-paths 
+library(ggplot2)  # for visualizing data
+library(dplyr)    # for manipulating data
 
 # import ----
 
