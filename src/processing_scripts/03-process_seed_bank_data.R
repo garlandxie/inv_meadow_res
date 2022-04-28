@@ -27,12 +27,12 @@ dplyr::glimpse(sb_fall)
 
 # clean data ----
 
-## combine both spring and fall sampling seasons ----
+## |- combine both spring and fall sampling seasons ----
 sb_spr_fall <- sb_fall %>%
   select(-Typed_by) %>%
   rbind(sb_spring)
 
-## calculate seed bank density ----
+## |- calculate seed bank density ----
 sb_spring_tidy <- sb_spr_fall %>%
   janitor::clean_names() %>%
   dplyr::filter(
@@ -44,7 +44,7 @@ sb_spring_tidy <- sb_spr_fall %>%
     sb_richness = dplyr::n_distinct(spp_code)) %>%
   ungroup()
 
-## calculate propagule pressure of V. rossicum ----
+## |- calculate propagule pressure of V. rossicum ----
 
 # no seeds of V.rossicum emerged from the greenhouse soil seed banks
 sb_spring_tidy$sb_pp_viro <- 0
@@ -56,9 +56,9 @@ write.csv(
   file = here("data", "intermediate_data", "seed_bank_tidy.csv")
 )
 
-# figures ----
+# figures: box-plots ----
 
-## seed bank density ----
+## |- seed bank density ----
 sb_spring_tidy %>%
   ggplot(aes(x = site_name, y = sb_density, fill = treatment)) + 
   geom_boxplot() + 
@@ -70,7 +70,7 @@ sb_spring_tidy %>%
   ) + 
   theme_bw()
 
-## seed bank richness ----
+## |- seed bank richness ----
 sb_spring_tidy %>%
   ggplot(aes(x = site_name, y = sb_richness, fill = treatment)) + 
   geom_boxplot() + 
