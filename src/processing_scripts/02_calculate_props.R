@@ -89,8 +89,8 @@ inv_to_tidy <- inv_spp_to %>%
       pattern = " ", 
       replace = "_")
     ) %>%
-  mutate(invasive_status = "I")
- 
+  mutate(invasive_status = "I") 
+
 ## obtain exotic/native status ----
 plants_to_tidy <- plants_to %>%
   janitor::clean_names() %>%
@@ -134,10 +134,8 @@ biomass_tidy <- biomass %>%
     # located in the plants of TO database
     spp_code == "CHGL" ~ "N",
     TRUE ~ exotic_native)
-  ) %>%
+  ) 
   
-
-
 ## clean status: spontaneous, seed mix, invasives -----
 biomass_tidy <- biomass_tidy %>%
   mutate(status = case_when(
@@ -145,15 +143,15 @@ biomass_tidy <- biomass_tidy %>%
     # native species in the TRCA seed mix
     exotic_native == "N" & seed_mix_1_2 == "Yes" ~ "SM", 
     
+    # invasive alien species with TRCA management priority 
+    invasive_status == "I" ~ "SI",
+    
     # spontaneous exotic species 
     exotic_native == "E" ~ "SE", 
     
     # spontaneous native species
     exotic_native == "N" ~ "SN",
-    
-    # invasive alien species with TRCA management priority 
-    exotic_native == "E" & invasive_status == "I" ~ "SI",
-    
+
     TRUE ~ "U"
   )
 )
