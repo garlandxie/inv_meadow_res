@@ -71,7 +71,7 @@ sb_tidy %>%
   theme_bw()
 
 ## |- seed bank richness ----
-sb_spring_tidy %>%
+sb_tidy %>%
   ggplot(aes(x = site_name, y = sb_richness, fill = treatment)) + 
   geom_boxplot() + 
   geom_point(alpha = 0.2) +
