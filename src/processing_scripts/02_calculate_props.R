@@ -254,3 +254,11 @@ tot <- abund_tot %>%
     ) + 
     theme_bw()
 )
+
+# save to disk ----
+
+write.csv(
+  x = biomass_tidy, 
+  file = here("data", "intermediate_data", "biomass_tidy.csv")
+) 
+  
