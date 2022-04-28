@@ -225,7 +225,7 @@ tot <- all_tot %>%
 ## |- proportions of abundance ----
 
 (prop_sm_bm_plot <- tot %>%
-  ggplot(aes(x = site, y = prop_sm, col = treatment)) + 
+  ggplot(aes(x = site, y = prop_sm_bm, col = treatment)) + 
   geom_boxplot() + 
   geom_point(alpha = 0.2) + 
   ylim(0, 1) + 
@@ -237,8 +237,8 @@ tot <- all_tot %>%
   theme_bw()
 )
 
-(prop_se__bm_plot <- tot %>%
-  ggplot(aes(x = site, y = prop_se, col = treatment)) + 
+(prop_se_bm_plot <- tot %>%
+  ggplot(aes(x = site, y = prop_se_bm, col = treatment)) + 
   geom_boxplot() + 
   geom_point(alpha = 0.2) + 
   ylim(0, 1) + 
@@ -251,7 +251,7 @@ tot <- all_tot %>%
 )
 
 (prop_sn_bm_plot <- tot %>%
-    ggplot(aes(x = site, y = prop_sn, col = treatment)) + 
+    ggplot(aes(x = site, y = prop_sn_bm, col = treatment)) + 
     geom_boxplot() + 
     geom_point(alpha = 0.2) + 
     ylim(0, 1) + 
@@ -264,7 +264,64 @@ tot <- all_tot %>%
 )
 
 (prop_si_bm_plot <- tot %>%
-    ggplot(aes(x = site, y = prop_si, col = treatment)) + 
+    ggplot(aes(x = site, y = prop_si_bm, col = treatment)) + 
+    geom_boxplot() + 
+    geom_point(alpha = 0.2) + 
+    ylim(0, 1) + 
+    labs(x = "Site", y = "Proportion of invasive species") + 
+    scale_color_discrete(
+      name = "Management Regime", 
+      labels = c("Undisturbed", "Tilling")
+    ) + 
+    theme_bw()
+)
+
+## |- proportions of richness ----
+
+(prop_sm_sr_plot <- tot %>%
+   ggplot(aes(x = site, y = prop_sm_sr, col = treatment)) + 
+   geom_boxplot() + 
+   geom_point(alpha = 0.2) + 
+   ylim(0, 1) + 
+   labs(x = "Site", y = "Proportion of native richness in seed mix") + 
+   scale_color_discrete(
+     name = "Management Regime", 
+     labels = c("Undisturbed", "Tilling")
+   ) + 
+   coord_flip() + 
+   theme_bw()
+)
+
+(prop_se_sr_plot <- tot %>%
+    ggplot(aes(x = site, y = prop_se_sr, col = treatment)) + 
+    geom_boxplot() + 
+    geom_point(alpha = 0.2) + 
+    ylim(0, 1) + 
+    labs(x = "Site", y = "Proportion of non-invasive exotic richness") + 
+    scale_color_discrete(
+      name = "Management Regime", 
+      labels = c("Undisturbed", "Tilling")
+    ) + 
+    coord_flip() + 
+    theme_bw()
+)
+
+(prop_sn_sr_plot <- tot %>%
+    ggplot(aes(x = site, y = prop_sn_sr, col = treatment)) + 
+    geom_boxplot() + 
+    geom_point(alpha = 0.2) + 
+    ylim(0, 1) + 
+    labs(x = "Site", y = "Proportion of spontaneous native species") + 
+    scale_color_discrete(
+      name = "Management Regime", 
+      labels = c("Undisturbed", "Tilling")
+    ) + 
+    coord_flip() + 
+    theme_bw()
+)
+
+(prop_si_sr_plot <- tot %>%
+    ggplot(aes(x = site, y = prop_si_sr, col = treatment)) + 
     geom_boxplot() + 
     geom_point(alpha = 0.2) + 
     ylim(0, 1) + 
