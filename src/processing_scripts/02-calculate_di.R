@@ -34,21 +34,34 @@ max_df <- biomass_tidy %>%
   )
 
 # observed exotic richness and biomass ----
-obs_df <- biomass_tidy %>%
-  filter(exotic_native == "E") %>%
+exo_df <- biomass_tidy %>%
+  filter(status == "SE") %>%
   group_by(section, site, treatment, plot) %>%
   summarize(
     sr_exo = dplyr::n_distinct(spp_code), 
     bm_exo = sum(biomass_g, na.rm = TRUE)
   )
 
+# observed invasive richness and biomass ----
+inv_df <- biomass_tidy %>%
+  filter(status == "SI") %>%
+  group_by(section, site, treatment, plot) %>%
+  summarize(
+    sr_inv = dplyr::n_distinct(spp_code), 
+    bm_inv = sum(biomass_g, na.rm = TRUE)
+  )
+
 # join total and observed values ----
 bm_df <- max_df %>%
-  inner_join(obs_df,by = c("section", "site", "treatment", "plot")) %>%
+  inner_join(exo_df, by = c("section", "site", "treatment", "plot")) %>%
+  inner_join(inv_df, by = c("section", "site", "treatment", "plot")) %>%
   mutate(
-    sr_frac = sr_exo/sr_tot, 
-    bm_frac = bm_exo/bm_tot,
-    guo_di = (sr_frac + bm_frac)*0.5
+    sr_exo_frac = sr_exo/sr_tot, 
+    bm_exo_frac = bm_exo/bm_tot,
+    sr_inv_frac = sr_inv/sr_tot, 
+    bm_inv_frac = bm_inv/bm_tot, 
+    guo_di_exo = (sr_exo_frac + bm_exo_frac)*0.5, 
+    guo_di_inv = (sr_inv_frac + bm_inv_frac)*0.5
     )
 
 # plots ----
