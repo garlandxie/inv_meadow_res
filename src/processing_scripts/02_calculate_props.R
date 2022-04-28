@@ -1,11 +1,11 @@
 # libraries ----
-library(here)
-library(dplyr)
-library(stringr)
-library(tidyr)
-library(rdryad)
-library(readxl)
-library(ggplot2)
+library(here)     # for creating relative file-paths
+library(dplyr)    # for manipulating data
+library(stringr)  # for manipulating string characters
+library(tidyr)    # for replacing missing values
+library(rdryad)   # for importing DRYAD repositories
+library(readxl)   # for importing excel spreadsheets
+library(ggplot2)  # for visualising data 
 
 # import ----
 
