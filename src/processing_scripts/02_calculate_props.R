@@ -159,46 +159,65 @@ biomass_tidy <- biomass_tidy %>%
 
 # |- calculate proportions (for abundance) ----
 
-abund_tot <- biomass_tidy %>%
+all_tot <- biomass_tidy %>%
   group_by(section, site, treatment, plot) %>%
-  summarize(abund_tot = sum(biomass_g, na.rm = TRUE)) %>%
+  summarize(
+    abund_tot = sum(biomass_g, na.rm = TRUE),
+    rich_tot = dplyr::n_distinct(spp_code)
+    ) %>%
   ungroup()
 
 sm_tot <- biomass_tidy %>%
   filter(status == "SM") %>%
   group_by(section, site, treatment, plot) %>%
-  summarize(abund_sm = sum(biomass_g, na.rm = TRUE)) %>%
+  summarize(
+    abund_sm = sum(biomass_g, na.rm = TRUE),
+    rich_sm = dplyr::n_distinct(spp_code)) %>%
   ungroup()
 
 se_tot <- biomass_tidy %>%
   filter(status == "SE") %>%
   group_by(section, site, treatment, plot) %>%
-  summarize(abund_se = sum(biomass_g, na.rm = TRUE)) %>%
+  summarize(
+    abund_se = sum(biomass_g, na.rm = TRUE),
+    rich_se  = dplyr::n_distinct(spp_code)) %>%
   ungroup()
 
 sn_tot <- biomass_tidy %>%
   filter(status == "SN") %>%
   group_by(section, site, treatment, plot) %>%
-  summarize(abund_sn = sum(biomass_g, na.rm = TRUE)) %>%
+  summarize(
+    abund_sn = sum(biomass_g, na.rm = TRUE),
+    rich_sn  = dplyr::n_distinct(spp_code)) %>%
   ungroup()
 
 si_tot <- biomass_tidy %>%
   filter(status == "SI") %>%
   group_by(section, site, treatment, plot) %>%
-  summarize(abund_si = sum(biomass_g, na.rm = TRUE)) %>%
+  summarize(
+    abund_si = sum(biomass_g, na.rm = TRUE),
+    rich_si  = dplyr::n_distinct(spp_code)) %>%
   ungroup()
 
 multi_key_id <- c("section", "site", "treatment", "plot")
-tot <- abund_tot %>%
+tot <- all_tot %>%
   left_join(sm_tot, by = multi_key_id) %>%
   left_join(se_tot, by = multi_key_id) %>%
   left_join(sn_tot, by = multi_key_id) %>%
   left_join(si_tot, by = multi_key_id) %>%
   mutate(
-    prop_sm = abund_sm/abund_tot, 
-    prop_sn = abund_sn/abund_tot, 
-    prop_se = abund_se/abund_tot, 
-    prop_si = abund_si/abund_tot
+    
+    # abundance
+    prop_sm_bm = abund_sm/abund_tot, 
+    prop_sn_bm = abund_sn/abund_tot, 
+    prop_se_bm = abund_se/abund_tot, 
+    prop_si_bm = abund_si/abund_tot,
+    
+    # richness
+    prop_sm_sr = rich_sm/rich_tot, 
+    prop_sn_sr = rich_sn/rich_tot, 
+    prop_se_sr = rich_se/rich_tot, 
+    prop_si_sr = rich_si/rich_tot
   ) 
 
 # plot ----
