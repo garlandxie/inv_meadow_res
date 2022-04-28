@@ -91,3 +91,60 @@ di_inv <- guo_di %>%
    ) + 
    theme_bw()
 )
+
+# plots: invasives species ----
+
+## |- includes extreme outliers ----
+(di_inv_plot <- di_inv %>%
+   ggplot(
+     aes(
+       x = i_e_chal, 
+       y = guo_di_inv, 
+       col = treatment 
+     )
+   ) +
+   geom_smooth(method = "lm") + 
+   geom_point(aes(shape = site)) + 
+   labs(
+     title = "Includes extreme outliers from maximum biomass", 
+     x = "Unified Metric of Invasibility",
+     y = "Degree of Invasion (Invasive Species)") + 
+   xlim(0, 1) + 
+   ylim(0, 1) + 
+   scale_color_discrete(
+     name = "Management Regime", 
+     labels = c("Undisturbed", "Tilling")
+   ) + 
+   scale_shape_discrete(
+     name = "Site"
+   ) + 
+   theme_bw()
+)
+
+## |- excludes extreme outliers ----
+
+(di_inv_out_plot <- di_inv %>%
+   ggplot(
+     aes(
+       x = i_e_bnsh, 
+       y = guo_di_inv, 
+       col = treatment 
+     )
+   ) +
+   geom_smooth(method = "lm") + 
+   geom_point(aes(shape = site)) + 
+   labs(
+     title = "Excludes extreme outliers from maximum biomass", 
+     x = "Unified Metric of Invasibility",
+     y = "Degree of Invasion (Invasive Species)") + 
+   xlim(0, 1) + 
+   ylim(0, 1) + 
+   scale_color_discrete(
+     name = "Management Regime", 
+     labels = c("Undisturbed", "Tilling")
+   ) + 
+   scale_shape_discrete(
+     name = "Site"
+   ) + 
+   theme_bw()
+)
