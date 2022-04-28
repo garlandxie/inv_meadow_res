@@ -33,7 +33,7 @@ sb_spr_fall <- sb_fall %>%
   rbind(sb_spring)
 
 ## |- calculate seed bank density ----
-sb_spring_tidy <- sb_spr_fall %>%
+sb_tidy <- sb_spr_fall %>%
   janitor::clean_names() %>%
   dplyr::filter(
     site_name %in% c("BNSH", "GRNB", "DAVE", "KENN", "TIMH", "VICP")
@@ -47,19 +47,19 @@ sb_spring_tidy <- sb_spr_fall %>%
 ## |- calculate propagule pressure of V. rossicum ----
 
 # no seeds of V.rossicum emerged from the greenhouse soil seed banks
-sb_spring_tidy$sb_pp_viro <- 0
+sb_tidy$sb_pp_viro <- 0
 
 # save to disk ----
 
 write.csv(
-  x = sb_spring_tidy, 
+  x = sb_tidy, 
   file = here("data", "intermediate_data", "seed_bank_tidy.csv")
 )
 
 # figures: box-plots ----
 
 ## |- seed bank density ----
-sb_spring_tidy %>%
+sb_tidy %>%
   ggplot(aes(x = site_name, y = sb_density, fill = treatment)) + 
   geom_boxplot() + 
   geom_point(alpha = 0.2) +
