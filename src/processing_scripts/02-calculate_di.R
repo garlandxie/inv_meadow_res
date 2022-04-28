@@ -66,11 +66,13 @@ bm_df <- max_df %>%
 
 # plots ----
 
-# relative fractions
-(rel_fracs <- bm_df %>%
+## non-invasive exotic species ----
+# relative fractions: exotic richness 
+
+(rel_fracs_exo <- bm_df %>%
    ggplot(aes(
-     x = sr_frac, 
-     y = bm_frac,
+     x = sr_exo_frac, 
+     y = bm_exo_frac,
      col = treatment, 
      shape = site)
      ) +
@@ -89,18 +91,22 @@ bm_df <- max_df %>%
    theme_bw()
 )
 
-# guo's degree of invasion per site
-di_vs_site <- bm_df %>% 
-  ggplot(aes(x = site, y = guo_di, fill = treatment)) + 
+# guo's degree of invasion per site 
+(di_exo_vs_site <- bm_df %>% 
+  ggplot(aes(x = site, y = guo_di_exo, fill = treatment)) + 
   geom_boxplot() + 
   geom_point(alpha = 0.2) + 
   ylim(0, 1) + 
-  labs(x = "Site", y = "Guo's Degree of Invasion") + 
+  labs(
+    title = "Analysis does not include invasive species",
+    x = "Site", 
+    y = "Guo's Degree of Invasion") + 
   scale_fill_discrete(
     name = "Management Regime", 
     labels = c("Undisturbed", "Tilling")
   ) + 
   theme_bw() 
+)
 
 # save to disk ----
 
