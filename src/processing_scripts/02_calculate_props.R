@@ -80,6 +80,17 @@ seed_mix_tidy <- seed_mix %>%
   ) %>%
   select(binom_latin, seed_mix_1_2) 
 
+## clean invasive species of TO -----
+
+inv_to_tidy <- inv_spp_to %>%
+  janitor::clean_names() %>%
+  mutate(binom_latin = str_replace(
+      species, 
+      pattern = " ", 
+      replace = "_")
+    ) %>%
+  mutate(status = "I")
+ 
 ## obtain exotic/native status ----
 plants_to_tidy <- plants_to %>%
   janitor::clean_names() %>%
