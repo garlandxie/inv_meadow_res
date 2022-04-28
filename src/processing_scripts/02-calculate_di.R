@@ -25,7 +25,7 @@ dplyr::glimpse(biomass_tidy)
 # TO DO: modify existing Guo's degree of invasion by partitioning into 
 # invasive alien and non-invasive alien species
 
-# obtain total richness and community biomass ----
+## |- obtain total richness and community biomass ----
 max_df <- biomass_tidy %>%
   group_by(section, site, treatment, plot) %>%
   summarize(
@@ -33,7 +33,7 @@ max_df <- biomass_tidy %>%
     bm_tot = sum(biomass_g, na.rm = TRUE)
   )
 
-# observed exotic richness and biomass ----
+## |- observed exotic richness and biomass ----
 exo_df <- biomass_tidy %>%
   filter(status == "SE") %>%
   group_by(section, site, treatment, plot) %>%
@@ -42,7 +42,7 @@ exo_df <- biomass_tidy %>%
     bm_exo = sum(biomass_g, na.rm = TRUE)
   )
 
-# observed invasive richness and biomass ----
+## |- observed invasive richness and biomass ----
 inv_df <- biomass_tidy %>%
   filter(status == "SI") %>%
   group_by(section, site, treatment, plot) %>%
@@ -66,7 +66,7 @@ bm_df <- max_df %>%
 
 # plots ----
 
-## non-invasive exotic species ----
+## |- non-invasive exotic species ----
 # relative fractions: exotic richness 
 
 (rel_fracs_exo <- bm_df %>%
@@ -108,7 +108,7 @@ bm_df <- max_df %>%
   theme_bw() 
 )
 
-## invasive exotic species ----
+## |- invasive exotic species ----
 
 # relative fractions: invasive richness 
 (rel_fracs_inv <- bm_df %>%
