@@ -3,6 +3,8 @@ library(here)
 library(dplyr)
 library(stringr)
 library(tidyr)
+library(rdryad)
+library(readxl)
 
 # import ----
 
@@ -35,13 +37,19 @@ seed_mix <- read.csv(
 ## plants of toronto ----
 
 # import dataset using R DRYAD API  
-dryad_doi <- "10.5061/dryad.1ns1rn8sg"
-dryad_link <- rdryad::dryad_download(dryad_doi)
-plants_to <- read.csv(unlist(dryad_link))
+dryad_doi_1 <- "10.5061/dryad.1ns1rn8sg"
+dryad_link_1 <- rdryad::dryad_download(dryad_doi_1)
+plants_to <- read.csv(unlist(dryad_link_1))
 
 ## invasive species in TO ----
 
-# insert dataset from Poitgeiter et al. 2022. J Appl Ecol
+dryad_doi_2 <- "10.5061/dryad.h9w0vt4k3"
+dryad_link_2 <- rdryad::dryad_download(dryad_doi_2)
+inv_spp_rank_wa <- dryad_link_2[[1]][2] 
+inv_spp_to <- readxl::read_excel(
+  unlist(inv_spp_rank_wa), 
+  sheet = "Combined Species Ranking"
+  )
 
 # data clean ----
 
