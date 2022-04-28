@@ -148,3 +148,92 @@ di_inv <- guo_di %>%
    ) + 
    theme_bw()
 )
+
+# plots: site effect on exotic species -----
+
+## |- includes extreme outliers ----
+(di_exo_inv_site_chal <- di_inv %>%
+   ggplot(
+     aes(
+       x = i_e_chal, 
+       y = guo_di_exo, 
+       col = site 
+     )
+   ) +
+   geom_smooth(method = "lm", se = FALSE) + 
+   geom_point() + 
+   labs(
+     title = "Includes extreme outliers from maximum biomass", 
+     x = "Unified Metric of Invasibility",
+     y = "Degree of Invasion (Exotic Species)") + 
+   xlim(0, 1) + 
+   ylim(0, 1) + 
+   scale_color_discrete(name = "Site") + 
+   theme_bw()
+)
+
+## |- excludes extreme outliers ----
+(di_exo_inv_site_bnsh <- di_inv %>%
+   ggplot(
+     aes(
+       x = i_e_bnsh, 
+       y = guo_di_exo, 
+       col = site 
+     )
+   ) +
+   geom_smooth(method = "lm", se = FALSE) + 
+   geom_point() + 
+   labs(
+     title = "Excludes extreme outliers from maximum biomass", 
+     x = "Unified Metric of Invasibility",
+     y = "Degree of Invasion (Exotic Species)") + 
+   xlim(0, 1) + 
+   ylim(0, 1) + 
+   scale_color_discrete(name = "Site") + 
+   theme_bw()
+)
+
+# plots: site effect on invasive species -----
+
+## |- includes extreme outliers ----
+(di_inv_site_chal <- di_inv %>%
+   ggplot(
+     aes(
+       x = i_e_chal, 
+       y = guo_di_inv, 
+       col = site 
+     )
+   ) +
+   geom_smooth(method = "lm", se = FALSE) + 
+   geom_point() + 
+   labs(
+     title = "Includes extreme outliers from maximum biomass", 
+     x = "Unified Metric of Invasibility",
+     y = "Degree of Invasion (Invasive Species)") + 
+   xlim(0, 1) + 
+   ylim(0, 1) + 
+   scale_color_discrete(name = "Site") + 
+   theme_bw()
+)
+
+## |- excludes extreme outliers ----
+(di_inv_site_bnsh <- di_inv %>%
+   ggplot(
+     aes(
+       x = i_e_bnsh, 
+       y = guo_di_inv, 
+       col = site 
+     )
+   ) +
+   geom_smooth(method = "lm", se = FALSE) + 
+   geom_point() + 
+   labs(
+     title = "Excludes extreme outliers from maximum biomass", 
+     x = "Unified Metric of Invasibility",
+     y = "Degree of Invasion (Invasive Species)") + 
+   xlim(0, 1) + 
+   ylim(0, 1) + 
+   scale_color_discrete(name = "Site") + 
+   theme_bw()
+)
+
