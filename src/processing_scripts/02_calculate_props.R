@@ -234,6 +234,7 @@ tot <- all_tot %>%
     name = "Management Regime", 
     labels = c("Undisturbed", "Tilling")
   ) + 
+  coord_flip() + 
   theme_bw()
 )
 
@@ -247,6 +248,7 @@ tot <- all_tot %>%
     name = "Management Regime", 
     labels = c("Undisturbed", "Tilling")
   ) + 
+  coord_flip() + 
   theme_bw()
 )
 
@@ -255,11 +257,12 @@ tot <- all_tot %>%
     geom_boxplot() + 
     geom_point(alpha = 0.2) + 
     ylim(0, 1) + 
-    labs(x = "Site", y = "Proportion of spontaneous native species") + 
+    labs(x = "Site", y = "Proportion of native abundance") + 
     scale_color_discrete(
       name = "Management Regime", 
       labels = c("Undisturbed", "Tilling")
-    ) + 
+    ) +
+    coord_flip() + 
     theme_bw()
 )
 
@@ -268,11 +271,15 @@ tot <- all_tot %>%
     geom_boxplot() + 
     geom_point(alpha = 0.2) + 
     ylim(0, 1) + 
-    labs(x = "Site", y = "Proportion of invasive species") + 
+    labs(
+      title = "Analysis does not include V. rossicum",
+      x = "Site",
+      y = "Proportion of invasive abundance") + 
     scale_color_discrete(
       name = "Management Regime", 
       labels = c("Undisturbed", "Tilling")
     ) + 
+    coord_flip() + 
     theme_bw()
 )
 
@@ -283,7 +290,7 @@ tot <- all_tot %>%
    geom_boxplot() + 
    geom_point(alpha = 0.2) + 
    ylim(0, 1) + 
-   labs(x = "Site", y = "Proportion of native richness in seed mix") + 
+   labs(x = "Site", y = "Proportion of native abundance in seed mix") + 
    scale_color_discrete(
      name = "Management Regime", 
      labels = c("Undisturbed", "Tilling")
@@ -297,7 +304,7 @@ tot <- all_tot %>%
     geom_boxplot() + 
     geom_point(alpha = 0.2) + 
     ylim(0, 1) + 
-    labs(x = "Site", y = "Proportion of non-invasive exotic richness") + 
+    labs(x = "Site", y = "Proportion of exotic richness") + 
     scale_color_discrete(
       name = "Management Regime", 
       labels = c("Undisturbed", "Tilling")
@@ -311,7 +318,7 @@ tot <- all_tot %>%
     geom_boxplot() + 
     geom_point(alpha = 0.2) + 
     ylim(0, 1) + 
-    labs(x = "Site", y = "Proportion of spontaneous native species") + 
+    labs(x = "Site", y = "Proportion of native richness") + 
     scale_color_discrete(
       name = "Management Regime", 
       labels = c("Undisturbed", "Tilling")
@@ -325,11 +332,15 @@ tot <- all_tot %>%
     geom_boxplot() + 
     geom_point(alpha = 0.2) + 
     ylim(0, 1) + 
-    labs(x = "Site", y = "Proportion of invasive species") + 
+    labs(
+      title = "Analysis does not include V. rossicum",
+      x = "Site", 
+      y = "Proportion of invasive richness") + 
     scale_color_discrete(
       name = "Management Regime", 
       labels = c("Undisturbed", "Tilling")
     ) + 
+    coord_flip() + 
     theme_bw()
 )
 
