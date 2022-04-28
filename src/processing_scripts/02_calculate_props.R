@@ -222,7 +222,9 @@ tot <- all_tot %>%
 
 # plot ----
 
-(prop_sm_plot <- tot %>%
+## |- proportions of abundance ----
+
+(prop_sm_bm_plot <- tot %>%
   ggplot(aes(x = site, y = prop_sm, col = treatment)) + 
   geom_boxplot() + 
   geom_point(alpha = 0.2) + 
@@ -235,7 +237,7 @@ tot <- all_tot %>%
   theme_bw()
 )
 
-(prop_se_plot <- tot %>%
+(prop_se__bm_plot <- tot %>%
   ggplot(aes(x = site, y = prop_se, col = treatment)) + 
   geom_boxplot() + 
   geom_point(alpha = 0.2) + 
@@ -248,7 +250,7 @@ tot <- all_tot %>%
   theme_bw()
 )
 
-(prop_sn_plot <- tot %>%
+(prop_sn_bm_plot <- tot %>%
     ggplot(aes(x = site, y = prop_sn, col = treatment)) + 
     geom_boxplot() + 
     geom_point(alpha = 0.2) + 
@@ -261,7 +263,7 @@ tot <- all_tot %>%
     theme_bw()
 )
 
-(prop_si_plot <- tot %>%
+(prop_si_bm_plot <- tot %>%
     ggplot(aes(x = site, y = prop_si, col = treatment)) + 
     geom_boxplot() + 
     geom_point(alpha = 0.2) + 
