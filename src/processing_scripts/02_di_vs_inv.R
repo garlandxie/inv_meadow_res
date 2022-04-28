@@ -74,7 +74,7 @@ di_inv <- guo_di %>%
        col = treatment 
      )
    ) +
-   geom_smooth(method = "lm") + 
+   geom_smooth(method = "lm", se = FALSE) + 
    geom_point(aes(shape = site)) + 
    labs(
      title = "Excludes extreme outliers from maximum biomass", 
@@ -103,7 +103,7 @@ di_inv <- guo_di %>%
        col = treatment 
      )
    ) +
-   geom_smooth(method = "lm") + 
+   geom_smooth(method = "lm", se = FALSE) + 
    geom_point(aes(shape = site)) + 
    labs(
      title = "Includes extreme outliers from maximum biomass", 
@@ -131,7 +131,7 @@ di_inv <- guo_di %>%
        col = treatment 
      )
    ) +
-   geom_smooth(method = "lm") + 
+   geom_smooth(method = "lm", se = FALSE) + 
    geom_point(aes(shape = site)) + 
    labs(
      title = "Excludes extreme outliers from maximum biomass", 
@@ -148,3 +148,5 @@ di_inv <- guo_di %>%
    ) + 
    theme_bw()
 )
+
+# plots: invasive + exotics
