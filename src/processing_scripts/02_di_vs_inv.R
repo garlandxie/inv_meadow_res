@@ -35,9 +35,9 @@ di_inv <- guo_di %>%
     guo_di_exo, guo_di_inv, 
     i_e_chal, i_e_bnsh)
 
-# plot ----
+# plots: exotic species ----
 
-## includes extreme outliers ----
+## |- includes extreme outliers ----
 (di_exo_inv_plot <- di_inv %>%
   ggplot(
     aes(
@@ -64,7 +64,7 @@ di_inv <- guo_di %>%
   theme_bw()
 )
 
-## excludes extreme outliers ----
+## |- excludes extreme outliers ----
 
 (di_exo_inv_out_plot <- di_inv %>%
    ggplot(
