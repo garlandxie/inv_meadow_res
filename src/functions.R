@@ -21,6 +21,7 @@ calc_seed_rain_index<- function(plot, seed_rain, distance = 10) {
   # calculate seed rain index
   dispersal_coef <- 1.49 # arbitrary number
   
+  # demographic parameters
   # key reference: Averill et al. 2017. 10.1614/IPSM-D-10-00034.1
   fecundity <- 130 
   seed_rain <- fecundity*exp((-dispersal_coef)*distance_sr)
