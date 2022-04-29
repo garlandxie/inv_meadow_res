@@ -91,6 +91,9 @@ sp_scores <- as.data.frame(rda_summ$species[, c("RDA1", "RDA2")])
 st_scores <- as.data.frame(rda_summ$sites[, c("RDA1", "RDA2")])
 yz_scores <- as.data.frame(rda_summ$biplot[, c("RDA1", "RDA2")]) 
 
+# change row names for yz scores
+rownames(yz_scores) <- c("DAVE", "GRNB", "KENN", "TIMH", "VICP")
+
 # plot the scores using ggplot2 syntax
 ggplot_rda <- ggplot() + 
   
