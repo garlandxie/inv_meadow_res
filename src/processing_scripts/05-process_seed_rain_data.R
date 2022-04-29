@@ -1,8 +1,8 @@
 # libraries ----
-library(here)
-library(sf)
-library(ggplot2)
-library(dplyr)
+library(here)      # for creating relative file-paths 
+library(sf)        # for manipulating geospatial data 
+library(ggplot2)   # for visualizing plots
+library(dplyr)     # for manipulating data 
 
 # custom functions ----
 
