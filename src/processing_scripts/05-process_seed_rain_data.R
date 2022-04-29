@@ -26,7 +26,7 @@ plot_coords <- read.csv(
 ## site: GRNB ----
 
 # I think GRNB 1 was a test run for GPS device
-# coordinates do make any sense with reference to the actual site
+# coordinates do not make any sense with reference to the actual site
 
 sr_grnb_2 <- import_gpx("seed_rain_GRNB_waypoints_21-JUL-21_2.gpx")
 sr_grnb_3 <- import_gpx("seed_rain_GRNB_waypoints_22-JUL-21_3.gpx")
