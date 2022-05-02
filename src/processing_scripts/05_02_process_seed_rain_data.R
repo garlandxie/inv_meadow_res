@@ -79,7 +79,8 @@ for (plot in 1:nrow(plot_coords_utm)) {
 
 seed_rain_df <- plot_coords %>%
   mutate(seed_rain_dsv = seed_rain) %>%
-  select(section, treatment, site, plot, seed_rain_dsv)
+  select(section, treatment, site, plot, seed_rain_dsv) %>%
+  mutate(seed_rain_dsv = seed_rain_dsv/max(seed_rain_dsv))
 
 # save to disk ----
 
