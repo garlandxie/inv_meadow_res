@@ -18,17 +18,28 @@ disp_df <- read.csv(
 
 # doi for this specific dispersal kernel dataset
 # https://doi.org/10.1674/0003-0031(2002)148[0263:SOTIAV]2.0.CO;2
+
+# should avoid "hardcoding" so this solution make work
+# for getting the Vincetoxicum rossicum dataset
 dsv_1 <- row.names(disp_df)[disp_df$Species.name == "Vincetoxicum rossicum"]
 dsv_1 <- as.numeric(dsv_1)
 dsv_2 = dsv_1 + 1
 
 disp_tidy <- disp_df %>%
+  
+  # grab the dispersal dataset for Vincetoxicum rossicum 
   slice(dsv_1:dsv_2) %>%
   select(-"Dataset", -"Species.name", -"Source") %>%
+  
+  # transpose data set so that we have distance and density as columns 
   t() %>%
   as.data.frame() %>%
   dplyr::filter(V1 != "Density (m-2)") %>%
+  
+  # remove additional missing values
   na.omit() %>%
+  
+  # make distance and density into numeric values 
   mutate(
     V1 = stringr::str_replace(V1, pattern = " ", replace = ""), 
     V1 = as.numeric(V1), 
