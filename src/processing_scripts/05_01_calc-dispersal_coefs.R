@@ -45,7 +45,8 @@ disp_tidy <- disp_df %>%
     V1 = as.numeric(V1), 
     V2 = as.numeric(V2)
   ) %>%
-  rename(distance_m = V1, density_m2 = V2) 
+  rename(distance_m = V1, density_m2 = V2) %>%
+  filter(distance %in% c(0:10))
 
 # plot ----
 
@@ -66,9 +67,11 @@ disp_tidy <- disp_df %>%
 # natural spline interpolation
 # from a vector of x and y coordinates
 
-# includes this parameter 
-# in calc_seed_rain_index() in the functions.R file 
-disperal_coef <- MESS::auc(
+dispersal_coef <- MESS::auc(
   x = disp_tidy$distance_m, 
   y = disp_tidy$density_m2, 
   type = "spline")
+
+# includes this parameter in calc_seed_rain_index()
+# in the functions.R file 
+dispersal_coef <- log(dispersal_coef)
