@@ -60,7 +60,7 @@ disp_tidy <- disp_df %>%
       y = "Density (m^2)") + 
     theme_bw()
 
-# get dispersal cofficients -----
+# get dispersal coefficients -----
 
 # calculate area under the curve using definite integrals
 # natural spline interpolation
