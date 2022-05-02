@@ -14,7 +14,7 @@ disp_df <- read.csv(
   here("data", "input_data", "seed_rain", "Plantdispersaldata.csv")
   )
 
-# clean data ---
+# clean data ----
 
 # doi for this specific dispersal kernel dataset
 # https://doi.org/10.1674/0003-0031(2002)148[0263:SOTIAV]2.0.CO;2
