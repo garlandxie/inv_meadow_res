@@ -19,7 +19,7 @@ calc_seed_rain_index<- function(plot, seed_rain, distance = 10) {
   distance_sr <- as.numeric(distance_sr)
   
   # calculate seed rain index
-  dispersal_coef <- 17.64277
+  dispersal_coef <- 2.870326
   
   # demographic parameters
   # key reference: Averill et al. 2017. 10.1614/IPSM-D-10-00034.1
