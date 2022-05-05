@@ -63,7 +63,7 @@ sem_df <- guo_inv %>%
   select(
     section, site, treatment, plot, 
     lat_dd, lon_dd, 
-    i_e, sb_density, sb_richness, sb_pp_viro, litter_mass_g, seed_rain_dsv
+    i_e_chal, sb_density, sb_richness, sb_pp_viro, litter_mass_g, seed_rain_dsv
   )
 
 # main figures ----
