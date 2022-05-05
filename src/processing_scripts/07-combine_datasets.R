@@ -7,7 +7,7 @@ library(ggplot2)
 
 ## invasibility metrics ----
 guo_inv <- read.csv(
-  here("data", "intermediate_data", "guo_inv_incl_morphospp.csv"), 
+  here("data", "intermediate_data", "guo_inv_with_outliers.csv"), 
   row.names = 1
 )
 
@@ -16,6 +16,8 @@ seed_bank <- read.csv(
   here("data", "intermediate_data", "seed_bank_tidy.csv"), 
   row.names = 1
 )
+
+seed_bank <- rename(seed_bank, site = site_name)
 
 ## litter mass ----
 litter <- read.csv(
