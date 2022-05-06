@@ -4,6 +4,7 @@ library(piecewiseSEM)  # for doing piece-wise structural equation modelling
 library(dplyr)         # for manipulating data
 library(lme4)          # for doing mixed effects models 
 library(DHARMa)        # for running diagnostic tests on mixed effects models
+library(partR2)        # for calculating part R2 for an individual predictor
 
 # import ----
 sem_df <- read.csv(
@@ -135,3 +136,8 @@ coefs(modelList = sem, standardize = "none")
 # see Std.Estimate column for standardized coefficients
 # range standardization assumes normal distributions on the respone variable
 coefs(modelList = sem, standardize = "range")
+
+# calculate part R2 -----
+
+# get proportion of variance uniquely explained by an individual predictor 
+partR2::partR2(lm_ie, partvars = c("sb_density", "seed_rain_dsv", "treatment"))
