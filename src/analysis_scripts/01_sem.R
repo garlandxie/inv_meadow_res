@@ -72,7 +72,7 @@ lm_ie <- glmer(
 
 # check diagnostics ----
 
-## explanatory power -----
+## |- explanatory power -----
 
 # Nakagawa's marginal and conditional r-squared values
 # marginal => variance explained by fixed effects
@@ -83,13 +83,13 @@ rsquared(lm_litter)
 rsquared(lm_sr)
 rsquared(lm_ie)
 
-## influential outliers ----
+## |- influential outliers ----
 performance::check_outliers(lm_sb)
 performance::check_outliers(lm_litter)
 performance::check_outliers(lm_sr)
 performance::check_outliers(lm_ie)
 
-## diagnostic plots ----
+## |- diagnostic plots ----
 
 lm_sb_sim <- simulateResiduals(fittedModel = lm_sb)
 lm_li_sim <- simulateResiduals(fittedModel = lm_litter)
@@ -101,7 +101,7 @@ plot(lm_li_sim)
 plot(lm_sr_sim)
 plot(lm_ie_sim)
 
-## overdispersion ----
+## |- overdispersion ----
 
 # for generalized linear mixed effects models
 testDispersion(lm_sb_sim, type = "DHARMa")
