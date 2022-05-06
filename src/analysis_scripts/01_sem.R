@@ -104,6 +104,7 @@ plot(lm_ie_sim)
 ## |- overdispersion ----
 
 # for generalized linear mixed effects models
+# non-parametric tests for overdispersion
 testDispersion(lm_sb_sim, type = "DHARMa")
 testDispersion(lm_ie_sim, type = "DHARMa")
 
