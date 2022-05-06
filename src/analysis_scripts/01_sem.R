@@ -48,8 +48,9 @@ lm_litter <- lmer(
 )
 
 ## |- seed rain ----
-lm_sr <- lmer(
+lm_sr <- glmer(
   seed_rain_dsv ~ treatment + (1|site), 
+  family = "binomial",
   data = sem_tidy, 
 )
 
