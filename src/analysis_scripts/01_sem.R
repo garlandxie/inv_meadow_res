@@ -132,10 +132,10 @@ piecewiseSEM::fisherC(sem, conserve = TRUE)
 coefs(modelList = sem, standardize = "none")
 
 # standardized coefficients
-
 # see Std.Estimate column for standardized coefficients
-# range standardization assumes normal distributions on the respone variable
-coefs(modelList = sem, standardize = "range")
+# use observation-empirical approach to account for non-normal distributions
+# in the response variable
+coefs(modelList = sem, standardize = "scale", standardize.type = "Menard.OE")
 
 # calculate part R2 -----
 
