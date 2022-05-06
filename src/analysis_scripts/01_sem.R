@@ -89,9 +89,8 @@ performance::check_outliers(lm_litter)
 performance::check_outliers(lm_sr)
 performance::check_outliers(lm_ie)
 
-# diagnostic plots ----
+## diagnostic plots ----
 
-## dharma -----
 lm_sb_sim <- simulateResiduals(fittedModel = lm_sb)
 lm_li_sim <- simulateResiduals(fittedModel = lm_litter)
 lm_sr_sim <- simulateResiduals(fittedModel = lm_sr)
