@@ -108,6 +108,20 @@ plot(lm_ie_sim)
 testDispersion(lm_sb_sim, type = "DHARMa")
 testDispersion(lm_ie_sim, type = "DHARMa")
 
-# fit SEM ----
-sem <- psem(lm_sb,lm_litter, lm_sr, lm_ie)
-summary(sem)
+# piece-wise SEM -----
+
+# important note: there was an issue with fitting SEMs in version 2.1.0
+# error in cbind(ret, isSig(ret[, 5])) : object 'ret' not found
+# github issue: https://github.com/jslefche/piecewiseSEM/issues/238
+# solution: download the developer version (2.2.0)
+sem <- piecewiseSEM::psem(lm_sb,lm_litter, lm_sr, lm_ie)
+
+## |- tests of d-separation ----
+
+# check for any important missing paths
+d_seps <- piecewiseSEM::dSep(sem, conserve = TRUE)
+
+# check Fischer's C statistics
+
+## |- summary -----
+summary(sem, conserve = TRUE)
