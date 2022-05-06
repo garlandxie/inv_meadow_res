@@ -118,10 +118,20 @@ sem <- piecewiseSEM::psem(lm_sb,lm_litter, lm_sr, lm_ie)
 
 ## |- tests of d-separation ----
 
-# check for any important missing paths
+# check for any important missing pathways
 d_seps <- piecewiseSEM::dSep(sem, conserve = TRUE)
 
-# check Fischer's C statistics
+# check Fischer's C statistic
+# alternative model fits include using log-likelihoods
+piecewiseSEM::fisherC(sem, conserve = TRUE)
 
-## |- summary -----
-summary(sem, conserve = TRUE)
+## |- grab coefficients ----
+
+# unstandardized coefficients 
+coefs(modelList = sem, standardize = "none")
+
+# standardized coefficients
+
+# see Std.Estimate column for standardized coefficients
+# range standardization assumes normal distributions on the respone variable
+coefs(modelList = sem, standardize = "range")
