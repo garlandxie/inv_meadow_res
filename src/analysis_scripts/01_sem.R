@@ -20,6 +20,7 @@ tail(sem_df, n = 5)
 
 sem_tidy <- sem_df %>%
   mutate(
+    scale_litter_mass_g = scale(litter_mass_g),
     treatment = case_when(
       treatment == "RES" ~ 0, 
       treatment == "TIL" ~ 1), 
@@ -27,11 +28,14 @@ sem_tidy <- sem_df %>%
     site = factor(site) 
     )
 
-# fit individual regression models ---
+# fit individual regression models ----
 
 ## |- seed bank ----
+
+# standardize litter mass due to convergence issues
+# original model (w/o standardizing) => unidentified => large eigenvalue ratio
 lm_sb <- glmer(
-  sb_density ~ treatment + litter_mass_g + (1|site),
+  sb_density ~ treatment + scale_litter_mass_g + (1|site),
   family = "poisson",
   data = sem_tidy
 )
@@ -69,23 +73,41 @@ lm_ie <- glmer(
 # check diagnostics ----
 
 ## explanatory power -----
+
+# Nakagawa's marginal and conditional r-squared values
+# marginal => variance explained by fixed effects
+# conditional => variance explained by random and fixed effects
+# observation-level variance derived by either delta or trigamma approximation 
 rsquared(lm_sb)
 rsquared(lm_litter)
 rsquared(lm_sr)
 rsquared(lm_ie)
 
 ## influential outliers ----
-check_outliers(lm_ie)
+performance::check_outliers(lm_sb)
+performance::check_outliers(lm_litter)
+performance::check_outliers(lm_sr)
+performance::check_outliers(lm_ie)
+
+# diagnostic plots ----
+
+## dharma -----
+lm_sb_sim <- simulateResiduals(fittedModel = lm_sb)
+lm_li_sim <- simulateResiduals(fittedModel = lm_litter)
+lm_sr_sim <- simulateResiduals(fittedModel = lm_sr)
+lm_ie_sim <- simulateResiduals(fittedModel = lm_ie)
+
+plot(lm_sb_sim)
+plot(lm_li_sim)
+plot(lm_sr_sim)
+plot(lm_ie_sim)
 
 ## overdispersion ----
-lm_sb_sim <- simulateResiduals(fittedModel = lm_sb)
+
+# for generalized linear mixed effects models
 testDispersion(lm_sb_sim, type = "DHARMa")
-
-lm_ie_sim <- simulateResiduals(fittedModel = lm_ie)
 testDispersion(lm_ie_sim, type = "DHARMa")
-
 
 # fit SEM ----
 sem <- psem(lm_sb,lm_litter, lm_sr, lm_ie)
-summary(sem_unst)
-rsquared(sem_unst)
+summary(sem)
