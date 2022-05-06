@@ -1,9 +1,9 @@
 # libraries ----
-library(here)
-library(piecewiseSEM)
-library(dplyr)
-library(lme4)
-library(DHARMa)
+library(here)          # for creating relative file-paths
+library(piecewiseSEM)  # for doing piece-wise structural equation modelling
+library(dplyr)         # for manipulating data
+library(lme4)          # for doing mixed effects models 
+library(DHARMa)        # for running diagnostic tests on mixed effects models
 
 # import ----
 sem_df <- read.csv(
