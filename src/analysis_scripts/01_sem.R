@@ -129,9 +129,6 @@ piecewiseSEM::fisherC(sem, conserve = TRUE)
 
 ## |- grab coefficients ----
 
-# unstandardized coefficients 
-coefs(modelList = sem, standardize = "none")
-
 # standardized coefficients
 # see Std.Estimate column for standardized coefficients
 # use observation-empirical approach to account for non-normal distributions
