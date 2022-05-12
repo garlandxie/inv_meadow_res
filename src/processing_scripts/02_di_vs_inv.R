@@ -2,6 +2,7 @@
 library(here)     # for creating relative file-paths 
 library(ggplot2)  # for visualizing data
 library(dplyr)    # for manipulating data
+library(glmmTMB)  # for running regression models
 
 # import ----
 
@@ -32,8 +33,8 @@ di_inv <- guo_di %>%
   inner_join(guo_inv_out, by = c("section", "site", "treatment", "plot")) %>%
   select(
     section, site, treatment, plot,
-    guo_di_exo, guo_di_inv, 
-    i_e_chal, i_e_bnsh)
+    guo_di_exo, 
+    i_e_chal, i_e_bnsh) 
 
 # plots: treatment effect on exotic species ----
 
@@ -157,7 +158,7 @@ di_inv <- guo_di %>%
      aes(
        x = i_e_chal, 
        y = guo_di_exo, 
-       col = site 
+       col = treatment
      )
    ) +
    geom_smooth(method = "lm", se = FALSE) + 
@@ -168,7 +169,7 @@ di_inv <- guo_di %>%
      y = "Degree of Invasion (Exotic Species)") + 
    xlim(0, 1) + 
    ylim(0, 1) + 
-   scale_color_discrete(name = "Site") + 
+   #scale_color_discrete(name = "Site") + 
    theme_bw()
 )
 
@@ -237,3 +238,14 @@ di_inv <- guo_di %>%
    theme_bw()
 )
 
+# regression models ----
+
+lm_di_inv_exo <- glmmTMB(
+   guo_di_exo ~ i_e_chal + treatment +  (1|site), 
+   family = beta_family(link = "logit"), 
+   data = di_inv)
+
+## diagnostics ----
+lm_exo_sim <- simulateResiduals(fittedModel = lm_di_inv_exo)
+plot(lm_exo_sim)
+performance::check_outliers(lm_exo_sim)
