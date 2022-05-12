@@ -56,12 +56,9 @@ bm_df <- max_df %>%
   inner_join(exo_df, by = c("section", "site", "treatment", "plot")) %>%
   inner_join(inv_df, by = c("section", "site", "treatment", "plot")) %>%
   mutate(
-    sr_exo_frac = sr_exo/sr_tot, 
-    bm_exo_frac = bm_exo/bm_tot,
-    sr_inv_frac = sr_inv/sr_tot, 
-    bm_inv_frac = bm_inv/bm_tot, 
+    sr_exo_frac = (sr_exo+sr_inv)/sr_tot, 
+    bm_exo_frac = (bm_exo+bm_inv)/bm_tot,
     guo_di_exo = (sr_exo_frac + bm_exo_frac)*0.5, 
-    guo_di_inv = (sr_inv_frac + bm_inv_frac)*0.5
     )
 
 # plots ----
