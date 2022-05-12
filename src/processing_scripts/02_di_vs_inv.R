@@ -38,18 +38,13 @@ di_inv <- guo_di %>%
 
 # regression models ----
 
-lm_di_inv_exo <- lmer(
-   guo_di_exo ~ i_e_chal + treatment +  (1|site), 
-   data = di_inv)
-
-
 glm_di_inv_exo <- glmmTMB(
    guo_di_exo ~ i_e_chal + treatment +  (1|site), 
    family = beta_family(link = "logit"), 
    data = di_inv)
 
 ## diagnostics ----
-lm_exo_sim <- simulateResiduals(fittedModel = lm_di_inv_exo)
+glm_exo_sim <- simulateResiduals(fittedModel = glm_di_inv_exo)
 plot(lm_exo_sim)
 performance::check_outliers(lm_exo_sim)
 
