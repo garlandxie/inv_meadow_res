@@ -70,7 +70,6 @@ inv_incl_mspp <- mutate(
   ggplot(aes(x = frac_sr_obs_max, y = frac_bm_obs_max, col = site)) +
   geom_point() +
   labs(
-    title = "Includes extreme outliers for maximum biomass",
     x = expression("S"["obs"]/"S"["max"]),
     y = expression("B"["obs"]/"B"["max"])
   ) + 
