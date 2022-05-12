@@ -96,8 +96,8 @@ effects_ie <- as.data.frame(
     labs(
        x = "Unified Metric of Invasibility",
        y = "Degree of Invasion") + 
-    xlim(0.2, 0.9) + 
-    ylim(0.2, 0.9) + 
+    xlim(0.1, 0.9) + 
+    ylim(0.1, 0.9) + 
     scale_color_discrete(
        name = "Management Regime", 
        labels = c("Undisturbed", "Tilling")
@@ -109,5 +109,10 @@ effects_ie <- as.data.frame(
 # save to disk ----
 
 ggsave(
-   
+   filename = here("output", "results", "di_vs_inv.png"),
+   plot = di_exo_inv_plot, 
+   device = "png", 
+   units = "in", 
+   height = 5, 
+   width = 6
 )
