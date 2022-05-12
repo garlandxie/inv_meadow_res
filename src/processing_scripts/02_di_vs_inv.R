@@ -36,211 +36,14 @@ di_inv <- guo_di %>%
     guo_di_exo, 
     i_e_chal, i_e_bnsh) 
 
-# plots: treatment effect on exotic species ----
-
-## |- includes extreme outliers ----
-(di_exo_inv_plot <- di_inv %>%
-  ggplot(
-    aes(
-      x = i_e_chal, 
-      y = guo_di_exo, 
-      col = treatment 
-      )
-    ) +
-  geom_smooth(method = "lm") + 
-  geom_point(aes(shape = site)) + 
-  labs(
-    title = "Includes extreme outliers from maximum biomass", 
-    x = "Unified Metric of Invasibility",
-    y = "Degree of Invasion (Exotic Species)") + 
-  xlim(0, 1) + 
-  ylim(0, 1) + 
-  scale_color_discrete(
-    name = "Management Regime", 
-    labels = c("Undisturbed", "Tilling")
-  ) + 
-  scale_shape_discrete(
-    name = "Site"
-  ) + 
-  theme_bw()
-)
-
-## |- excludes extreme outliers ----
-
-(di_exo_inv_out_plot <- di_inv %>%
-   ggplot(
-     aes(
-       x = i_e_bnsh, 
-       y = guo_di_exo, 
-       col = treatment 
-     )
-   ) +
-   geom_smooth(method = "lm", se = FALSE) + 
-   geom_point(aes(shape = site)) + 
-   labs(
-     title = "Excludes extreme outliers from maximum biomass", 
-     x = "Unified Metric of Invasibility",
-     y = "Degree of Invasion") + 
-   xlim(0, 1) + 
-   ylim(0, 1) + 
-   scale_color_discrete(
-     name = "Management Regime", 
-     labels = c("Undisturbed", "Tilling")
-   ) + 
-   scale_shape_discrete(
-     name = "Site"
-   ) + 
-   theme_bw()
-)
-
-# plots: treatment effect on invasives species ----
-
-## |- includes extreme outliers ----
-(di_inv_plot <- di_inv %>%
-   ggplot(
-     aes(
-       x = i_e_chal, 
-       y = guo_di_inv, 
-       col = treatment 
-     )
-   ) +
-   geom_smooth(method = "lm", se = FALSE) + 
-   geom_point(aes(shape = site)) + 
-   labs(
-     title = "Includes extreme outliers from maximum biomass", 
-     x = "Unified Metric of Invasibility",
-     y = "Degree of Invasion (Invasive Species)") + 
-   xlim(0, 1) + 
-   ylim(0, 1) + 
-   scale_color_discrete(
-     name = "Management Regime", 
-     labels = c("Undisturbed", "Tilling")
-   ) + 
-   scale_shape_discrete(
-     name = "Site"
-   ) + 
-   theme_bw()
-)
-
-## |- excludes extreme outliers ----
-
-(di_inv_out_plot <- di_inv %>%
-   ggplot(
-     aes(
-       x = i_e_bnsh, 
-       y = guo_di_inv, 
-       col = treatment 
-     )
-   ) +
-   geom_smooth(method = "lm", se = FALSE) + 
-   geom_point(aes(shape = site)) + 
-   labs(
-     title = "Excludes extreme outliers from maximum biomass", 
-     x = "Unified Metric of Invasibility",
-     y = "Degree of Invasion (Invasive Species)") + 
-   xlim(0, 1) + 
-   ylim(0, 1) + 
-   scale_color_discrete(
-     name = "Management Regime", 
-     labels = c("Undisturbed", "Tilling")
-   ) + 
-   scale_shape_discrete(
-     name = "Site"
-   ) + 
-   theme_bw()
-)
-
-# plots: site effect on exotic species -----
-
-## |- includes extreme outliers ----
-(di_exo_inv_site_chal <- di_inv %>%
-   ggplot(
-     aes(
-       x = i_e_chal, 
-       y = guo_di_exo, 
-       col = treatment
-     )
-   ) +
-   geom_smooth(method = "lm", se = FALSE) + 
-   geom_point() + 
-   labs(
-     title = "Includes extreme outliers from maximum biomass", 
-     x = "Unified Metric of Invasibility",
-     y = "Degree of Invasion (Exotic Species)") + 
-   xlim(0, 1) + 
-   ylim(0, 1) + 
-   #scale_color_discrete(name = "Site") + 
-   theme_bw()
-)
-
-## |- excludes extreme outliers ----
-(di_exo_inv_site_bnsh <- di_inv %>%
-   ggplot(
-     aes(
-       x = i_e_bnsh, 
-       y = guo_di_exo, 
-       col = site 
-     )
-   ) +
-   geom_smooth(method = "lm", se = FALSE) + 
-   geom_point() + 
-   labs(
-     title = "Excludes extreme outliers from maximum biomass", 
-     x = "Unified Metric of Invasibility",
-     y = "Degree of Invasion (Exotic Species)") + 
-   xlim(0, 1) + 
-   ylim(0, 1) + 
-   scale_color_discrete(name = "Site") + 
-   theme_bw()
-)
-
-# plots: site effect on invasive species -----
-
-## |- includes extreme outliers ----
-(di_inv_site_chal <- di_inv %>%
-   ggplot(
-     aes(
-       x = i_e_chal, 
-       y = guo_di_inv, 
-       col = site 
-     )
-   ) +
-   geom_smooth(method = "lm", se = FALSE) + 
-   geom_point() + 
-   labs(
-     title = "Includes extreme outliers from maximum biomass", 
-     x = "Unified Metric of Invasibility",
-     y = "Degree of Invasion (Invasive Species)") + 
-   xlim(0, 1) + 
-   ylim(0, 1) + 
-   scale_color_discrete(name = "Site") + 
-   theme_bw()
-)
-
-## |- excludes extreme outliers ----
-(di_inv_site_bnsh <- di_inv %>%
-   ggplot(
-     aes(
-       x = i_e_bnsh, 
-       y = guo_di_inv, 
-       col = site 
-     )
-   ) +
-   geom_smooth(method = "lm", se = FALSE) + 
-   geom_point() + 
-   labs(
-     title = "Excludes extreme outliers from maximum biomass", 
-     x = "Unified Metric of Invasibility",
-     y = "Degree of Invasion (Invasive Species)") + 
-   xlim(0, 1) + 
-   ylim(0, 1) + 
-   scale_color_discrete(name = "Site") + 
-   theme_bw()
-)
-
 # regression models ----
 
-lm_di_inv_exo <- glmmTMB(
+lm_di_inv_exo <- lmer(
+   guo_di_exo ~ i_e_chal + treatment +  (1|site), 
+   data = di_inv)
+
+
+glm_di_inv_exo <- glmmTMB(
    guo_di_exo ~ i_e_chal + treatment +  (1|site), 
    family = beta_family(link = "logit"), 
    data = di_inv)
@@ -249,3 +52,56 @@ lm_di_inv_exo <- glmmTMB(
 lm_exo_sim <- simulateResiduals(fittedModel = lm_di_inv_exo)
 plot(lm_exo_sim)
 performance::check_outliers(lm_exo_sim)
+
+# main plot ----
+
+# back-transform regression coefficients 
+# from beta regression model
+# so that I can plot the slope with the raw data
+
+# controlling for management regime
+effects_ie <- as.data.frame(
+   effects::effect(
+   term= "i_e_chal", 
+   mod = glm_di_inv_exo
+   )
+)
+
+(di_exo_inv_plot <- ggplot() + 
+   
+    geom_point(
+       data = di_inv,
+       aes(
+          x = i_e_chal, 
+          y = guo_di_exo, 
+          col = treatment 
+       )
+    ) + 
+      
+   geom_line(
+      data = effects_ie, 
+      aes(
+         x = i_e_chal, 
+         y = fit, 
+      ),
+      col = "black"
+   ) + 
+
+   geom_ribbon(
+      data = effects_ie, 
+      aes(x = i_e_chal, ymin = lower, ymax = upper), 
+      alpha = 0.2, 
+      ) +
+      
+    labs(
+       x = "Unified Metric of Invasibility",
+       y = "Degree of Invasion") + 
+    xlim(0.2, 0.9) + 
+    ylim(0.2, 0.9) + 
+    scale_color_discrete(
+       name = "Management Regime", 
+       labels = c("Undisturbed", "Tilling")
+    ) + 
+ 
+    theme_bw()
+)
