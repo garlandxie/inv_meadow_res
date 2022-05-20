@@ -85,10 +85,10 @@ rsquared(lm_sr)
 rsquared(lm_ie)
 
 ## |- influential outliers ----
-performance::check_outliers(lm_sb)
-performance::check_outliers(lm_litter)
-performance::check_outliers(lm_sr)
-performance::check_outliers(lm_ie)
+performance::check_outliers(lm_sb, method = "cook")
+performance::check_outliers(lm_litter, method = "cook")
+performance::check_outliers(lm_sr, method = "cook")
+performance::check_outliers(lm_ie, method = "cook")
 
 ## |- diagnostic plots ----
 
