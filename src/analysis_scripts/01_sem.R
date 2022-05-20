@@ -33,23 +33,21 @@ sem_tidy <- sem_df %>%
 
 ## |- seed bank ----
 
-# standardize litter mass due to convergence issues
-# original model (w/o standardizing) => unidentified => large eigenvalue ratio
-lm_sb <- glmer(
-  sb_density ~ treatment + scale_litter_mass_g + (1|site),
-  family = "poisson",
+# fit negative binomial model to account for overdispersion in count data
+lm_sb <- glmer.nb(
+  sb_density ~ treatment + litter_mass_g + (1|treatment),
   data = sem_tidy
 )
 
 ## |- litter ----
 lm_litter <- lmer(
-  litter_mass_g ~ treatment + (1|site), 
+  litter_mass_g ~ treatment + (1|treatment), 
   data = sem_tidy
 )
 
 ## |- seed rain ----
 lm_sr <- glmer(
-  seed_rain_dsv ~ treatment + (1|site), 
+  seed_rain_dsv ~ treatment + (1|treatment), 
   family = "binomial",
   data = sem_tidy, 
 )
@@ -65,12 +63,13 @@ lm_ie <- glmer(
     treatment + 
     
     # random effects
-    (1|site), 
+    (1|treatment), 
   
     family = "binomial",
   
   data = sem_tidy
 )
+
 
 # check diagnostics ----
 
@@ -133,7 +132,7 @@ piecewiseSEM::fisherC(sem, conserve = TRUE)
 # see Std.Estimate column for standardized coefficients
 # use observation-empirical approach to account for non-normal distributions
 # in the response variable
-coefs(modelList = sem, standardize = "scale", standardize.type = "Menard.OE")
+coefs(modelList = sem, standardize = "range", standardize.type = "Menard.OE")
 
 # calculate part R2 -----
 
