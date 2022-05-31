@@ -38,15 +38,35 @@ di_inv <- guo_di %>%
 
 # regression models ----
 
-glm_di_inv_exo <- glmmTMB(
+# compare alternative link functions 
+# since the model has continuous predictors 
+# see Douma et al. 2019. MEE
+
+glm_di_inv_logit_link <- glmmTMB(
    guo_di_exo ~ i_e_chal + treatment +  (1|site), 
    family = beta_family(link = "logit"), 
    data = di_inv)
 
+glm_di_inv_probit_link <- glmmTMB(
+  guo_di_exo ~ i_e_chal + treatment +  (1|site), 
+  family = beta_family(link = "probit"), 
+  data = di_inv)
+
+glm_di_inv_loglog_link <- glmmTMB(
+  guo_di_exo ~ i_e_chal + treatment +  (1|site), 
+  family = beta_family(link = "cloglog"), 
+  data = di_inv)
+
+AIC(
+  glm_di_inv_logit_link, 
+  glm_di_inv_probit_link, 
+  glm_di_inv_loglog_link
+  )
+
 ## diagnostics ----
 glm_exo_sim <- simulateResiduals(fittedModel = glm_di_inv_exo)
-plot(lm_exo_sim)
-performance::check_outliers(lm_exo_sim)
+plot(glm_exo_sim)
+performance::check_outliers(glm_di_inv_exo, method = "cook")
 
 # main plot ----
 
