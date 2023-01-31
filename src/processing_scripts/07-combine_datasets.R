@@ -1,17 +1,24 @@
-# libraries ----
-library(here)
-library(dplyr)
-library(ggplot2)
+# libraries --------------------------------------------------------------------
+library(here)    # for creating relative file-paths
+library(dplyr)   # for manipulating data 
+library(ggplot2) # for visualizing data 
 
-# import ----
+# import -----------------------------------------------------------------------
 
-## invasibility metrics ----
+## |- invasibility -------------------------------------------------------------
 guo_inv <- read.csv(
   here("data", "intermediate_data", "guo_inv_with_outliers.csv"), 
   row.names = 1
 )
 
-## seed bank metrics -----
+## |- degree of invasion -------------------------------------------------------  
+
+guo_di <- read.csv(
+  here("data", "intermediate_data", "guo_di.csv"), 
+  row.names = 1
+)
+
+## |- seed bank metrics --------------------------------------------------------
 seed_bank <- read.csv(
   here("data", "intermediate_data", "seed_bank_tidy.csv"), 
   row.names = 1
@@ -19,25 +26,19 @@ seed_bank <- read.csv(
 
 seed_bank <- rename(seed_bank, site = site_name)
 
-## litter mass ----
+## |- litter mass --------------------------------------------------------------
 litter <- read.csv(
   here("data", "intermediate_data", "litter_tidy.csv"), 
   row.names = 1
 )
 
-## plot coordinates ----
-plot_coords <- read.csv(
-  here("data", "intermediate_data", "plot_coords.csv"), 
-  row.names = 1
-)
-
-## seed rain for DSV ----
+## |- seed rain for DSV --------------------------------------------------------
 seed_rain_dsv <- read.csv(
   here("data", "intermediate_data", "seed_rain_tidy.csv"), 
   row.names = 1
 )
 
-# clean data ----
+# clean data -------------------------------------------------------------------
 
 ## create SEM df ----
 
