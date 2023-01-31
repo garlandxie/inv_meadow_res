@@ -27,6 +27,7 @@ seed_bank <- read.csv(
 seed_bank <- rename(seed_bank, site = site_name)
 
 ## |- litter mass --------------------------------------------------------------
+
 litter <- read.csv(
   here("data", "intermediate_data", "litter_tidy.csv"), 
   row.names = 1
@@ -38,17 +39,15 @@ seed_rain_dsv <- read.csv(
   row.names = 1
 )
 
-# clean data -------------------------------------------------------------------
-
-## create SEM df ----
+# clean data: create data frame for SEM  ---------------------------------------
 
 multi_key_id <- c("section", "site", "treatment", "plot")
 
 sem_df <- guo_inv %>%
   left_join(seed_bank, by = multi_key_id) %>%
   left_join(litter, by = multi_key_id) %>%
-  left_join(plot_coords, by = multi_key_id) %>%
   left_join(seed_rain_dsv, by = multi_key_id) %>%
+  left_join(guo_di, by = multi_key_id) %>%
   mutate(
     across(
       .cols = c("sb_richness", "sb_density", "litter_mass_g"),
@@ -63,8 +62,9 @@ sem_df <- guo_inv %>%
   ) %>%
   select(
     section, site, treatment, plot, 
-    lat_dd, lon_dd, 
-    i_e_chal, sb_density, sb_richness, sb_pp_viro, litter_mass_g, seed_rain_dsv
+    i_e_chal, guo_di_exo, 
+    sb_density, sb_richness, sb_pp_viro, 
+    litter_mass_g, seed_rain_dsv
   )
 
 # save to disk -----
