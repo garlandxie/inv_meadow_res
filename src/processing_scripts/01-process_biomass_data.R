@@ -164,7 +164,7 @@ write.csv(
   x = biomass_summ, 
   file = here(
     "data", 
-    "analysis_data",
-    "biomass_analysis_data.csv"
+    "intermediate_data",
+    "comm_biomass_data.csv"
   )
 )
