@@ -348,6 +348,6 @@ tot <- all_tot %>%
 
 write.csv(
   x = biomass_tidy, 
-  file = here("data", "intermediate_data", "biomass_tidy.csv")
+  file = here("data", "intermediate_data", "biomass_spp_status.csv")
 ) 
   
