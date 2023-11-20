@@ -57,16 +57,6 @@ biomass_summ <- biomass_tidy %>%
     ) %>%
   ungroup() 
 
-# save to disk ----
-write.csv(
-  x = biomass_summ, 
-  file = here(
-    "data", 
-    "analysis_data",
-    "biomass_analysis_data.csv"
-    )
-)
-
 # figures ----------------------------------------------------------------------
 
 ## biomass ---------------------------------------------------------------------
@@ -119,3 +109,14 @@ biomass_summ %>%
   facet_wrap(~ treatment) + 
   scale_color_discrete(name = "Site") + 
   theme_bw()
+
+# save to disk -----------------------------------------------------------------
+
+write.csv(
+  x = biomass_summ, 
+  file = here(
+    "data", 
+    "analysis_data",
+    "biomass_analysis_data.csv"
+  )
+)
