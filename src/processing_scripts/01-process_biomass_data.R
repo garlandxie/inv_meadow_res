@@ -95,7 +95,8 @@ biomass_summ %>%
 
 ## correlation: richness and biomass -------------------------------------------
 
-# can community biomass and species richness act as surrogates?
+# does species richness affect community biomass across all sites 
+# within the Meadoway?
 biomass_summ %>%
   mutate(
     treatment = case_when(
@@ -104,8 +105,55 @@ biomass_summ %>%
   ) %>%
   ggplot(aes(x = species_richness, y = comm_biomass_g)) + 
   geom_point(aes(col = site)) + 
-  geom_smooth(method = "lm") + 
+  geom_smooth(method = "lm", se = FALSE) + 
   labs(x = "Species Richness", y = "Community Biomass (in grams)") + 
+  scale_color_discrete(name = "Site") + 
+  theme_bw()
+
+# does community biomass affect species richness across all sites
+# within the Meadoway?
+biomass_summ %>%
+  mutate(
+    treatment = case_when(
+      treatment == "RES" ~ "Undisturbed", 
+      treatment == "TIL" ~ "Tilling")
+  ) %>%
+  ggplot(aes(x = comm_biomass_g, y = species_richness)) + 
+  geom_point(aes(col = site)) + 
+  geom_smooth(method = "lm", se = FALSE) + 
+  labs(x = "Species Richness", y = "Community Biomass (in grams)") + 
+  scale_color_discrete(name = "Site") + 
+  theme_bw()
+
+# does species richness affect community biomass 
+# after controlling for restoration stage? 
+biomass_summ %>%
+  mutate(
+    treatment = case_when(
+      treatment == "RES" ~ "Undisturbed", 
+      treatment == "TIL" ~ "Tilling")
+  ) %>%
+  ggplot(aes(x = species_richness, y = comm_biomass_g)) + 
+  geom_point(aes(col = site)) + 
+  geom_smooth(method = "lm", se = FALSE) + 
+  labs(x = "Species Richness", y = "Community Biomass (in grams)") + 
+  facet_wrap(~ treatment) + 
+  scale_color_discrete(name = "Site") + 
+  theme_bw()
+
+# does community biomass affect species richness
+# after controlling for restoration stage? 
+
+biomass_summ %>%
+  mutate(
+    treatment = case_when(
+      treatment == "RES" ~ "Undisturbed", 
+      treatment == "TIL" ~ "Tilling")
+  ) %>%
+  ggplot(aes(x = comm_biomass_g, y = species_richness)) + 
+  geom_point(aes(col = site)) + 
+  geom_smooth(method = "lm", se = FALSE) + 
+  labs(x = "Community Biomass (in grams)", y = "Species Richness") + 
   facet_wrap(~ treatment) + 
   scale_color_discrete(name = "Site") + 
   theme_bw()
