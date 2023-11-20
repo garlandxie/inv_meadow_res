@@ -89,7 +89,8 @@ effects_ie <- as.data.frame(
        aes(
           x = i_e_chal, 
           y = guo_di_exo, 
-          col = treatment 
+          col = treatment, 
+          shape = site
        )
     ) + 
       
