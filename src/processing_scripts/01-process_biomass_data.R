@@ -1,11 +1,11 @@
-# libraries ----
-library(here)    # for creating relative file-paths
-library(dplyr)   # for manipulating data
-library(janitor) # for creating r-friendly column names
-library(ggplot2)
-library(forcats)
+# libraries --------------------------------------------------------------------
+library(here)      # for creating relative file-paths
+library(dplyr)     # for manipulating data
+library(janitor)   # for creating r-friendly column names
+library(ggplot2)   # for visualizing data
+library(forcats)   # for manipulating factor variables 
 
-# import ----
+# import -----------------------------------------------------------------------
 
 biomass <- read.csv(
   here(
@@ -16,20 +16,19 @@ biomass <- read.csv(
     )
 )
 
-
-# check packaging ----
+# check packaging --------------------------------------------------------------
 dplyr::glimpse(biomass)
 
-# clean data ----
+# clean data -------------------------------------------------------------------
 
-## get species-specific biomass per plot ----
+## get species-specific biomass per plot ---------------------------------------
 biomass_tidy <- biomass %>%
   janitor::clean_names() %>%
   group_by(section, site, treatment, plot, spp_code) %>%
   summarize(biomass_g = sum(biomass_g, na.rm = TRUE)) %>%
   ungroup()
 
-## get community-level metrics per plot ----
+## get community-level metrics per plot ----------------------------------------
 biomass_summ <- biomass_tidy %>%
   group_by(section, site, treatment, plot) %>%
   summarize(
@@ -53,9 +52,9 @@ write.csv(
     )
 )
 
-# figures ----
+# figures ----------------------------------------------------------------------
 
-## biomass -----
+## biomass ---------------------------------------------------------------------
 biomass_summ %>%
   mutate(
     site = factor(
@@ -72,7 +71,7 @@ biomass_summ %>%
   ) + 
   theme_bw()
 
-## species richness ----
+## species richness ------------------------------------------------------------
 biomass_summ %>%
   mutate(
     site = factor(
@@ -89,7 +88,7 @@ biomass_summ %>%
   ) + 
   theme_bw()
 
-## correlation: richness and biomass ----
+## correlation: richness and biomass -------------------------------------------
 
 # can community biomass and species richness act as surrogates?
 biomass_summ %>%
