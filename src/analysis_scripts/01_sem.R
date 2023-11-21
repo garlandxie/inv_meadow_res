@@ -33,7 +33,7 @@ sem_tidy <- sem_df %>%
 # this is likely plot with a seed bank with a high abundance of common mullein 
 sem_tidy_no_out <- dplyr::filter(sem_tidy, !(sb_density == max(sb_density)))
 
-# sem model 1: simple ----------------------------------------------------------
+# sem model 1 ------------------------------------------------------------------
 
 ## |- management regime -> seed bank -------------------------------------------
 
@@ -123,7 +123,7 @@ coefs(modelList = sem_1, standardize = "none")
 # un the response variable 
 coefs(modelList = sem_1, standardize = "scale", standardize.type = "Menard.OE")
 
-# sem model 2: complex ---------------------------------------------------------
+# sem model 2 ------------------------------------------------------------------
 
 ## |- management regime -> community biomass -----------------------------------
 # specify model 
@@ -178,7 +178,7 @@ piecewiseSEM::rsquared(sb_lm2)
 # check model output
 summary(sb_lm2)
 
-## |- seed bank density + seed bank richness -> degree of invasion ----------------
+## |- seed bank density + seed bank richness -> degree of invasion -------------
 
 # specify model 
 di_lm2 <- lmer(
@@ -240,8 +240,75 @@ sem_2 <- piecewiseSEM::psem(
 )
 
 # check for any important missing pathways
-d_seps <- piecewiseSEM::dSep(sem_2, conserve = TRUE)
+piecewiseSEM::dSep(sem_2, conserve = TRUE)
 piecewiseSEM::fisherC(sem_2, conserve = TRUE)
+
+# sem model 3 ------------------------------------------------------------------
+
+## |- seed bank ----------------------------------------------------------------
+
+# standardize litter mass due to convergence issues
+# original model (w/o standardizing) => unidentified => large eigenvalue ratio
+sb_lm3 <- glmer(
+  sb_density ~ treatment + scale(litter_mass_g) + (1|site),
+  family = poisson,
+  data = sem_tidy_no_out
+)
+
+# check model diagnostics
+DHARMa::simulateResiduals(fittedModel = sb_lm3, plot = TRUE)
+
+# check model fit
+piecewiseSEM::rsquared(sb_lm3)
+
+## |- litter -------------------------------------------------------------------
+
+litter_lm3 <- lmer(
+  litter_mass_g ~ treatment + (1|site),
+  data = sem_tidy_no_out
+)
+
+# check model diagnostics
+DHARMa::simulateResiduals(fittedModel = litter_lm3, plot = TRUE)
+
+# check model fit
+piecewiseSEM::rsquared(litter_lm3)
+
+## |- invasibility -------------------------------------------------------------
+
+ie_lm3 <- glmer(
+  i_e_chal ~ 
+    
+    # fixed effects
+    sb_density + 
+    seed_rain_dsv + 
+    treatment + 
+    
+    # random effects
+    (1|site), 
+   family = binomial, 
+  
+   data = sem_tidy_no_out
+)
+
+# check model diagnostics
+DHARMa::simulateResiduals(fittedModel = ie_lm3, plot = TRUE)
+
+# check model fit
+piecewiseSEM::rsquared(ie_lm3)
+
+## |- run sem model 3 ----------------------------------------------------------
+
+sem_3 <- piecewiseSEM::psem(
+  sb_lm3, 
+  litter_lm3, 
+  ie_lm3
+)
+
+piecewiseSEM::dSep(sem_3, conserve = TRUE)
+piecewiseSEM::fisherC(sem_3, conserve = TRUE)
+
+coefs(modelList = sem_3, standardize = "none")
 
 # plot -------------------------------------------------------------------------
 
