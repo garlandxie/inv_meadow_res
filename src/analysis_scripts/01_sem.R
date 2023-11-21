@@ -105,7 +105,8 @@ sem_1 <- piecewiseSEM::psem(
   inv_di_lm1, 
   mgt_sb_lm1,
   mgt_sr_lm1, 
-  sb_inv_lm1)
+  sb_inv_lm1
+  )
 
 # check for any important missing pathways
 d_seps <- piecewiseSEM::dSep(sem_1, conserve = TRUE)
@@ -132,8 +133,7 @@ comm_biomass_lm2 <- lmer(
 )
 
 # check model diagnostics
-sim_comm_biomass <- simulateResiduals(fittedModel = comm_biomass_lm2, plot = F)
-plot(sim_comm_biomass)
+DHARMa::simulateResiduals(fittedModel = comm_biomass_lm2, plot = TRUE)
 
 # check model fit
 piecewiseSEM::rsquared(comm_biomass_lm2)
@@ -150,8 +150,7 @@ litter_lm2 <- lmer(
 )
 
 # check model diagnostics
-sim_litter_bm <- simulateResiduals(fittedModel = litter_lm2, plot = F)
-plot(sim_litter_bm)
+DHARMa::simulateResiduals(fittedModel = litter_lm2, plot = TRUE)
 
 # check model fit
 piecewiseSEM::rsquared(litter_lm2)
@@ -162,6 +161,8 @@ summary(litter_lm2)
 ## |- litter biomass -> seed bank density --------------------------------------
 
 # specify model 
+# scaled the independent fixed variable to address that the previous model is
+# nearly unidentifiable 
 sb_lm2 <- glmer(
    sb_density ~ scale(litter_mass_g) + (1|site), 
    family = "poisson",
@@ -169,8 +170,7 @@ sb_lm2 <- glmer(
 )
 
 # check model diagnostics
-sim_sb <- simulateResiduals(fittedModel = sb_lm2, plot = F)
-plot(sim_sb)
+DHARMa::simulateResiduals(fittedModel = sb_lm2, plot = TRUE)
 
 # check model fit
 piecewiseSEM::rsquared(sb_lm2)
@@ -182,12 +182,12 @@ summary(sb_lm2)
 
 # specify model 
 di_lm2 <- lmer(
-car::logit(guo_data = sem_tidy
+  car::logit(guo_di_exo) ~ sb_richness + sb_density + (1|site), 
+  data = sem_tidy
 )
 
 # check model diagnostics
-sim_di_lm2 <- simulateResiduals(fittedModel = di_lm2, plot = F)
-plot(sim_di_lm2)
+DHARMa::simulateResiduals(fittedModel = di_lm2, plot = TRUE)
 
 # check model fit
 piecewiseSEM::rsquared(di_lm2)
@@ -205,8 +205,7 @@ comm_rich_lm2 <- glmer(
 )
 
 # check model diagnostics
-sim_comm_rich <- simulateResiduals(fittedModel = comm_rich_lm2, plot = F)
-plot(sim_comm_rich)
+DHARMa::simulateResiduals(fittedModel = comm_rich_lm2, plot = TRUE)
 
 # check model fit
 piecewiseSEM::rsquared(comm_rich_lm2)
@@ -224,8 +223,7 @@ sr_lm2 <- glmer(
 )
 
 # check model diagnostics
-sim_sr_lm2 <- simulateResiduals(fittedModel = sr_lm2, plot = F)
-plot(sim_sr_lm2)
+DHARMa::simulateResiduals(fittedModel = sr_lm2, plot = TRUE)
 
 # check model fit
 piecewiseSEM::rsquared(sr_lm2)
