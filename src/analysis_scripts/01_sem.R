@@ -31,7 +31,11 @@ sem_tidy <- sem_df %>%
 
 # remove an outlier for seed bank density
 # this is likely plot with a seed bank with a high abundance of common mullein 
-sem_tidy_no_out <- dplyr::filter(sem_tidy, !(sb_density == max(sb_density)))
+sem_tidy_no_out <- dplyr::filter(sem_tidy, !(sb_density == max(sb_density))) %>%
+  mutate(
+    logit_ie = car::logit(i_e_chal), 
+    logit_di = car::logit(guo_di_exo)
+    )
 
 # sem model 1 ------------------------------------------------------------------
 
@@ -39,7 +43,7 @@ sem_tidy_no_out <- dplyr::filter(sem_tidy, !(sb_density == max(sb_density)))
 
 # specify model 
 mgt_sb_lm1 <- glmer(
-  sb_density ~ treatment + (1|site), 
+  sb_density ~ treatment + seed_rain_dsv + (1|site), 
   family = poisson(link = "log"),
   data = sem_tidy_no_out
   )
@@ -57,7 +61,7 @@ summary(mgt_sb_lm1)
 
 # fit model
 sb_inv_lm1 <- lmer(
-  car::logit(i_e_chal) ~ sb_density + treatment + (1|site), 
+  logit_ie ~ sb_density + treatment + (1|site), 
   data = sem_tidy_no_out
 )
 
@@ -70,9 +74,10 @@ piecewiseSEM::rsquared(sb_inv_lm1)
 ## |- invasibility -> degree of invasion ---------------------------------------
 
 # fit model
-inv_di_lm1 <- lmer(
-  car::logit(guo_di_exo) ~ i_e_chal + treatment + seed_rain_dsv + (1|site), 
-  data = sem_tidy_no_out
+inv_di_lm1 <- sem_tidy_no_out %>%  
+  lmer(
+  logit_di ~ logit_ie + seed_rain_dsv + (1|site), 
+  data = .
 )
 
 # check model diagnostics
@@ -108,8 +113,9 @@ sem_1 <- piecewiseSEM::psem(
   sb_inv_lm1
   )
 
+summary(sem_1)
 # check for any important missing pathways
-d_seps <- piecewiseSEM::dSep(sem_1, conserve = TRUE)
+piecewiseSEM::dSep(sem_1, conserve = TRUE)
 
 # check Fischer's C statistics
 # alternative model fits using log-likelihoods
@@ -280,12 +286,13 @@ ie_lm3 <- glmer(
   i_e_chal ~ 
     
     # fixed effects
-    sb_density + 
-    seed_rain_dsv + 
+    scale(sb_density) + 
+    scale(seed_rain_dsv) + 
     treatment + 
     
     # random effects
-    (1|site), 
+   (1|site), 
+  
    family = binomial, 
   
    data = sem_tidy_no_out
@@ -350,9 +357,3 @@ ggsave(
   height = 5, 
   width = 7
 )
-
-
-
-
-
-
