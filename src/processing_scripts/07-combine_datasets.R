@@ -48,8 +48,6 @@ seed_bank <- read.csv(
 
 seed_bank <- rename(seed_bank, site = site_name)
 
-##
-
 ## |- litter mass --------------------------------------------------------------
 
 litter <- read.csv(
@@ -87,6 +85,7 @@ sem_df <- guo_inv %>%
   ) %>%
   select(
     section, site, treatment, plot, 
+    comm_biomass_g, species_richness,
     i_e_chal, guo_di_exo, 
     sb_density, sb_richness, sb_pp_viro, 
     litter_mass_g, seed_rain_dsv
