@@ -45,14 +45,13 @@ mgt_sb_lm1 <- glmer(
   )
 
 # check model diagnostics
-sim_mgt_sb <- DHARMa::simulateResiduals(fittedModel = mgt_sb_lm, plot = F)
-plot(sim_mgt_sb)
+DHARMa::simulateResiduals(fittedModel = mgt_sb_lm1, plot = T) 
 
 # check model fit using Nakagawa's marginal and conditional R2
-piecewiseSEM::rsquared(mgt_sb_lm)
+piecewiseSEM::rsquared(mgt_sb_lm1)
 
 # check model output
-summary(mgt_sb_lm)
+summary(mgt_sb_lm1)
 
 ## |- seed bank -> invasibility ------------------------------------------------
 
@@ -63,11 +62,10 @@ sb_inv_lm1 <- lmer(
 )
 
 # check model diagnostics
-sim_inv_lm1 <- DHARMa::simulateResiduals(fittedModel = sb_inv_lm, plot = F)
-plot(sim_inv_lm)
+DHARMa::simulateResiduals(fittedModel = sb_inv_lm1, plot = TRUE)
 
 # check model fit using Nakagawa's marginal and conditional R2
-piecewiseSEM::rsquared(sb_inv_lm)
+piecewiseSEM::rsquared(sb_inv_lm1)
 
 ## |- invasibility -> degree of invasion ---------------------------------------
 
@@ -78,11 +76,10 @@ inv_di_lm1 <- lmer(
 )
 
 # check model diagnostics
-sim_inv_di<- DHARMa::simulateResiduals(fittedModel = inv_di_lm, plot = F)
-plot(sim_inv_di)
+DHARMa::simulateResiduals(fittedModel = inv_di_lm1, plot = TRUE)
 
 # check model fit using Nakagawa's marginal and conditional R2
-piecewiseSEM::rsquared(inv_di_lm)
+piecewiseSEM::rsquared(inv_di_lm1)
 
 ## |- management regime -> seed rain DSV ---------------------------------------
 
@@ -93,14 +90,13 @@ mgt_sr_lm1 <- lmer(
 )
 
 # check model diagnostics
-sim_mgt_sr <- simulateResiduals(fittedModel = mgt_sr_lm, plot = F)
-plot(sim_mgt_sr)
+DHARMa::simulateResiduals(fittedModel = mgt_sr_lm1, plot = TRUE)
 
 # check model fit
-piecewiseSEM::rsquared(mgt_sr_lm)
+piecewiseSEM::rsquared(mgt_sr_lm1)
 
 # check model output
-summary(mgt_sr_lm)
+summary(mgt_sr_lm1)
 
 ## |- run sem ----------------------------------------------------------------------
 
@@ -186,7 +182,7 @@ summary(sb_lm2)
 
 # specify model 
 di_lm2 <- lmer(
-s  data = sem_tidy
+car::logit(guo_data = sem_tidy
 )
 
 # check model diagnostics
