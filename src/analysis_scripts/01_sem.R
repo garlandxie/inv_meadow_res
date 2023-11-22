@@ -31,17 +31,33 @@ sem_tidy <- sem_df %>%
 
 # remove an outlier for seed bank density
 # this is likely plot with a seed bank with a high abundance of common mullein 
-sem_tidy_no_out <- dplyr::filter(sem_tidy, !(sb_density == max(sb_density))) %>%
+sem_tidy_no_out <- dplyr::filter(sem_tidy, !(sb_density == max(sb_density))) 
+
+# apply a logit transformation on invasibility and degree of invasion
+# this is done to accommodate the proportional data type
+# since piecewise R package (v.2.3.0) does provide standardized coefficients
+# under a beta distribution when using glmmTMB 
+
+sem_tidy_no_out <- sem_tidy_no_out %>%
   mutate(
     logit_ie = car::logit(i_e_chal), 
     logit_di = car::logit(guo_di_exo)
-    )
+  )
+
+sem_tidy <- sem_tidy %>%
+  mutate(
+    logit_ie = car::logit(i_e_chal), 
+    logit_di = car::logit(guo_di_exo)
+  )
 
 # sem model 1 ------------------------------------------------------------------
 
 ## |- management regime -> seed bank -------------------------------------------
 
 # specify model 
+# note: I added seed_rain_dsv based on a previous d-sep test that suggested
+# this pathway may be missing from the first run; biologically, this makes
+# sense since the seed rain of DSV can easily contribute to the seed banks
 mgt_sb_lm1 <- glmer(
   sb_density ~ treatment + seed_rain_dsv + (1|site), 
   family = poisson(link = "log"),
