@@ -166,8 +166,9 @@ summary(comm_biomass_lm2)
 ## |- community biomass -> litter biomass --------------------------------------
 
 # specify model 
+# added treatment based on a previous d-separation test
 litter_lm2 <- lmer(
-  litter_mass_g ~ comm_biomass_g + (1|site), 
+  litter_mass_g ~ comm_biomass_g + treatment + (1|site), 
   data = sem_tidy
 )
 
@@ -183,10 +184,9 @@ summary(litter_lm2)
 ## |- litter biomass -> seed bank density --------------------------------------
 
 # specify model 
-# scaled the independent fixed variable to address that the previous model is
-# nearly unidentifiable 
+# added sb_richness based on a previous d-tests of separation
 sb_lm2 <- glmer(
-   sb_density ~ scale(litter_mass_g) + (1|site), 
+   sb_density ~ litter_mass_g + sb_richness + (1|site), 
    family = "poisson",
   data = sem_tidy
 )
@@ -203,8 +203,9 @@ summary(sb_lm2)
 ## |- seed bank density + seed bank richness -> degree of invasion -------------
 
 # specify model 
+# added treatment from a previous d-tests of separation
 di_lm2 <- lmer(
-  car::logit(guo_di_exo) ~ sb_richness + sb_density + (1|site), 
+  logit_di ~ sb_richness + sb_density + treatment + (1|site), 
   data = sem_tidy
 )
 
@@ -238,8 +239,9 @@ summary(comm_rich_lm2)
 ## |- species richness -> seed bank richness -----------------------------------
 
 # specify model 
+# added treatment based on a previous d-tests of separation
 sr_lm2 <- glmer(
-  sb_richness ~ species_richness + (1|site), 
+  sb_richness ~ species_richness + treatment + (1|site), 
   family = "poisson", 
   data = sem_tidy
 )
