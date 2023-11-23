@@ -47,7 +47,8 @@ sem_tidy_no_out <- sem_tidy_no_out %>%
 sem_tidy <- sem_tidy %>%
   mutate(
     logit_ie = car::logit(i_e_chal), 
-    logit_di = car::logit(guo_di_exo)
+    logit_di = car::logit(guo_di_exo),
+    log_sb_density = log(sb_density)
   )
 
 # sem model 1 ------------------------------------------------------------------
@@ -185,10 +186,9 @@ summary(litter_lm2)
 
 # specify model 
 # added sb_richness based on a previous d-tests of separation
-sb_lm2 <- glmer(
-   sb_density ~ litter_mass_g + sb_richness + (1|site), 
-   family = "poisson",
-  data = sem_tidy
+sb_lm2 <- lmer(
+   log_sb_density ~ litter_mass_g + sb_richness + (1|site), 
+   data = sem_tidy
 )
 
 # check model diagnostics
@@ -205,7 +205,7 @@ summary(sb_lm2)
 # specify model 
 # added treatment from a previous d-tests of separation
 di_lm2 <- lmer(
-  logit_di ~ sb_richness + sb_density + treatment + (1|site), 
+  logit_di ~ sb_richness + log_sb_density + treatment + (1|site), 
   data = sem_tidy
 )
 
@@ -266,6 +266,9 @@ sem_2 <- piecewiseSEM::psem(
 # check for any important missing pathways
 piecewiseSEM::dSep(sem_2, conserve = TRUE)
 piecewiseSEM::fisherC(sem_2, conserve = TRUE)
+
+coefs(modelList = sem_2, standardize = "scale", standardize.type = "Menard.OE")
+
 
 # sem model 3 ------------------------------------------------------------------
 
