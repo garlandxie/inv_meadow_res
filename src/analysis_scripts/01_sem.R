@@ -51,30 +51,32 @@ sem_tidy <- sem_tidy %>%
     log_sb_density = log(sb_density)
   )
 
-# sem model 1 ------------------------------------------------------------------
+# original: sem model 1 --------------------------------------------------------
 
-## |- management regime -> seed bank -------------------------------------------
+# revised: sem model 1 ---------------------------------------------------------
+
+## |- seed bank <- restoration stage + seed rain of DSV ------------------------
 
 # specify model 
 # note: I added seed_rain_dsv based on a previous d-sep test that suggested
 # this pathway may be missing from the first run; biologically, this makes
 # sense since the seed rain of DSV can easily contribute to the seed banks
-mgt_sb_lm1 <- glmer(
+mgt_sb_lm1_rev <- glmer(
   sb_density ~ treatment + seed_rain_dsv + (1|site), 
   family = poisson(link = "log"),
   data = sem_tidy_no_out
   )
 
 # check model diagnostics
-DHARMa::simulateResiduals(fittedModel = mgt_sb_lm1, plot = T) 
+DHARMa::simulateResiduals(fittedModel = mgt_sb_lm1_rev, plot = T) 
 
 # check model fit using Nakagawa's marginal and conditional R2
-piecewiseSEM::rsquared(mgt_sb_lm1)
+piecewiseSEM::rsquared(mgt_sb_lm1_rev)
 
 # check model output
-summary(mgt_sb_lm1)
+summary(mgt_sb_lm1_rev)
 
-## |- seed bank -> invasibility ------------------------------------------------
+## |- invasibility <- seed bank density + restoration stage --------------------
 
 # fit model
 sb_inv_lm1 <- lmer(
@@ -88,7 +90,7 @@ DHARMa::simulateResiduals(fittedModel = sb_inv_lm1, plot = TRUE)
 # check model fit using Nakagawa's marginal and conditional R2
 piecewiseSEM::rsquared(sb_inv_lm1)
 
-## |- invasibility -> degree of invasion ---------------------------------------
+## |- degree of invasion <- invasibility + seed rain of DSV --------------------
 
 # fit model
 inv_di_lm1 <- sem_tidy_no_out %>%  
@@ -103,7 +105,7 @@ DHARMa::simulateResiduals(fittedModel = inv_di_lm1, plot = TRUE)
 # check model fit using Nakagawa's marginal and conditional R2
 piecewiseSEM::rsquared(inv_di_lm1)
 
-## |- management regime -> seed rain DSV ---------------------------------------
+## |- seed rain of dsv <- restoration stage ------------------------------------
 
 # fit model 
 mgt_sr_lm1 <- lmer(
@@ -123,9 +125,9 @@ summary(mgt_sr_lm1)
 ## |- run sem ----------------------------------------------------------------------
 
 # run piecewise structural equation modelling for simple version
-sem_1 <- piecewiseSEM::psem(
+sem_1_rev <- piecewiseSEM::psem(
   inv_di_lm1, 
-  mgt_sb_lm1,
+  mgt_sb_lm1_rev,
   mgt_sr_lm1, 
   sb_inv_lm1
   )
@@ -269,104 +271,6 @@ piecewiseSEM::fisherC(sem_2, conserve = TRUE)
 
 coefs(modelList = sem_2, standardize = "scale", standardize.type = "Menard.OE")
 
-
-# sem model 3 ------------------------------------------------------------------
-
-## |- seed bank ----------------------------------------------------------------
-
-# standardize litter mass due to convergence issues
-# original model (w/o standardizing) => unidentified => large eigenvalue ratio
-sb_lm3 <- glmer(
-  sb_density ~ treatment + scale(litter_mass_g) + (1|site),
-  family = poisson,
-  data = sem_tidy_no_out
-)
-
-# check model diagnostics
-DHARMa::simulateResiduals(fittedModel = sb_lm3, plot = TRUE)
-
-# check model fit
-piecewiseSEM::rsquared(sb_lm3)
-
-## |- litter -------------------------------------------------------------------
-
-litter_lm3 <- lmer(
-  litter_mass_g ~ treatment + (1|site),
-  data = sem_tidy_no_out
-)
-
-# check model diagnostics
-DHARMa::simulateResiduals(fittedModel = litter_lm3, plot = TRUE)
-
-# check model fit
-piecewiseSEM::rsquared(litter_lm3)
-
-## |- invasibility -------------------------------------------------------------
-
-ie_lm3 <- glmer(
-  i_e_chal ~ 
-    
-    # fixed effects
-    scale(sb_density) + 
-    scale(seed_rain_dsv) + 
-    treatment + 
-    
-    # random effects
-   (1|site), 
-  
-   family = binomial, 
-  
-   data = sem_tidy_no_out
-)
-
-# check model diagnostics
-DHARMa::simulateResiduals(fittedModel = ie_lm3, plot = TRUE)
-
-# check model fit
-piecewiseSEM::rsquared(ie_lm3)
-
-## |- run sem model 3 ----------------------------------------------------------
-
-sem_3 <- piecewiseSEM::psem(
-  sb_lm3, 
-  litter_lm3, 
-  ie_lm3
-)
-
-piecewiseSEM::dSep(sem_3, conserve = TRUE)
-piecewiseSEM::fisherC(sem_3, conserve = TRUE)
-
-coefs(modelList = sem_3, standardize = "none")
-
-# plot -------------------------------------------------------------------------
-
-## |- TRCA meeting -------------------------------------------------------------
-sem_tidy %>%
-  filter(!(sb_density == max(sb_density))) %>% 
-  ggplot(aes(x = i_e_chal, y = guo_di_exo, fill = factor(treatment))) + 
-  geom_point(aes(col = factor(site))) + 
-  geom_smooth(method = "lm", color = "black") + 
-  scale_fill_discrete(
-    name = "Management Regime", 
-    labels = c("Section 4 (Restored)", "Section 2 (Tilled)")
-  ) + 
-  xlim(0, 1) + 
-  ylim(0, 1) + 
-  labs(
-    x = "Susceptibility to Plant Invasion",
-    y = "Extent of Invasion") + 
-  theme_bw()
-
-sem_tidy %>%
-  filter(!(sb_density == max(sb_density))) %>% 
-  ggplot(aes(x = sb_density, y = i_e_chal, fill = factor(treatment))) + 
-  geom_point(aes(color = factor(treatment))) + 
-  geom_smooth(method = "lm", color = "black") + 
-  scale_fill_discrete(
-    name = "Management Regime", 
-    labels = c("Section 4 (Restored)", "Section 2 (Tilled)")  
-  ) +
-  theme_bw()
 
 # save to disk -----------------------------------------------------------------
 
