@@ -88,10 +88,10 @@ mgt_sb_lm1 <- glmer(
 DHARMa::simulateResiduals(fittedModel = mgt_sb_lm1, plot = T) 
 
 # check model fit using Nakagawa's marginal and conditional R2
-piecewiseSEM::rsquared(mgt_sb_lm1_rev)
+piecewiseSEM::rsquared(mgt_sb_lm1)
 
 # check model output
-summary(mgt_sb_lm1_rev) 
+summary(mgt_sb_lm1) 
 
 ## |- invasibility <- seed bank density + restoration stage --------------------
 
@@ -138,7 +138,7 @@ piecewiseSEM::rsquared(mgt_sr_lm1)
 # check model output
 summary(mgt_sr_lm1)
 
-## |- run sem ----------------------------------------------------------------------
+## |- run original sem model 1 -------------------------------------------------
 
 # run piecewise structural equation modelling for simple version
 sem_1 <- piecewiseSEM::psem(
@@ -154,7 +154,6 @@ summary(sem_1, conserve = TRUE)
 piecewiseSEM::dSep(sem_1, conserve = TRUE)
 
 # check Fischer's C statistics
-# alternative model fits using log-likelihoods
 piecewiseSEM::fisherC(sem_1, conserve = TRUE)
 
 # grab unstandardized coefficients
@@ -188,7 +187,7 @@ piecewiseSEM::rsquared(mgt_sb_lm1_rev)
 # check model output
 summary(mgt_sb_lm1_rev)
 
-## |- run revised sem model ----------------------------------------------------
+## |- run revised sem model 1----------------------------------------------------
 
 sem_1_rev <- piecewiseSEM::psem(
   inv_di_lm1, 
@@ -214,9 +213,9 @@ coefs(modelList = sem_1_rev, standardize = "none")
 # un the response variable 
 coefs(modelList = sem_1_rev, standardize = "scale", standardize.type = "Menard.OE")
 
-# original: sem model 2 ------------------------------------------------------------------
+# original: sem model 2 --------------------------------------------------------
 
-## |- management regime -> community biomass -----------------------------------
+## |- community biomass <- restoration stage -----------------------------------
 # specify model 
 comm_biomass_lm2 <- lmer(
   comm_biomass_g ~ treatment + (1|site), 
@@ -232,7 +231,7 @@ piecewiseSEM::rsquared(comm_biomass_lm2)
 # check model output
 summary(comm_biomass_lm2)
 
-## |- community biomass -> litter biomass --------------------------------------
+## |- litter biomass <- community biomass --------------------------------------
 
 # specify model 
 litter_lm2 <- lmer(
@@ -249,7 +248,7 @@ piecewiseSEM::rsquared(litter_lm2)
 # check model output
 summary(litter_lm2)
 
-## |- litter biomass -> seed bank density --------------------------------------
+## |- seed bank density <- litter biomass --------------------------------------
 
 # specify model 
 sb_lm2 <- lmer(
@@ -283,7 +282,7 @@ piecewiseSEM::rsquared(di_lm2)
 # check model output
 summary(di_lm2)
 
-## |- management regime -> community richness ----------------------------------
+## |- community richness <- restoration stage ----------------------------------
 
 # specify model 
 comm_rich_lm2 <- glmer(
@@ -301,7 +300,7 @@ piecewiseSEM::rsquared(comm_rich_lm2)
 # check model output
 summary(comm_rich_lm2)
 
-## |- species richness -> seed bank richness -----------------------------------
+## |- seed bank richness <- species richness -----------------------------------
 
 # specify model 
 sr_lm2 <- glmer(
@@ -316,7 +315,7 @@ DHARMa::simulateResiduals(fittedModel = sr_lm2, plot = TRUE)
 # check model fit
 piecewiseSEM::rsquared(sr_lm2)
 
-## |- run original sem model 1 -------------------------------------------------
+## |- run original sem model 2 -------------------------------------------------
 
 sem_2 <- piecewiseSEM::psem(
   di_lm2, 
@@ -335,7 +334,7 @@ coefs(modelList = sem_2, standardize = "scale", standardize.type = "Menard.OE")
 
 # revised: sem model 2 ---------------------------------------------------------
 
-## |- community biomass -> litter biomass + restoration stage ------------------
+## |- litter biomass <- community biomass + restoration stage ------------------
 
 # specify model 
 # added treatment based on a previous d-separation test
@@ -371,7 +370,7 @@ piecewiseSEM::rsquared(sb_lm2_rev)
 # check model output
 summary(sb_lm2_rev)
 
-## |- di -> seed bank richness + seed bank density + restoration stage ---------
+## |- di <- seed bank richness + seed bank density + restoration stage ---------
 
 # specify model 
 # added treatment from a previous d-tests of separation
@@ -416,13 +415,3 @@ sem_2_rev <- piecewiseSEM::psem(
   comm_biomass_lm2 
 )
 
-# save to disk -----------------------------------------------------------------
-
-ggsave(
-  plot = di_vs_inv_by_trt,
-  file = here("output", "results", "di_vs_inv.pdf"),
-  device = "pdf", 
-  units = "in", 
-  height = 5, 
-  width = 7
-)
