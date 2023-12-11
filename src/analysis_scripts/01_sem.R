@@ -110,10 +110,9 @@ piecewiseSEM::rsquared(sb_inv_lm1)
 ## |- degree of invasion <- invasibility + seed rain of DSV --------------------
 
 # fit model
-inv_di_lm1 <- sem_tidy_no_out %>%  
-  lmer(
+inv_di_lm1 <- lmer(
   logit_di ~ logit_ie + seed_rain_dsv + (1|site), 
-  data = .
+  data =  sem_tidy_no_out
 )
 
 # check model diagnostics
@@ -198,7 +197,24 @@ sem_1_rev <- piecewiseSEM::psem(
   sb_inv_lm1
 )
 
-# sem model 2 ------------------------------------------------------------------
+summary(sem_1_rev, conserve = TRUE)
+
+# check for any important missing pathways
+piecewiseSEM::dSep(sem_1_rev, conserve = TRUE)
+
+# check Fischer's C statistics
+# alternative model fits using log-likelihoods
+piecewiseSEM::fisherC(sem_1_rev, conserve = TRUE)
+
+# grab unstandardized coefficients
+coefs(modelList = sem_1_rev, standardize = "none")
+
+# grab standardized coefficients
+# use observation-empirical approach to account for non-normal distributions
+# un the response variable 
+coefs(modelList = sem_1_rev, standardize = "scale", standardize.type = "Menard.OE")
+
+# original: sem model 2 ------------------------------------------------------------------
 
 ## |- management regime -> community biomass -----------------------------------
 # specify model 
@@ -219,9 +235,8 @@ summary(comm_biomass_lm2)
 ## |- community biomass -> litter biomass --------------------------------------
 
 # specify model 
-# added treatment based on a previous d-separation test
 litter_lm2 <- lmer(
-  litter_mass_g ~ comm_biomass_g + treatment + (1|site), 
+  litter_mass_g ~ comm_biomass_g + (1|site), 
   data = sem_tidy
 )
 
@@ -237,9 +252,8 @@ summary(litter_lm2)
 ## |- litter biomass -> seed bank density --------------------------------------
 
 # specify model 
-# added sb_richness based on a previous d-tests of separation
 sb_lm2 <- lmer(
-   log_sb_density ~ litter_mass_g + sb_richness + (1|site), 
+   log_sb_density ~ litter_mass_g + (1|site), 
    data = sem_tidy
 )
 
@@ -252,12 +266,11 @@ piecewiseSEM::rsquared(sb_lm2)
 # check model output
 summary(sb_lm2)
 
-## |- seed bank density + seed bank richness -> degree of invasion -------------
+## |- di <- seed bank density + seed bank richness -----------------------------
 
 # specify model 
-# added treatment from a previous d-tests of separation
 di_lm2 <- lmer(
-  logit_di ~ sb_richness + log_sb_density + treatment + (1|site), 
+  logit_di ~ sb_richness + log_sb_density + (1|site), 
   data = sem_tidy
 )
 
@@ -291,9 +304,8 @@ summary(comm_rich_lm2)
 ## |- species richness -> seed bank richness -----------------------------------
 
 # specify model 
-# added treatment based on a previous d-tests of separation
 sr_lm2 <- glmer(
-  sb_richness ~ species_richness + treatment + (1|site), 
+  sb_richness ~ species_richness + (1|site), 
   family = "poisson", 
   data = sem_tidy
 )
@@ -304,7 +316,7 @@ DHARMa::simulateResiduals(fittedModel = sr_lm2, plot = TRUE)
 # check model fit
 piecewiseSEM::rsquared(sr_lm2)
 
-## |- run sem ------------------------------------------------------------------
+## |- run original sem model 1 -------------------------------------------------
 
 sem_2 <- piecewiseSEM::psem(
   di_lm2, 
@@ -321,6 +333,88 @@ piecewiseSEM::fisherC(sem_2, conserve = TRUE)
 
 coefs(modelList = sem_2, standardize = "scale", standardize.type = "Menard.OE")
 
+# revised: sem model 2 ---------------------------------------------------------
+
+## |- community biomass -> litter biomass + restoration stage ------------------
+
+# specify model 
+# added treatment based on a previous d-separation test
+litter_lm2_rev <- lmer(
+  litter_mass_g ~ comm_biomass_g + treatment + (1|site), 
+  data = sem_tidy
+)
+
+# check model diagnostics
+DHARMa::simulateResiduals(fittedModel = litter_lm2_rev, plot = TRUE)
+
+# check model fit
+piecewiseSEM::rsquared(litter_lm2_rev)
+
+# check model output
+summary(litter_lm2_rev)
+
+## |- seed bank density <- litter + seed bank richness -------------------------
+
+# specify model 
+# added sb_richness based on a previous d-tests of separation
+sb_lm2_rev <- lmer(
+  log_sb_density ~ litter_mass_g + sb_richness + (1|site), 
+  data = sem_tidy
+)
+
+# check model diagnostics
+DHARMa::simulateResiduals(fittedModel = sb_lm2_rev, plot = TRUE)
+
+# check model fit
+piecewiseSEM::rsquared(sb_lm2_rev)
+
+# check model output
+summary(sb_lm2_rev)
+
+## |- di -> seed bank richness + seed bank density + restoration stage ---------
+
+# specify model 
+# added treatment from a previous d-tests of separation
+di_lm2_rev <- lmer(
+  logit_di ~ sb_richness + log_sb_density + treatment + (1|site), 
+  data = sem_tidy
+)
+
+# check model diagnostics
+DHARMa::simulateResiduals(fittedModel = di_lm2_rev, plot = TRUE)
+
+# check model fit
+piecewiseSEM::rsquared(di_lm2_rev)
+
+# check model output
+summary(di_lm2_rev)
+
+## |- species richness <- seed bank richness + restoration stage ---------------
+
+# specify model 
+# added treatment based on a previous d-tests of separation
+sr_lm2_rev <- glmer(
+  sb_richness ~ species_richness + treatment + (1|site), 
+  family = "poisson", 
+  data = sem_tidy
+)
+
+# check model diagnostics
+DHARMa::simulateResiduals(fittedModel = sr_lm2_rev, plot = TRUE)
+
+# check model fit
+piecewiseSEM::rsquared(sr_lm2_rev)
+
+## |- run revised sem model 2 --------------------------------------------------
+
+sem_2_rev <- piecewiseSEM::psem(
+  di_lm2_rev, 
+  litter_lm2_rev, 
+  sb_lm2_rev, 
+  comm_rich_lm2, 
+  sr_lm2_rev, 
+  comm_biomass_lm2 
+)
 
 # save to disk -----------------------------------------------------------------
 
