@@ -53,28 +53,22 @@ sem_tidy <- sem_tidy %>%
 
 # original: sem model 1 --------------------------------------------------------
 
-# revised: sem model 1 ---------------------------------------------------------
+## |- seed bank <- restoration stage -------------------------------------------
 
-## |- seed bank <- restoration stage + seed rain of DSV ------------------------
-
-# specify model 
-# note: I added seed_rain_dsv based on a previous d-sep test that suggested
-# this pathway may be missing from the first run; biologically, this makes
-# sense since the seed rain of DSV can easily contribute to the seed banks
-mgt_sb_lm1_rev <- glmer(
-  sb_density ~ treatment + seed_rain_dsv + (1|site), 
+mgt_sb_lm1 <- glmer(
+  sb_density ~ treatment + (1|site), 
   family = poisson(link = "log"),
   data = sem_tidy_no_out
-  )
+)
 
 # check model diagnostics
-DHARMa::simulateResiduals(fittedModel = mgt_sb_lm1_rev, plot = T) 
+DHARMa::simulateResiduals(fittedModel = mgt_sb_lm1, plot = T) 
 
 # check model fit using Nakagawa's marginal and conditional R2
 piecewiseSEM::rsquared(mgt_sb_lm1_rev)
 
 # check model output
-summary(mgt_sb_lm1_rev)
+summary(mgt_sb_lm1_rev) 
 
 ## |- invasibility <- seed bank density + restoration stage --------------------
 
@@ -125,14 +119,15 @@ summary(mgt_sr_lm1)
 ## |- run sem ----------------------------------------------------------------------
 
 # run piecewise structural equation modelling for simple version
-sem_1_rev <- piecewiseSEM::psem(
+sem_1 <- piecewiseSEM::psem(
   inv_di_lm1, 
-  mgt_sb_lm1_rev,
+  mgt_sb_lm1,
   mgt_sr_lm1, 
   sb_inv_lm1
   )
 
-summary(sem_1)
+summary(sem_1, conserve = TRUE)
+
 # check for any important missing pathways
 piecewiseSEM::dSep(sem_1, conserve = TRUE)
 
@@ -147,6 +142,38 @@ coefs(modelList = sem_1, standardize = "none")
 # use observation-empirical approach to account for non-normal distributions
 # un the response variable 
 coefs(modelList = sem_1, standardize = "scale", standardize.type = "Menard.OE")
+
+# revised: sem model 1 ---------------------------------------------------------
+
+## |- seed bank <- restoration stage + seed rain of DSV ------------------------
+
+# specify model 
+# note: I added seed_rain_dsv based on a previous d-sep test that suggested
+# this pathway may be missing from the first run; biologically, this makes
+# sense since the seed rain of DSV can easily contribute to the seed banks
+mgt_sb_lm1_rev <- glmer(
+  sb_density ~ treatment + seed_rain_dsv + (1|site), 
+  family = poisson(link = "log"),
+  data = sem_tidy_no_out
+)
+
+# check model diagnostics
+DHARMa::simulateResiduals(fittedModel = mgt_sb_lm1_rev, plot = T) 
+
+# check model fit using Nakagawa's marginal and conditional R2
+piecewiseSEM::rsquared(mgt_sb_lm1_rev)
+
+# check model output
+summary(mgt_sb_lm1_rev)
+
+## |- run revised sem model ----------------------------------------------------
+
+sem_1_rev <- piecewiseSEM::psem(
+  inv_di_lm1, 
+  mgt_sb_lm1_rev,
+  mgt_sr_lm1, 
+  sb_inv_lm1
+)
 
 # sem model 2 ------------------------------------------------------------------
 
