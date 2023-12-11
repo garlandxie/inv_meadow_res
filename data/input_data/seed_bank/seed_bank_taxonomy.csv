@@ -1,0 +1,96 @@
+Code,Order,Family,Genus,Species,Authority,Comment
+ABTH,Malvales,Malvaceae,Abutilon,theophrasti,Medik.,"Velvetleaf, http://www.omafra.gov.on.ca/english/crops/facts/ontweeds/velvetleaf.htm "
+ACRH,Malpighiales,Euphorbiaceae,Acalypha,rhomboidea,L.,"Three Seeded mercury , http://www.omafra.gov.on.ca/english/crops/facts/ontweeds/threeseed_mercury.htm"
+AGAL,Asterales,Asteraceae,Ageratina,altissima,(L.) R.M. King & H. Rob.,"White Snakeroot, http://www.omafra.gov.on.ca/english/crops/facts/ontweeds/white_snakeroot.htm "
+AGST,Poales,Poaceae,Agrostis,stolonifera,L.,
+AMAR,Asterales,Asteraceae,Ambrosia,artemisiifolia,L.,https://plants.usda.gov/home/plantProfile?symbol=AMAR2
+AMBL,Caryophyllales,Amaranthaceae,Amaranthus,blitoides,S.Wats.,
+AMRE,Caryophyllales,Amaranthaceae,Amaranthus,retroflexus,L.,Redroot Amaranth
+AMSP,Lamiales,Scrophulariaceae,Verbascum,thapsus,L.,"Also coded as ""VETH"" in the Fall dataset"
+ANGE,Poales,Poaceae,Andropogon,gerardii,Vitman,
+BAVU,Brassicales,Brassicaceae,Barbarea,vulgaris,W.T. Aiton,Yellow Rocketcress
+BRRA,Brassicales,Brassicaceae,Brassica,rapa,L.,
+CABP,Brassicales,Brassicaceae,Capsella,bursa-pastoris,(L.) Medik.,
+CAPR,Brassicales,Brassicaceae,Cardamine,pratensis,L.,
+CAPE,Poales,Cyperaceae,Carex,spp.,L.,Could not identify to species-level due to a lack of flowers from sedges
+CEFO,Caryophyllales,Caryophyllaceae,Cerastium,fontanum,Baumg. ,
+CELO,Poales,Poaceae,Cenchrus,longispinus,(Hack.) Fern.,"Long-Spined Sandbur, https://inspection.canada.ca/plant-health/seeds/seed-testing-and-grading/seeds-identification/cenchrus-longispinus/eng/1475881458633/1475881458975 "
+CHAL,Caryophyllales,Amaranthaceae,Chenopodium,album,L.,https://plants.usda.gov/home/plantProfile?symbol=CHAL7
+CHSE,Malpighiales,Euphorbiaceae,Euphorbia,serpyllifolia,Pers.,Thyme Leaved Spurge
+CIAR,Asterales,Asteraceae,Cirsium,arvense,(L.) Scop.,
+CIIN,Asterales,Asteraceae,Cichorium,intybus,L.,Chicory
+CIVU,Asterales,Asteraceae,Cirsium,vulgare,(Savi) Ten. ,
+COCA,Asterales,Asteraceae,Conyza,canadensis,L.,Taxonomic synonym for Erigeron canadensis (code: ERCA)
+COLA,Asterales,Asteraceae,Coreopsis,lanceolata,L.,Lanceleaf tickseed
+COTR,Asterales,Asteraceae,Coreopsis,tripteris,L.,
+DACA,Apiales,Apiaceae,Daucus,carota,L.,Queen annes lace
+DECA,Fabales,  Fabaceae,Desmodium,canadense,(L.) DC.,Showy tick-trefoil
+ECCR,Poales,Poaceae,Echinochloa,crus-galli,(L.) Beauv,Barnyard Grass
+ECGI,Poales,Poaceae,Eragrostis,cilianensis,(All.) Vign. ex Janchen,
+ERAN,Asterales,Asteraceae,Erigeron,annuus,(L.) Pers.,
+ERCI,Poales,Poaceae,Eragrostis,cilianensis,(All.) Vign. ex Janchen,
+EUGR,Asterales,Asteraceae,Euthamia,graminifolia,(L.) Nutt.,
+FRVE,Rosales,Rosaceae,Fragaria,vesca,L.,Woodland Strawberry
+GLHE,Lamiales,Lamiaceae,Glechoma,hederacea,L.,
+HEGI,Asterales,Asteraceae,Helianthus,giganteus,L.,Tall sunflower
+HEHE,Asterales,Asteraceae,Heliopsis,helianthoides,L.,http://www.illinoiswildflowers.info/prairie/plantx/fs_sunflowerx.htm 
+HETU,Asterales,Asteraceae,Helianthus,tuberosus,L.,
+HYPE,Malpighiales,Hypericaceae,Hypericum,perforatum,L.,St.Johns Wort
+LACO,Asterales,Asteraceae,Lapsana,communis,L.,Nipplewort
+LASA,Asterales,Asteraceae,Lactuca,sativa,L.,
+LASE,Asterales,Asteraceae,Lactuca,serriola,L.,
+LECA,Lamiales,Lamiaceae,Leonurus,cardiaca,L.,
+LIVU,Lamiales,Plantaginaceae,Linaria,vulgaris,Mill.,
+LOPE,Poales,Poaceae,Lolium,perenne,L.,
+MEAR,Lamiales,Lamiaceae,Mentha,arvensis,L.,Wild mint 
+MELU,Fabales,Fabaceae,Medicago,lupulina,L.,Black Medick
+MESA,Fabales,Fabaceae,Medicago,sativa,L.,Alfalfa
+MOAL,Rosales,Moraceae,Morus,alba,L.,White Mulberry
+MOFI,Lamiales,Lamiaceae,Monarda,fistulosa,L.,Wild Bergamot
+MOVE,Caryophyllales,Molluginaceae,Mollugo,verticillata,L.,
+NECA,Lamiales,Lamiaceae,Nepeta,cataria,L.,Catnip
+OCRI,Asterales,Asteraceae,Solidago,rigida,L.,AKA Oligoneuron rigidum
+OEBI,Myrtales,Onagraceae,Oenothera,biennis,L.,
+OXST,Geraniales,Oxalidaceae,Oxalis,stricta,L.,https://plants.usda.gov/home/plantProfile?symbol=OXST
+PACA,Cyperales,Gramineae,Panicum,capillare,L.,
+PAMI,Cyperales,Gramineae,Panicum,milliaceum,L.,https://plants.usda.gov/home/plantProfile?symbol=PAMI2
+PAVI,Poales,Poaceae,Panicum,virgatum,(L.) Scop.,
+PEMU,Caryophyllales,Polygonaceae,Persicaria,maculosa,Gray,Ladys Thumb
+PIEC,Asterales,Asteraceae,Picris,echioides,(L.) Holub,
+PIHI,Asterales,Asteraceae,Picris,hieracioides,L.,
+PLMA,Lamiales,Plantaginaceae,Plantago,major,L.,Common plantain
+POAR,Rosales,Rosaceae,Potentilla,argentea,L.,"Silverleaf cinquefoil, http://www.omafra.gov.on.ca/english/crops/facts/ontweeds/silvery_cinquefoil.htm"
+POAV,Caryophyllales,Polygonaceae,Polygonum,aviculare,L. 1753,
+PONO,Rosales,Rosaceae,Potentilla,norvegica,L.,Rough cinquefoil
+POOL,Caryophyllales,Portulacaceae,Portulaca,oleracea,L.,https://plants.usda.gov/home/plantProfile?symbol=POOL
+PORE,Rosales,Rosaceae,Potentilla,recta,L.,
+PRVU,Lamiales,Lamiaceae,Prunella,vulgaris,L.,Heal all
+PYMU,Lamiales,Lamiaceae,Pycnanthemum,muticum,(Michx.) Pers.,
+PYTE,Lamiales,Lamiaceae,Pycnanthemum,virginianum,Schrad.,
+RARA,Brassicales,Brassicaceae,Raphanus,raphanistrum,L.,
+RHTY,Sapindales,Anacardiaceae,Rhus,typhina,L.,https://plants.usda.gov/home/plantProfile?symbol=RHTY
+RUAL,Rosales,Rosaceae,Rubus,allegheniensis,(Porter) Porter 1896,
+RUCR,Caryophyllales,Polygonaceae,Rumex,crispus,L.,Curled Dock
+RUHI,Asterales,Asteraceae,Rudbeckia,hirta,L.,
+SCSC,Poales,Poaceae,Schizachyrium,scoparium,(Michx.) Nash,
+SEVI,Poales,Poaceae,Setaria,viridis,L.,Green Foxtail
+SIAL,Brassicales,Brassicaceae,Sinapis,alba,L.,White Mustard
+SIAR,Brassicales,Brassicaceae,Sinapis,arvensis,L.,Field Mustard
+SIPE,Asterales,Asteraceae,Silphium,perfoliatum,L.,
+SOAR,Asterales,Asteraceae,Sonchus,arvensis,L. 1753,
+SONE,Asterales,Asteraceae,Solidago,nemoralis,Aiton 1789,
+SONI,Solanales,Solanaceae,Solanum,nigrum,L.,Black Nightshade
+SONU,Poales,Poaceae,Sorghastrum,nutans,(L.) Nash,
+SOOL,Asterales,Asteraceae,Sonchus,oleraceus,L.,
+SOSP,Asterales,Asteraceae,Solidago,canadensis,L.,"Originally labelled as ""Solidago spp."" but confirmed as Soligado canadensis based on surveys done in late August 2021"
+STME,Caryophyllales,Caryophyllaceae,Stellaria,media,(L.) Vill.,
+TAOF,Asterales,Asteraceae,Taraxacum,officinale,F.H. Wigg.,
+TRPR,Fabales,Fabaceae,Trifolium,pratense,L.,Red Clover
+TRRE,Fabales,Fabaceae,Trifolium,repens,L.,White Clover
+TSCA,Pinales,Pinaceae,Tsuga,canadensis,(L.) Carrière,
+VEAG,Lamiales,Plantaginaceae,Veronica,agrestis,L.,
+VEAR,Scrophulariales,Scrophulariaceae,Veronica,arvensis,L.,https://plants.usda.gov/home/plantProfile?symbol=VEAR
+VEST,Lamiales,Verbenaceae,Verbena,hastata,L.,"Orignally labeled as ""Verbena stricta"", but relabelled as ""Verbena hastata"""
+VEUR,Lamiales,Verbenaceae,Verbenum,urticifolia,L.,
+VICR,Fabales,Fabaceae,Vicia,cracca,L.,
+XXXI,Malpighiales,Euphorbiaceae,Euphorbia,spp.,-,"Spurge : Unable to identify to species level, Possibly Leafy Spurge"
