@@ -97,7 +97,7 @@ summary(mgt_sb_lm1)
 
 # fit model
 sb_inv_lm1 <- lmer(
-  logit_ie ~ sb_density + treatment + (1|site), 
+  logit_ie ~ sb_density + (1|site), 
   data = sem_tidy_no_out
 )
 
@@ -415,3 +415,13 @@ sem_2_rev <- piecewiseSEM::psem(
   comm_biomass_lm2 
 )
 
+piecewiseSEM::dSep(sem_2_rev, conserve = TRUE)
+piecewiseSEM::fisherC(sem_2_rev, conserve = TRUE)
+
+coefs(modelList = sem_2_rev, standardize = "none")
+
+coefs(
+  modelList = sem_2_rev, 
+  standardize = "scale", 
+  standardize.type = "Menard.OE"
+  )
