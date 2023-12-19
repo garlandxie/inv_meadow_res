@@ -211,7 +211,7 @@ coefs(modelList = sem_1_rev, standardize = "none")
 # grab standardized coefficients
 # use observation-empirical approach to account for non-normal distributions
 # un the response variable 
-coefs(modelList = sem_1_rev, standardize = "scale", standardize.type = "Menard.OE")
+coefs(modelList = sem_1_rev, standardize = "range", standardize.type = "Menard.OE")
 
 # original: sem model 2 --------------------------------------------------------
 
@@ -330,7 +330,7 @@ sem_2 <- piecewiseSEM::psem(
 piecewiseSEM::dSep(sem_2, conserve = TRUE)
 piecewiseSEM::fisherC(sem_2, conserve = TRUE)
 
-coefs(modelList = sem_2, standardize = "scale", standardize.type = "Menard.OE")
+coefs(modelList = sem_2, standardize = "range", standardize.type = "Menard.OE")
 
 # revised: sem model 2 ---------------------------------------------------------
 
@@ -422,6 +422,6 @@ coefs(modelList = sem_2_rev, standardize = "none")
 
 coefs(
   modelList = sem_2_rev, 
-  standardize = "scale", 
+  standardize = "range", 
   standardize.type = "Menard.OE"
   )
