@@ -1,3 +1,22 @@
+################################################################################
+# Accompanying code for the following research project: 
+#   Drivers of invasibility in urban meadow restoration
+#
+#
+# Corresponding authors for this script:  
+#   Garland Xie      (1)
+#
+# Affiliations: 
+#   (1) Department of Biological Sciences, 
+#       University of Toronto Scarborough,
+#       1265 Military Trail, Toronto, ON, M1C 1A4, Canada
+#       email: garlandxie@gmail.com
+#
+# Purpose of this R script: to run summary statistics for the results section
+#
+# IMPORTANT: Please refresh your R session before you run this script
+# Why? See https://rstats.wtf/save-source.html
+
 # libraries --------------------------------------------------------------------
 library(here)    # for creating relative file-paths
 library(dplyr)   # for manipulating data
