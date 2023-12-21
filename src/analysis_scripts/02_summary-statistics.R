@@ -18,10 +18,12 @@
 # Why? See https://rstats.wtf/save-source.html
 
 # libraries --------------------------------------------------------------------
-library(here)    # for creating relative file-paths
-library(dplyr)   # for manipulating data
-library(stringr) # for manipulating string characters
-library(rdryad)  # for importing DRYAD repositories 
+library(here)      # for creating relative file-paths
+library(dplyr)     # for manipulating data
+library(stringr)   # for manipulating string characters
+library(rdryad)    # for importing DRYAD repositories 
+library(ggplot2)   # for visualizing data
+library(patchwork) # for visualizing ggplot2 layouts
 
 # import data ------------------------------------------------------------------
 
@@ -75,7 +77,7 @@ inv_spp_to <- readxl::read_excel(
 
 # clean data -------------------------------------------------------------------
 
-## |- biomass ------------------------------------------------------------------
+## |- clean biomass ------------------------------------------------------------------
 biomass_tidy <- biomass %>%
   janitor::clean_names() %>%
   group_by(section, site, treatment, plot, spp_code) %>%
@@ -95,7 +97,7 @@ biomass_summ <- biomass_tidy %>%
   ) %>%
   ungroup() 
 
-## |- obtain native/non-native status ------------------------------------------
+## |- clean native/non-native status ------------------------------------------
 
 # clean seed mix
 
@@ -135,7 +137,7 @@ inv_to_tidy <- inv_spp_to %>%
   ) %>%
   mutate(invasive_status = "I") 
 
-# obtain exotic/native status ----
+# obtain exotic/native status 
 plants_to_tidy <- plants_to %>%
   janitor::clean_names() %>%
   select(scientific_name, exotic_native) %>%
@@ -145,7 +147,7 @@ plants_to_tidy <- plants_to %>%
     replace = "_")
   )
 
-# link exotic/native status with biomass ----
+# link exotic/native status with biomass
 biomass_status <- biomass %>%
   janitor::clean_names() %>%
   left_join(taxon, by = c("spp_code" = "Code")) %>%
@@ -273,4 +275,98 @@ avg_estimates <- biomass_summ %>%
 bm_outliers <- filter(biomass_summ, comm_biomass_g == max(comm_biomass_g))
 sr_outliers <- filter(biomass_summ, species_richness == max(species_richness))
 
-## |- rank-abundance curve -----------------------------------------------------
+# visualize data ---------------------------------------------------------------
+
+## |- biomass ------------------------------------------------------------------
+
+(bm_plot_til <- biomass_summ %>%
+  filter(treatment == "TIL") %>%
+  mutate(plot = factor(plot)) %>%
+  ggplot(aes(x = plot, y = comm_biomass_g)) + 
+  geom_col() +
+  ylim(0, 2000) + 
+  facet_wrap(~site) + 
+  labs(
+    title = "Newly Established",
+    x = "Plot ID", 
+    y = "Community Biomass (in grams)"
+  ) + 
+  theme(axis.text.x = element_blank()) 
+)
+
+(bm_plot_res <- biomass_summ %>%
+    filter(treatment == "RES") %>%
+    mutate(plot = factor(plot)) %>%
+    ggplot(aes(x = plot, y = comm_biomass_g)) + 
+    geom_col() +
+    ylim(0, 2000) + 
+    facet_wrap(~site) + 
+    labs(
+      title = "Restored",
+      x = "Plot ID", 
+      y = NULL
+    ) + 
+    theme(
+      axis.text.x = element_blank(),
+      axis.text.y = element_blank(), 
+      axis.ticks.y = element_blank()) 
+)
+
+bm_plot <- bm_plot_til + bm_plot_res
+
+## |- species richness ---------------------------------------------------------
+
+(sr_plot_til <- biomass_summ %>%
+   filter(treatment == "TIL") %>%
+   mutate(plot = factor(plot)) %>%
+   ggplot(aes(x = plot, y = species_richness)) + 
+   geom_col() +
+   ylim(0, 30) + 
+   facet_wrap(~site) + 
+   labs(
+     title = "Newly Established",
+     x = "Plot ID", 
+     y = "Species Richness"
+   ) + 
+   theme(axis.text.x = element_blank()) 
+)
+
+(sr_plot_res <- biomass_summ %>%
+    filter(treatment == "RES") %>%
+    mutate(plot = factor(plot)) %>%
+    ggplot(aes(x = plot, y = species_richness)) + 
+    geom_col() +
+    ylim(0, 30) + 
+    facet_wrap(~site) + 
+    labs(
+      title = "Restored",
+      x = "Plot ID", 
+      y = NULL
+    ) + 
+    theme(
+      axis.text.x = element_blank(),
+      axis.text.y = element_blank()
+      ) 
+)
+
+(sr_plot <- sr_plot_til + sr_plot_res)
+
+# save to disk -----------------------------------------------------------------
+
+ggsave(
+  filename = here("output", "data_appendix_output", "bm_plot.png"),
+  plot = bm_plot, 
+  device = "png", 
+  units = "in",
+  height = 3.5, 
+  width = 6
+)
+
+ggsave(
+  filename = here("output", "data_appendix_output", "sr_plot.png"),
+  plot = sr_plot, 
+  device = "png", 
+  units = "in",
+  height = 3.5, 
+  width = 6
+)
