@@ -177,6 +177,10 @@ biomass_status <- biomass %>%
     # synonym with Oxybasis glauca
     # located in the plants of TO database
     spp_code == "CHGL" ~ "N",
+    
+    
+    # Bellis sylvestris
+    spp_code == "BESP" ~ "E",
     TRUE ~ exotic_native)
   ) 
 
@@ -212,12 +216,15 @@ biomass_status <- biomass_status %>%
 
 ## |- plant id: aboveground inventory ------------------------------------------
 
-# total number of sampled plants from aboveground inventory
+# total number of sampled plants from above-ground inventory
+# includes two genus-level ids: Carex and Solidago
+# Carex being difficult to id without flowers
+# Solidago because of the Canadensis-Altissima-Giganetus complex 
+
 sr_ab_plants <- biomass %>%
   janitor::clean_names() %>%
   pull(spp_code) %>%
-  unique() %>%
-  length()
+  unique() 
 
 # number of morphospecies
 sr_ab_morphospecies <- biomass %>%
