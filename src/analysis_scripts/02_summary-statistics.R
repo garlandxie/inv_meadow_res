@@ -18,12 +18,14 @@
 # Why? See https://rstats.wtf/save-source.html
 
 # libraries --------------------------------------------------------------------
-library(here)      # for creating relative file-paths
-library(dplyr)     # for manipulating data
-library(stringr)   # for manipulating string characters
-library(rdryad)    # for importing DRYAD repositories 
-library(ggplot2)   # for visualizing data
-library(patchwork) # for visualizing ggplot2 layouts
+library(here)         # for creating relative file-paths
+library(dplyr)        # for manipulating data
+library(stringr)      # for manipulating string characters
+library(rdryad)       # for importing DRYAD repositories 
+library(ggplot2)      # for visualizing data
+library(patchwork)    # for visualizing ggplot2 layouts
+library(tidyr)        # for tidying data  
+library(gghighlight)  # for highlight specific features in ggplot2
 
 # import data ------------------------------------------------------------------
 
@@ -275,6 +277,30 @@ avg_estimates <- biomass_summ %>%
 bm_outliers <- filter(biomass_summ, comm_biomass_g == max(comm_biomass_g))
 sr_outliers <- filter(biomass_summ, species_richness == max(species_richness))
 
+## |- rank abundance curves ----------------------------------------------------
+
+rank_abd <- biomass_status %>%
+  group_by(treatment, spp_code, status) %>%
+  summarize(total_biomass = sum(biomass_g)) %>%
+  ungroup() %>%
+  tidyr::pivot_wider(
+    names_from = treatment, 
+    values_from = total_biomass
+    ) %>%
+  
+  rename(
+    stage_res = RES, 
+    stage_new = TIL
+    ) %>%
+  
+  mutate(
+  
+    # calculate relative abundance
+    prop_stage_res = stage_res/sum(stage_res, na.rm = TRUE),
+    prop_stage_new = stage_new/sum(stage_new, na.rm = TRUE)
+    
+  ) 
+  
 # visualize data ---------------------------------------------------------------
 
 ## |- biomass ------------------------------------------------------------------
@@ -309,7 +335,8 @@ sr_outliers <- filter(biomass_summ, species_richness == max(species_richness))
     theme(
       axis.text.x = element_blank(),
       axis.text.y = element_blank(), 
-      axis.ticks.y = element_blank()) 
+      axis.ticks.y = element_blank()
+      ) 
 )
 
 bm_plot <- bm_plot_til + bm_plot_res
@@ -350,6 +377,55 @@ bm_plot <- bm_plot_til + bm_plot_res
 )
 
 (sr_plot <- sr_plot_til + sr_plot_res)
+
+## |- rank abundance curves ----------------------------------------------------
+
+# newly-established stage 
+ra_new <- rank_abd %>%
+  select(spp_code, status, prop_stage_new) %>%
+  arrange(desc(prop_stage_new)) %>%
+  drop_na() 
+
+ra_new2 <- mutate(ra_new, rank = 1:nrow(ra_new))
+
+(ra_new_plot <- ra_new2 %>%
+    mutate(
+      status = case_when(
+        status == "SE" ~ "Non-Native", 
+        status == "SI" ~ "Non-Native invasive", 
+        status == "SM" ~ "Native included in seed mix",
+        status == "SN" ~ "Native excluded from seed mix",
+        status == "U"  ~ "Native excluded from seed mix",
+        TRUE ~ status)
+      ) %>%
+    ggplot(aes(x = rank, y = prop_stage_new)) + 
+    geom_line(alpha = 0.1) + 
+    geom_text(
+      aes(label = spp_code), 
+      nudge_x = 5, 
+      data = dplyr::filter(
+        ra_new2, spp_code %in% c("CHAL", "MELU", "CEFO"))) + 
+    scale_color_discrete(name = "Status") + 
+    geom_point(aes(col = status)) + 
+    labs(x = "Rank", y = "Relative abundance") + 
+    theme_bw()
+)
+
+# restored stage
+ra_res <- rank_abd %>%
+  select(spp_code, status, prop_stage_res) %>%
+  arrange(desc(prop_stage_res)) %>%
+  drop_na() 
+
+ra_res2 <- mutate(ra_res, rank = 1:nrow(ra_res))
+
+(ra_res_plot <- ra_res2 %>%
+  ggplot(aes(x = rank, y = prop_stage_res)) + 
+  geom_point(aes(col = status)) + 
+  geom_line(alpha = 0.1) + 
+  labs(x = "Rank", y = "Relative abundance") + 
+  theme_bw()
+)
 
 # save to disk -----------------------------------------------------------------
 
