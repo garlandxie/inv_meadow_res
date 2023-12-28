@@ -4,8 +4,8 @@ library(vegan)     # for calculating similarity indices
 library(dplyr)     # for manipulating data
 library(janitor)   # for cleaning column names
 library(tidyr)     # for changing from long to wide tables
-library(tibble)
-library(stringr)
+library(tibble)    # for converting column to row-names
+library(stringr)   # for manipulating string characters
 
 # import -----------------------------------------------------------------------
 
@@ -51,33 +51,81 @@ abg_tidy <- abg_biomass %>%
   dplyr::select(treatment, site, plot, spp_code, abund = biomass_g) %>%
   mutate(layer = "ab")
 
-comm_incid <- rbind(sb_tidy, abg_tidy) %>%
+comm_incid_til <- rbind(sb_tidy, abg_tidy) %>%
   group_by(layer, site, treatment, plot, spp_code) %>%
   summarize(incidence = 1) %>%
   ungroup() %>%
+  dplyr::filter(treatment == "TIL") %>%
   tidyr::pivot_wider(names_from = spp_code, values_from = incidence) %>%
-  mutate(across(CAREX:STME, ~tidyr::replace_na(., 0))) %>%
+  mutate(across(ALPE:PONO, ~tidyr::replace_na(., 0))) %>%
+  mutate(plot_id = paste(layer, site, treatment, plot, sep = "-")) 
+
+comm_incid_res <- rbind(sb_tidy, abg_tidy) %>%
+  group_by(layer, site, treatment, plot, spp_code) %>%
+  summarize(incidence = 1) %>%
+  ungroup() %>%
+  dplyr::filter(treatment == "RES") %>%
+  tidyr::pivot_wider(names_from = spp_code, values_from = incidence) %>%
+  mutate(across(CAREX:FRVE, ~tidyr::replace_na(., 0))) %>%
   mutate(plot_id = paste(layer, site, treatment, plot, sep = "-")) 
 
 # calculate indices ------------------------------------------------------------
 
 ## |- Jaccard ------------------------------------------------------------------
 
-j_dist_til <- comm_incid  %>%
-  dplyr::filter(treatment == "TIL") %>%
+j_dist_til <- comm_incid_til  %>%
   tibble::column_to_rownames(var = "plot_id") %>%
   dplyr::select(-c("layer", "site", "treatment", "plot")) %>%
   as.matrix() %>%
   vegan::vegdist(method = "jaccard")
 
-j_dist_res <- comm_incid  %>%
-  dplyr::filter(treatment == "RES") %>%
+j_dist_res <- comm_incid_res  %>%
   tibble::column_to_rownames(var = "plot_id") %>%
   dplyr::select(-c("layer", "site", "treatment", "plot")) %>%
   as.matrix() %>%
   vegan::vegdist(method = "jaccard")
 
-## |- Sorensen -----------------------------------------------------------------
+## |- Bray-Curtis --------------------------------------------------------------
+
+b_dist_til <- comm_incid_til  %>%
+  tibble::column_to_rownames(var = "plot_id") %>%
+  dplyr::select(-c("layer", "site", "treatment", "plot")) %>%
+  as.matrix() %>%
+  vegan::vegdist(method = "bray")
+
+b_dist_res <- comm_incid_res  %>%
+  tibble::column_to_rownames(var = "plot_id") %>%
+  dplyr::select(-c("layer", "site", "treatment", "plot")) %>%
+  as.matrix() %>%
+  vegan::vegdist(method = "bray")
+
+## |- Chao ---------------------------------------------------------------------
+
+c_dist_til <- comm_incid_til  %>%
+  tibble::column_to_rownames(var = "plot_id") %>%
+  dplyr::select(-c("layer", "site", "treatment", "plot")) %>%
+  as.matrix() %>%
+  vegan::vegdist(method = "chao")
+
+c_dist_res <- comm_incid_res  %>%
+  tibble::column_to_rownames(var = "plot_id") %>%
+  dplyr::select(-c("layer", "site", "treatment", "plot")) %>%
+  as.matrix() %>%
+  vegan::vegdist(method = "chao")
+
+## |- Raup ---------------------------------------------------------------------
+
+r_dist_til <- comm_incid_til  %>%
+  tibble::column_to_rownames(var = "plot_id") %>%
+  dplyr::select(-c("layer", "site", "treatment", "plot")) %>%
+  as.matrix() %>%
+  vegan::vegdist(method = "raup")
+
+r_dist_res <- comm_incid_res  %>%
+  tibble::column_to_rownames(var = "plot_id") %>%
+  dplyr::select(-c("layer", "site", "treatment", "plot")) %>%
+  as.matrix() %>%
+  vegan::vegdist(method = "raup")
 
 # clean distance matrices ------------------------------------------------------
 
@@ -100,10 +148,16 @@ j_til_tidy <- j_til_df %>%
     stringr::str_detect(plot_2, pattern = "ab")
   ) %>%
   mutate(
+    site_1_rep = str_split(plot_1, pattern = "-") %>% sapply("[", 2),
+    site_2_rep = str_split(plot_2, pattern = "-") %>% sapply("[", 2),
     plot_1_rep = str_split(plot_1, pattern = "-") %>% sapply("[", 4), 
     plot_2_rep = str_split(plot_2, pattern = "-") %>% sapply("[", 4)
   ) %>% 
-  dplyr::filter(plot_1_rep == plot_2_rep)
+  dplyr::filter(
+    plot_1_rep == plot_2_rep, 
+    site_1_rep == site_2_rep
+    ) %>%
+  select(-c("plot_1_rep", "plot_2_rep", "site_1_rep", "site_2_rep"))
 
 j_res_df <- j_dist_res %>%
   as.matrix() %>%
@@ -122,10 +176,187 @@ j_res_tidy <- j_res_df %>%
       stringr::str_detect(plot_2, pattern = "ab")
   ) %>%
   mutate(
+    site_1_rep = str_split(plot_1, pattern = "-") %>% sapply("[", 2),
+    site_2_rep = str_split(plot_2, pattern = "-") %>% sapply("[", 2),
     plot_1_rep = str_split(plot_1, pattern = "-") %>% sapply("[", 4), 
     plot_2_rep = str_split(plot_2, pattern = "-") %>% sapply("[", 4)
   ) %>% 
-  dplyr::filter(plot_1_rep == plot_2_rep)
+  dplyr::filter(
+    plot_1_rep == plot_2_rep,
+    site_1_rep == site_2_rep
+    ) %>%
+  select(-c("plot_1_rep", "plot_2_rep", "site_1_rep", "site_2_rep"))
 
+## |- Sorensen -----------------------------------------------------------------
 
+b_til_df <- b_dist_til %>%
+  as.matrix() %>%
+  as_tibble(rownames = "plot_id") %>%
+  rename(plot_1 = plot_id) %>%
+  tidyr::pivot_longer(
+    cols = -plot_1, 
+    names_to = "plot_2", 
+    values_to = "bray"
+  ) 
 
+b_til_tidy <- b_til_df %>%
+  dplyr::filter(
+    bray > 0 &
+      stringr::str_detect(plot_1, pattern = "sb") &
+      stringr::str_detect(plot_2, pattern = "ab")
+  ) %>%
+  mutate(
+    site_1_rep = str_split(plot_1, pattern = "-") %>% sapply("[", 2),
+    site_2_rep = str_split(plot_2, pattern = "-") %>% sapply("[", 2),
+    plot_1_rep = str_split(plot_1, pattern = "-") %>% sapply("[", 4), 
+    plot_2_rep = str_split(plot_2, pattern = "-") %>% sapply("[", 4)
+  ) %>% 
+  dplyr::filter(
+    plot_1_rep == plot_2_rep,
+    site_1_rep == site_2_rep
+    ) %>%
+  select(-c("plot_1_rep", "plot_2_rep", "site_1_rep", "site_2_rep"))
+
+b_res_df <- b_dist_res %>%
+  as.matrix() %>%
+  as_tibble(rownames = "plot_id") %>%
+  rename(plot_1 = plot_id) %>%
+  tidyr::pivot_longer(
+    cols = -plot_1, 
+    names_to = "plot_2", 
+    values_to = "bray"
+  ) 
+
+b_res_tidy <- b_res_df %>%
+  dplyr::filter(
+    bray > 0 &
+      stringr::str_detect(plot_1, pattern = "sb") &
+      stringr::str_detect(plot_2, pattern = "ab")
+  ) %>%
+  mutate(
+    site_1_rep = str_split(plot_1, pattern = "-") %>% sapply("[", 2),
+    site_2_rep = str_split(plot_2, pattern = "-") %>% sapply("[", 2),
+    plot_1_rep = str_split(plot_1, pattern = "-") %>% sapply("[", 4), 
+    plot_2_rep = str_split(plot_2, pattern = "-") %>% sapply("[", 4)
+  ) %>% 
+  dplyr::filter(
+    plot_1_rep == plot_2_rep,
+    site_1_rep == site_2_rep
+    ) %>%
+  select(-c("plot_1_rep", "plot_2_rep", "site_1_rep", "site_2_rep"))
+
+## |- Chao ---------------------------------------------------------------------
+
+c_til_df <- c_dist_til %>%
+  as.matrix() %>%
+  as_tibble(rownames = "plot_id") %>%
+  rename(plot_1 = plot_id) %>%
+  tidyr::pivot_longer(
+    cols = -plot_1, 
+    names_to = "plot_2", 
+    values_to = "chao"
+  ) 
+
+c_til_tidy <- c_til_df %>%
+  dplyr::filter(
+    chao > 0 &
+      stringr::str_detect(plot_1, pattern = "sb") &
+      stringr::str_detect(plot_2, pattern = "ab")
+  ) %>%
+  mutate(
+    site_1_rep = str_split(plot_1, pattern = "-") %>% sapply("[", 2),
+    site_2_rep = str_split(plot_2, pattern = "-") %>% sapply("[", 2),
+    plot_1_rep = str_split(plot_1, pattern = "-") %>% sapply("[", 4), 
+    plot_2_rep = str_split(plot_2, pattern = "-") %>% sapply("[", 4)
+  ) %>% 
+  dplyr::filter(
+    plot_1_rep == plot_2_rep,
+    site_1_rep == site_2_rep
+  ) %>%
+  select(-c("plot_1_rep", "plot_2_rep", "site_1_rep", "site_2_rep"))
+
+c_res_df <- c_dist_res %>%
+  as.matrix() %>%
+  as_tibble(rownames = "plot_id") %>%
+  rename(plot_1 = plot_id) %>%
+  tidyr::pivot_longer(
+    cols = -plot_1, 
+    names_to = "plot_2", 
+    values_to = "chao"
+  ) 
+
+c_res_tidy <- c_res_df %>%
+  dplyr::filter(
+    chao > 0 &
+      stringr::str_detect(plot_1, pattern = "sb") &
+      stringr::str_detect(plot_2, pattern = "ab")
+  ) %>%
+  mutate(
+    site_1_rep = str_split(plot_1, pattern = "-") %>% sapply("[", 2),
+    site_2_rep = str_split(plot_2, pattern = "-") %>% sapply("[", 2),
+    plot_1_rep = str_split(plot_1, pattern = "-") %>% sapply("[", 4), 
+    plot_2_rep = str_split(plot_2, pattern = "-") %>% sapply("[", 4)
+  ) %>% 
+  dplyr::filter(
+    plot_1_rep == plot_2_rep,
+    site_1_rep == site_2_rep
+  ) %>%
+  select(-c("plot_1_rep", "plot_2_rep", "site_1_rep", "site_2_rep"))
+
+## |- Raup ---------------------------------------------------------------------
+
+r_til_df <- r_dist_til %>%
+  as.matrix() %>%
+  as_tibble(rownames = "plot_id") %>%
+  rename(plot_1 = plot_id) %>%
+  tidyr::pivot_longer(
+    cols = -plot_1, 
+    names_to = "plot_2", 
+    values_to = "raup"
+  ) 
+
+r_til_tidy <- r_til_df %>%
+  dplyr::filter(
+    raup > 0 &
+      stringr::str_detect(plot_1, pattern = "sb") &
+      stringr::str_detect(plot_2, pattern = "ab")
+  ) %>%
+  mutate(
+    site_1_rep = str_split(plot_1, pattern = "-") %>% sapply("[", 2),
+    site_2_rep = str_split(plot_2, pattern = "-") %>% sapply("[", 2),
+    plot_1_rep = str_split(plot_1, pattern = "-") %>% sapply("[", 4), 
+    plot_2_rep = str_split(plot_2, pattern = "-") %>% sapply("[", 4)
+  ) %>% 
+  dplyr::filter(
+    plot_1_rep == plot_2_rep,
+    site_1_rep == site_2_rep
+  ) %>%
+  select(-c("plot_1_rep", "plot_2_rep", "site_1_rep", "site_2_rep"))
+
+r_res_df <- r_dist_res %>%
+  as.matrix() %>%
+  as_tibble(rownames = "plot_id") %>%
+  rename(plot_1 = plot_id) %>%
+  tidyr::pivot_longer(
+    cols = -plot_1, 
+    names_to = "plot_2", 
+    values_to = "raup"
+  ) 
+
+r_res_tidy <- r_res_df %>%
+  dplyr::filter(
+    raup > 0 &
+      stringr::str_detect(plot_1, pattern = "sb") &
+      stringr::str_detect(plot_2, pattern = "ab")
+  ) %>%
+  mutate(
+    site_1_rep = str_split(plot_1, pattern = "-") %>% sapply("[", 2),
+    site_2_rep = str_split(plot_2, pattern = "-") %>% sapply("[", 2),
+    plot_1_rep = str_split(plot_1, pattern = "-") %>% sapply("[", 4), 
+    plot_2_rep = str_split(plot_2, pattern = "-") %>% sapply("[", 4)
+  ) %>% 
+  dplyr::filter(
+    plot_1_rep == plot_2_rep,
+    site_1_rep == site_2_rep
+  ) %>%
+  select(-c("plot_1_rep", "plot_2_rep", "site_1_rep", "site_2_rep"))
