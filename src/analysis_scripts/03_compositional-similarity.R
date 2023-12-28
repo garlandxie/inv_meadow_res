@@ -94,7 +94,7 @@ b_dist_til <- comm_incid_til  %>%
   as.matrix() %>%
   vegan::vegdist(method = "bray")
 
-b_dist_res <- comm_incid_res  %>%
+b_dist_res <- comm_incid_res %>%
   tibble::column_to_rownames(var = "plot_id") %>%
   dplyr::select(-c("layer", "site", "treatment", "plot")) %>%
   as.matrix() %>%
