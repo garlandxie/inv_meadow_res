@@ -6,6 +6,7 @@ library(janitor)   # for cleaning column names
 library(tidyr)     # for changing from long to wide tables
 library(tibble)    # for converting column to row-names
 library(stringr)   # for manipulating string characters
+library(ggplot2)   # for visualizing data
 
 # import -----------------------------------------------------------------------
 
@@ -187,7 +188,7 @@ j_res_tidy <- j_res_df %>%
     ) %>%
   select(-c("plot_1_rep", "plot_2_rep", "site_1_rep", "site_2_rep"))
 
-## |- Sorensen -----------------------------------------------------------------
+## |- Bray-Curtis --------------------------------------------------------------
 
 b_til_df <- b_dist_til %>%
   as.matrix() %>%
@@ -259,7 +260,7 @@ c_til_df <- c_dist_til %>%
 
 c_til_tidy <- c_til_df %>%
   dplyr::filter(
-    chao > 0 &
+    chao >= 0 &
       stringr::str_detect(plot_1, pattern = "sb") &
       stringr::str_detect(plot_2, pattern = "ab")
   ) %>%
@@ -287,7 +288,7 @@ c_res_df <- c_dist_res %>%
 
 c_res_tidy <- c_res_df %>%
   dplyr::filter(
-    chao > 0 &
+    chao >= 0 &
       stringr::str_detect(plot_1, pattern = "sb") &
       stringr::str_detect(plot_2, pattern = "ab")
   ) %>%
@@ -317,7 +318,7 @@ r_til_df <- r_dist_til %>%
 
 r_til_tidy <- r_til_df %>%
   dplyr::filter(
-    raup > 0 &
+    raup >= 0 &
       stringr::str_detect(plot_1, pattern = "sb") &
       stringr::str_detect(plot_2, pattern = "ab")
   ) %>%
@@ -345,7 +346,7 @@ r_res_df <- r_dist_res %>%
 
 r_res_tidy <- r_res_df %>%
   dplyr::filter(
-    raup > 0 &
+      raup >= 0 &
       stringr::str_detect(plot_1, pattern = "sb") &
       stringr::str_detect(plot_2, pattern = "ab")
   ) %>%
@@ -360,3 +361,31 @@ r_res_tidy <- r_res_df %>%
     site_1_rep == site_2_rep
   ) %>%
   select(-c("plot_1_rep", "plot_2_rep", "site_1_rep", "site_2_rep"))
+
+# summarize --------------------------------------------------------------------
+
+sim_res <- b_res_tidy %>%
+  inner_join(j_res_tidy, by = c("plot_1", "plot_2")) %>%
+  inner_join(c_res_tidy, by = c("plot_1", "plot_2")) %>%
+  inner_join(r_res_tidy, by = c("plot_1", "plot_2"))
+
+sim_til <- b_til_tidy %>%
+  inner_join(j_til_tidy, by = c("plot_1", "plot_2")) %>%
+  inner_join(c_til_tidy, by = c("plot_1", "plot_2")) %>%
+  inner_join(r_til_tidy, by = c("plot_1", "plot_2"))
+
+sim <- rbind(sim_res, sim_til) %>%
+  mutate(across(bray:raup, ~round(., digits = 2)))
+
+# get mean and sd's for raup-crick similarity indices (per restoration stage)
+mean(sim_res$raup)
+sd(sim_res$raup)
+
+mean(sim_til$raup)
+sd(sim_til$raup)
+
+
+
+
+
+
