@@ -6,7 +6,7 @@ library(ggplot2)  # for visualising data
 # import ----
 
 biomass <- read.csv(
-  here("data", "analysis_data", "biomass_analysis_data.csv"), 
+  here("data", "intermediate_data", "comm_biomass_data.csv"), 
   row.names = 1
 )
 
