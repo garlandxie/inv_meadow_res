@@ -378,13 +378,11 @@ sim <- rbind(sim_res, sim_til) %>%
   mutate(across(bray:raup, ~round(., digits = 2)))
 
 # get mean and sd's for raup-crick similarity indices (per restoration stage)
-mean(sim_res$raup)
-sd(sim_res$raup)
+median(sim_res$raup)
+IQR(sim_res$raup)
 
-mean(sim_til$raup)
-sd(sim_til$raup)
-
-
+median(sim_til$raup)
+IQR(sim_til$raup)
 
 
 
