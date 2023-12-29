@@ -388,6 +388,14 @@ ra_new <- rank_abd %>%
 
 ra_new2 <- mutate(ra_new, rank = 1:nrow(ra_new))
 
+ra_new_chr <- ra_new2 %>%
+  dplyr::filter(spp_code %in% c("CHAL", "MELU", "CEFO")) %>%
+  mutate(latin = case_when(
+    spp_code == "CHAL" ~ "Chenopodium album", 
+    spp_code == "MELU" ~ "Medicago lupulina", 
+    spp_code == "CEFO" ~ "Cerastium fontanum") 
+    )
+
 (ra_new_plot <- ra_new2 %>%
     mutate(
       status = case_when(
@@ -401,14 +409,17 @@ ra_new2 <- mutate(ra_new, rank = 1:nrow(ra_new))
     ggplot(aes(x = rank, y = prop_stage_new)) + 
     geom_line(alpha = 0.1) + 
     geom_text(
-      aes(label = spp_code), 
-      nudge_x = 5, 
-      data = dplyr::filter(
-        ra_new2, spp_code %in% c("CHAL", "MELU", "CEFO"))) + 
+      aes(label = latin), 
+      size = 3, 
+      nudge_x = 10, 
+      data = ra_new_chr) + 
     scale_color_discrete(name = "Status") + 
     geom_point(aes(col = status)) + 
     labs(x = "Rank", y = "Relative abundance") + 
-    theme_bw()
+    theme_bw() +
+    theme(
+      legend.title = element_text(size=8),
+      legend.text  = element_text(size=8))
 )
 
 # restored stage
@@ -419,9 +430,32 @@ ra_res <- rank_abd %>%
 
 ra_res2 <- mutate(ra_res, rank = 1:nrow(ra_res))
 
+ra_res_chr <- ra_res2 %>%
+  dplyr::filter(spp_code %in% c("SOSP", "ANGE", "MOFI")) %>%
+  mutate(latin = case_when(
+    spp_code == "SOSP" ~ "Solidago ssp.", 
+    spp_code == "ANGE" ~ "Andropogon gerardii", 
+    spp_code == "MOFI" ~ "Monarda fistulosa") 
+  )
+
 (ra_res_plot <- ra_res2 %>%
+  mutate(
+      status = case_when(
+        status == "SE" ~ "Non-Native", 
+        status == "SI" ~ "Non-Native invasive", 
+        status == "SM" ~ "Native included in seed mix",
+        status == "SN" ~ "Native excluded from seed mix",
+        status == "U"  ~ "Native excluded from seed mix",
+        TRUE ~ status)
+  ) %>%
   ggplot(aes(x = rank, y = prop_stage_res)) + 
   geom_point(aes(col = status)) + 
+  geom_text(
+    aes(label = latin), 
+    size = 3, 
+    nudge_x = 10, 
+    data = ra_res_chr) + 
+  scale_color_discrete(name = "Status") + 
   geom_line(alpha = 0.1) + 
   labs(x = "Rank", y = "Relative abundance") + 
   theme_bw()
@@ -446,3 +480,22 @@ ggsave(
   height = 3.5, 
   width = 6
 )
+
+ggsave(
+  filename = here("output", "data_appendix_output", "ra_new_plot.png"),
+  plot = ra_new_plot, 
+  device = "png", 
+  units = "in",
+  height = 3.5, 
+  width = 7
+)
+
+ggsave(
+  filename = here("output", "data_appendix_output", "ra_res_plot.png"),
+  plot = ra_res_plot, 
+  device = "png", 
+  units = "in",
+  height = 3.5, 
+  width = 7
+)
+
