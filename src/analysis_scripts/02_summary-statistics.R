@@ -344,123 +344,39 @@ plot_tot_bm <- biomass_status %>%
 
 ## |- species richness ---------------------------------------------------------
 
-(sr_plot_til <- biomass_summ %>%
-   filter(treatment == "TIL") %>%
-   mutate(plot = factor(plot)) %>%
-   ggplot(aes(x = plot, y = species_richness)) + 
-   geom_col() +
-   ylim(0, 30) + 
-   facet_wrap(~site) + 
-   labs(
-     title = "Newly Established",
-     x = "Plot ID", 
-     y = "Species Richness"
-   ) + 
-   theme(axis.text.x = element_blank()) 
-)
-
-(sr_plot_res <- biomass_summ %>%
-    filter(treatment == "RES") %>%
-    mutate(plot = factor(plot)) %>%
-    ggplot(aes(x = plot, y = species_richness)) + 
-    geom_col() +
-    ylim(0, 30) + 
-    facet_wrap(~site) + 
-    labs(
-      title = "Restored",
-      x = "Plot ID", 
-      y = NULL
-    ) + 
-    theme(
-      axis.text.x = element_blank(),
-      axis.text.y = element_blank()
-      ) 
-)
-
-(sr_plot <- sr_plot_til + sr_plot_res)
-
-## |- rank abundance curves ----------------------------------------------------
-
-# newly-established stage 
-ra_new <- rank_abd %>%
-  select(spp_code, status, prop_stage_new) %>%
-  arrange(desc(prop_stage_new)) %>%
-  drop_na() 
-
-ra_new2 <- mutate(ra_new, rank = 1:nrow(ra_new))
-
-ra_new_chr <- ra_new2 %>%
-  dplyr::filter(spp_code %in% c("CHAL", "MELU", "CEFO")) %>%
-  mutate(latin = case_when(
-    spp_code == "CHAL" ~ "Chenopodium album", 
-    spp_code == "MELU" ~ "Medicago lupulina", 
-    spp_code == "CEFO" ~ "Cerastium fontanum") 
-    )
-
-(ra_new_plot <- ra_new2 %>%
-    mutate(
-      status = case_when(
-        status == "SE" ~ "Non-Native", 
-        status == "SI" ~ "Non-Native invasive", 
-        status == "SM" ~ "Native included in seed mix",
-        status == "SN" ~ "Native excluded from seed mix",
-        status == "U"  ~ "Native excluded from seed mix",
-        TRUE ~ status)
-      ) %>%
-    ggplot(aes(x = rank, y = prop_stage_new)) + 
-    geom_line(alpha = 0.1) + 
-    geom_text(
-      aes(label = latin), 
-      size = 3, 
-      nudge_x = 10, 
-      data = ra_new_chr) + 
-    scale_color_discrete(name = "Status") + 
-    geom_point(aes(col = status)) + 
-    labs(x = "Rank", y = "Relative abundance") + 
-    theme_bw() +
-    theme(
-      legend.title = element_text(size=8),
-      legend.text  = element_text(size=8))
-)
-
-# restored stage
-ra_res <- rank_abd %>%
-  select(spp_code, status, prop_stage_res) %>%
-  arrange(desc(prop_stage_res)) %>%
-  drop_na() 
-
-ra_res2 <- mutate(ra_res, rank = 1:nrow(ra_res))
-
-ra_res_chr <- ra_res2 %>%
-  dplyr::filter(spp_code %in% c("SOSP", "ANGE", "MOFI")) %>%
-  mutate(latin = case_when(
-    spp_code == "SOSP" ~ "Solidago ssp.", 
-    spp_code == "ANGE" ~ "Andropogon gerardii", 
-    spp_code == "MOFI" ~ "Monarda fistulosa") 
-  )
-
-(ra_res_plot <- ra_res2 %>%
+plot_tot_sr <- biomass_status %>%
+  group_by(treatment, status) %>%
+  summarize(sr = dplyr::n_distinct(spp_code)) %>%
+  ungroup() %>%
+  dplyr::filter(status != "U") %>%
   mutate(
-      status = case_when(
-        status == "SE" ~ "Non-Native", 
-        status == "SI" ~ "Non-Native invasive", 
-        status == "SM" ~ "Native included in seed mix",
-        status == "SN" ~ "Native excluded from seed mix",
-        status == "U"  ~ "Native excluded from seed mix",
-        TRUE ~ status)
+    
+    treatment = case_when(
+      treatment == "TIL" ~ "Newly-established", 
+      treatment == "RES" ~ "Restored", 
+      TRUE ~ treatment), 
+    treatment = factor(
+      treatment, 
+      levels = c("Newly-established", "Restored")
+    ),
+    
+    status = case_when(
+      status == "SE" ~ "Non-native", 
+      status == "SI" ~ "Invasive",
+      status == "SM" ~ "Seed Mix", 
+      status == "SN" ~ "Spontaneous Native"), 
+    status = factor(
+      status, 
+      levels = c("Non-native", "Invasive", "Spontaneous Native", "Seed Mix")
+    ) 
   ) %>%
-  ggplot(aes(x = rank, y = prop_stage_res)) + 
-  geom_point(aes(col = status)) + 
-  geom_text(
-    aes(label = latin), 
-    size = 3, 
-    nudge_x = 10, 
-    data = ra_res_chr) + 
-  scale_color_discrete(name = "Status") + 
-  geom_line(alpha = 0.1) + 
-  labs(x = "Rank", y = "Relative abundance") + 
+  ggplot(aes(x = status, y = sr, fill = treatment)) +
+  geom_col(position = "dodge2") +
+  scale_fill_discrete(name = "Restoration Age") + 
+  labs(
+    x = "Status", 
+    y = "Aboveground Species Richness") + 
   theme_bw()
-)
 
 # save to disk -----------------------------------------------------------------
 
@@ -474,8 +390,8 @@ ggsave(
 )
 
 ggsave(
-  filename = here("output", "data_appendix_output", "sr_plot.png"),
-  plot = sr_plot, 
+  filename = here("output", "data_appendix_output", "plot_tot_sr.png"),
+  plot = plot_tot_sr, 
   device = "png", 
   units = "in",
   height = 3.5, 
