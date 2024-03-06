@@ -465,8 +465,8 @@ ra_res_chr <- ra_res2 %>%
 # save to disk -----------------------------------------------------------------
 
 ggsave(
-  filename = here("output", "data_appendix_output", "bm_plot.png"),
-  plot = bm_plot, 
+  filename = here("output", "data_appendix_output", "plot_tot_bm.png"),
+  plot = plot_tot_bm, 
   device = "png", 
   units = "in",
   height = 3.5, 
