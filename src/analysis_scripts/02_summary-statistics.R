@@ -429,6 +429,47 @@ plot_tot_sr <- biomass_status %>%
     y = "Aboveground Species Richness") + 
   theme_bw()
 
+# |- other summary statistics --------------------------------------------------
+
+## |-- invasive species --------------------------------------------------------
+
+# species identity
+inv_id_res <- biomass_status %>%
+  filter(status == "SI" & treatment == "RES") %>% 
+  pull(spp_code) %>%
+  unique()
+
+inv_id_til <- biomass_status %>%
+  filter(status == "SI" & treatment == "TIL") %>% 
+  pull(spp_code) %>%
+  unique()
+
+intersect(inv_id_res, inv_id_til)
+dplyr::symdiff(inv_id_res, inv_id_til)
+biomass_status %>%
+  group_by(treatment, site, plot, status) %>%
+  summarize(biomass = sum(biomass_g, na.rm = TRUE)) %>%
+  ungroup() %>%
+  filter(status == "SI") %>%
+  group_by(treatment) %>%
+  summarize(
+    mean_biomass = mean(biomass, na.rm = TRUE),
+    sd_biomass = sd(biomass, na.rm = TRUE)
+    ) %>%
+  ungroup() 
+
+biomass_status %>%
+  group_by(treatment, site, plot, status) %>%
+  summarize(sr = dplyr::n_distinct(spp_code)) %>%
+  ungroup() %>%
+  filter(status == "SI") %>%
+  group_by(treatment) %>%
+  summarize(
+    mean_sr = mean(sr, na.rm = TRUE),
+    sd_sr = sd(sr, na.rm = TRUE)
+  ) %>%
+  ungroup() 
+
 # save to disk -----------------------------------------------------------------
 
 ggsave(
