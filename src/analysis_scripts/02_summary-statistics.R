@@ -314,7 +314,6 @@ plot_tot_bm <- biomass_status %>%
   ungroup() %>%
   filter(status != "U") %>%
   mutate(
-    log_biomass = log(biomass),
     
     treatment = case_when(
       treatment == "TIL" ~ "Newly-established", 
