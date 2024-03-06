@@ -308,6 +308,7 @@ rank_abd <- biomass_status %>%
 
 ## |- biomass ------------------------------------------------------------------
 
+### |--- total biomass per restoration stage -----------------------------------
 plot_tot_bm <- biomass_status %>%
   group_by(treatment, status) %>%
   summarize(biomass = sum(biomass_g)) %>%
@@ -342,8 +343,82 @@ plot_tot_bm <- biomass_status %>%
     y = "Total aboveground biomass (in grams)") + 
   theme_bw()
 
+### |-- mean biomass per plot --------------------------------------------------
+
+plot_mean_bm <- biomass_status %>%
+  group_by(treatment, site, plot, status) %>%
+  summarize(biomass = mean(biomass_g, na.rm = TRUE)) %>%
+  ungroup() %>%
+  filter(status != "U") %>%
+  mutate(
+    
+    treatment = case_when(
+      treatment == "TIL" ~ "Newly-established", 
+      treatment == "RES" ~ "Restored", 
+      TRUE ~ treatment), 
+    treatment = factor(
+      treatment, 
+      levels = c("Newly-established", "Restored")
+    ),
+    
+    status = case_when(
+      status == "SE" ~ "Non-native", 
+      status == "SI" ~ "Invasive",
+      status == "SM" ~ "Seed Mix", 
+      status == "SN" ~ "Spontaneous Native", 
+      TRUE ~ status), 
+    status = factor(
+      status, 
+      levels = c("Non-native", "Invasive", "Spontaneous Native", "Seed Mix")
+    ) 
+  ) %>%
+  ggplot(aes(x = status, y = biomass, fill = treatment)) +
+  geom_boxplot(position = "dodge2") + 
+  scale_fill_discrete(name = "Restoration Age") + 
+  labs(
+    x = "Status", 
+    y = "Aboveground biomass (in grams)") + 
+  theme_bw()
+
 ## |- species richness ---------------------------------------------------------
 
+### |-- average species richness per plot --------------------------------------
+
+plot_mean_sr <- biomass_status %>%
+  group_by(treatment, site, plot, status) %>%
+  summarize(sr = dplyr::n_distinct(spp_code)) %>%
+  dplyr::filter(status != "U") %>%
+  mutate(
+    
+    treatment = case_when(
+      treatment == "TIL" ~ "Newly-established", 
+      treatment == "RES" ~ "Restored", 
+      TRUE ~ treatment), 
+    treatment = factor(
+      treatment, 
+      levels = c("Newly-established", "Restored")
+    ),
+    
+    status = case_when(
+      status == "SE" ~ "Non-native", 
+      status == "SI" ~ "Invasive",
+      status == "SM" ~ "Seed Mix", 
+      status == "SN" ~ "Spontaneous Native"), 
+    status = factor(
+      status, 
+      levels = c("Non-native", "Invasive", "Spontaneous Native", "Seed Mix")
+    ) 
+  ) %>%
+  ggplot(aes(x = status, y = sr, fill = treatment)) + 
+  geom_boxplot(position = "dodge2") + 
+  scale_fill_discrete(name = "Restoration Age") + 
+  labs(
+    x = "Status", 
+    y = "Aboveground Species Richness"
+  ) + 
+  theme_bw()
+
+### |-- species richness per restoration stage ---------------------------------
 plot_tot_sr <- biomass_status %>%
   group_by(treatment, status) %>%
   summarize(sr = dplyr::n_distinct(spp_code)) %>%
@@ -397,5 +472,25 @@ ggsave(
   height = 3.5, 
   width = 6
 )
+
+ggsave(
+  filename = here("output", "data_appendix_output", "plot_mean_sr.png"),
+  plot = plot_mean_sr, 
+  device = "png", 
+  units = "in",
+  height = 3.5, 
+  width = 6
+)
+
+ggsave(
+  filename = here("output", "data_appendix_output", "plot_mean_bm.png"),
+  plot = plot_mean_bm, 
+  device = "png", 
+  units = "in",
+  height = 3.5, 
+  width = 6
+)
+
+
 
 
