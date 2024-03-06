@@ -280,30 +280,6 @@ avg_estimates <- biomass_summ %>%
 bm_outliers <- filter(biomass_summ, comm_biomass_g == max(comm_biomass_g))
 sr_outliers <- filter(biomass_summ, species_richness == max(species_richness))
 
-## |- rank abundance curves ----------------------------------------------------
-
-rank_abd <- biomass_status %>%
-  group_by(treatment, spp_code, status) %>%
-  summarize(total_biomass = sum(biomass_g)) %>%
-  ungroup() %>%
-  tidyr::pivot_wider(
-    names_from = treatment, 
-    values_from = total_biomass
-    ) %>%
-  
-  rename(
-    stage_res = RES, 
-    stage_new = TIL
-    ) %>%
-  
-  mutate(
-  
-    # calculate relative abundance
-    prop_stage_res = stage_res/sum(stage_res, na.rm = TRUE),
-    prop_stage_new = stage_new/sum(stage_new, na.rm = TRUE)
-    
-  ) 
-  
 # visualize data ---------------------------------------------------------------
 
 ## |- biomass ------------------------------------------------------------------
