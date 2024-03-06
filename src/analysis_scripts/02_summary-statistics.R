@@ -182,9 +182,12 @@ biomass_status <- biomass %>%
     # located in the plants of TO database
     spp_code == "CHGL" ~ "N",
     
-    
     # Bellis sylvestris
     spp_code == "BESP" ~ "E",
+    
+    # Solidago spp. 
+    spp_code == "SOSP" ~ "N",
+    
     TRUE ~ exotic_native)
   ) 
 
@@ -305,41 +308,40 @@ rank_abd <- biomass_status %>%
 
 ## |- biomass ------------------------------------------------------------------
 
-(bm_plot_til <- biomass_summ %>%
-  filter(treatment == "TIL") %>%
-  mutate(plot = factor(plot)) %>%
-  ggplot(aes(x = plot, y = comm_biomass_g)) + 
-  geom_col() +
-  ylim(0, 2000) + 
-  facet_wrap(~site) + 
-  labs(
-    title = "Newly Established",
-    x = "Plot ID", 
-    y = "Community Biomass (in grams)"
-  ) + 
-  theme(axis.text.x = element_blank()) 
-)
-
-(bm_plot_res <- biomass_summ %>%
-    filter(treatment == "RES") %>%
-    mutate(plot = factor(plot)) %>%
-    ggplot(aes(x = plot, y = comm_biomass_g)) + 
-    geom_col() +
-    ylim(0, 2000) + 
-    facet_wrap(~site) + 
-    labs(
-      title = "Restored",
-      x = "Plot ID", 
-      y = NULL
-    ) + 
-    theme(
-      axis.text.x = element_blank(),
-      axis.text.y = element_blank(), 
-      axis.ticks.y = element_blank()
+plot_tot_bm <- biomass_status %>%
+  group_by(treatment, status) %>%
+  summarize(biomass = sum(biomass_g)) %>%
+  ungroup() %>%
+  filter(status != "U") %>%
+  mutate(
+    log_biomass = log(biomass),
+    
+    treatment = case_when(
+      treatment == "TIL" ~ "Newly-established", 
+      treatment == "RES" ~ "Restored", 
+      TRUE ~ treatment), 
+    treatment = factor(
+      treatment, 
+      levels = c("Newly-established", "Restored")
+      ),
+    
+    status = case_when(
+      status == "SE" ~ "Non-native", 
+      status == "SI" ~ "Invasive",
+      status == "SM" ~ "Seed Mix", 
+      status == "SN" ~ "Spontaneous Native"), 
+    status = factor(
+      status, 
+      levels = c("Non-native", "Invasive", "Spontaneous Native", "Seed Mix")
       ) 
-)
-
-bm_plot <- bm_plot_til + bm_plot_res
+  ) %>%
+  ggplot(aes(x = status, y = biomass, fill = treatment)) +
+  geom_col(position = "dodge2") + 
+  scale_fill_discrete(name = "Restoration Age") + 
+  labs(
+    x = "Status", 
+    y = "Total aboveground biomass (in grams)") + 
+  theme_bw()
 
 ## |- species richness ---------------------------------------------------------
 
