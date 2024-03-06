@@ -323,7 +323,7 @@ plot_tot_bm <- biomass_status %>%
 
 plot_mean_bm <- biomass_status %>%
   group_by(treatment, site, plot, status) %>%
-  summarize(biomass = mean(biomass_g, na.rm = TRUE)) %>%
+  summarize(biomass = sum(biomass_g, na.rm = TRUE)) %>%
   ungroup() %>%
   filter(status != "U") %>%
   mutate(
