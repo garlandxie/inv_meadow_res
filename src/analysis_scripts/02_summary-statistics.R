@@ -398,21 +398,4 @@ ggsave(
   width = 6
 )
 
-ggsave(
-  filename = here("output", "data_appendix_output", "ra_new_plot.png"),
-  plot = ra_new_plot, 
-  device = "png", 
-  units = "in",
-  height = 3.5, 
-  width = 7
-)
-
-ggsave(
-  filename = here("output", "data_appendix_output", "ra_res_plot.png"),
-  plot = ra_res_plot, 
-  device = "png", 
-  units = "in",
-  height = 3.5, 
-  width = 7
-)
 
