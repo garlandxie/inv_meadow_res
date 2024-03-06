@@ -134,6 +134,8 @@ biomass_tidy <- biomass %>%
     # synonym with Oxybasis glauca
     # located in the plants of TO database
     spp_code == "CHGL" ~ "N",
+    
+    spp_code == "SOSP" ~ "N",
     TRUE ~ exotic_native)
   ) 
   
@@ -219,6 +221,15 @@ tot <- all_tot %>%
     prop_se_sr = rich_se/rich_tot, 
     prop_si_sr = rich_si/rich_tot
   ) 
+
+# additional summary statistics ----
+
+biomass_tidy %>% 
+  filter(treatment == "TIL" & status == "SI") %>% 
+  pull(biomass_g) %>% 
+  sum()
+
+
 
 # plot ----
 
